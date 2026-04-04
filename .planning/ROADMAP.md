@@ -40,15 +40,15 @@ This roadmap rebuilds the Fame Logistics freight management system from a legacy
 4. GitHub Actions CI pipeline runs linting, type-checking, and test stubs on every push to `main`
 5. The shadcn/ui component library, AG Grid, and Tailwind CSS are wired and a sample table renders correctly
 
-**Plans**: TBD (5–8 plans)
+**Plans:** 6 plans
 
 Plans:
-- [ ] 01-01: Monorepo structure, environment variable conventions, Docker Compose (Next.js + Django + PostgreSQL + Redis)
-- [ ] 01-02: Django project setup — apps, settings, Celery, DRF base config, health-check endpoint
-- [ ] 01-03: Next.js 14 App Router setup — TypeScript, Tailwind CSS, shadcn/ui, AG Grid integration
-- [ ] 01-04: Design system tokens — colour palette, typography scale, sidebar layout shell (dark navy nav)
-- [ ] 01-05: PostgreSQL schema — all models defined, initial migrations, seed fixtures scaffold
-- [ ] 01-06: GitHub Actions CI/CD pipeline — lint, typecheck, Django tests, Next.js build; Vercel preview deploys
+- [ ] 01-01-PLAN.md — Monorepo structure, Docker Compose, environment config
+- [ ] 01-02-PLAN.md — Django project setup (DRF, Celery, health-check, admin bootstrap)
+- [ ] 01-03-PLAN.md — Next.js 14 setup (TypeScript, Tailwind, shadcn/ui, AG Grid)
+- [ ] 01-04-PLAN.md — Login page design, sidebar shell, navigation, AG Grid demo
+- [ ] 01-05-PLAN.md — Full database schema (all models), migrations, seed fixtures
+- [ ] 01-06-PLAN.md — GitHub Actions CI/CD pipeline, full stack integration verification
 
 ---
 
@@ -298,7 +298,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/6 | Not started | - |
+| 1. Foundation | 0/6 | Planned | - |
 | 2. Authentication & RBAC | 0/7 | Not started | - |
 | 3. Administration & Lookup Setup | 0/7 | Not started | - |
 | 4. Customer Management | 0/7 | Not started | - |
