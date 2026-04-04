@@ -1,0 +1,12 @@
+django>=5.0
+djangorestframework
+djangorestframework-simplejwt
+psycopg2-binary
+celery[redis]
+redis
+django-cors-headers
+python-dotenv
+ruff
+pytest
+pytest-django
+gunicorn
