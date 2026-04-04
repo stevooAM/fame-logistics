@@ -154,24 +154,86 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 through AUTH-07 | Phase 1 | Pending |
-| RBAC-01 through RBAC-04 | Phase 1 | Pending |
-| SEC-01 through SEC-09 | Phase 1 | Pending |
-| PERF-01, PERF-02 | Phase 1 | Pending |
-| CUST-01 through CUST-13 | Phase 2 | Pending |
-| JOB-01 through JOB-11 | Phase 3 | Pending |
-| APR-01 through APR-05 | Phase 4 | Pending |
-| ACC-01 through ACC-05 | Phase 4 | Pending |
-| DASH-01 through DASH-03 | Phase 5 | Pending |
-| RPT-01 through RPT-05 | Phase 5 | Pending |
-| ADMIN-01 through ADMIN-03 | Phase 6 | Pending |
-| SETUP-01 through SETUP-05 | Phase 6 | Pending |
+| AUTH-01 | Phase 2 — Authentication & RBAC | Pending |
+| AUTH-02 | Phase 2 — Authentication & RBAC | Pending |
+| AUTH-03 | Phase 2 — Authentication & RBAC | Pending |
+| AUTH-04 | Phase 2 — Authentication & RBAC | Pending |
+| AUTH-05 | Phase 2 — Authentication & RBAC | Pending |
+| AUTH-06 | Phase 2 — Authentication & RBAC | Pending |
+| AUTH-07 | Phase 2 — Authentication & RBAC | Pending |
+| RBAC-01 | Phase 2 — Authentication & RBAC | Pending |
+| RBAC-02 | Phase 2 — Authentication & RBAC | Pending |
+| RBAC-03 | Phase 2 — Authentication & RBAC | Pending |
+| RBAC-04 | Phase 2 — Authentication & RBAC | Pending |
+| CUST-01 | Phase 4 — Customer Management | Pending |
+| CUST-02 | Phase 4 — Customer Management | Pending |
+| CUST-03 | Phase 4 — Customer Management | Pending |
+| CUST-04 | Phase 4 — Customer Management | Pending |
+| CUST-05 | Phase 4 — Customer Management | Pending |
+| CUST-06 | Phase 4 — Customer Management | Pending |
+| CUST-07 | Phase 4 — Customer Management | Pending |
+| CUST-08 | Phase 4 — Customer Management | Pending |
+| CUST-09 | Phase 4 — Customer Management | Pending |
+| CUST-10 | Phase 4 — Customer Management | Pending |
+| CUST-11 | Phase 4 — Customer Management | Pending |
+| CUST-12 | Phase 4 — Customer Management | Pending |
+| CUST-13 | Phase 4 — Customer Management | Pending |
+| JOB-01 | Phase 5 — Job Management | Pending |
+| JOB-02 | Phase 5 — Job Management | Pending |
+| JOB-03 | Phase 5 — Job Management | Pending |
+| JOB-04 | Phase 5 — Job Management | Pending |
+| JOB-05 | Phase 5 — Job Management | Pending |
+| JOB-06 | Phase 5 — Job Management | Pending |
+| JOB-07 | Phase 5 — Job Management | Pending |
+| JOB-08 | Phase 5 — Job Management | Pending |
+| JOB-09 | Phase 5 — Job Management | Pending |
+| JOB-10 | Phase 5 — Job Management | Pending |
+| JOB-11 | Phase 5 — Job Management | Pending |
+| APR-01 | Phase 6 — Approval Workflow | Pending |
+| APR-02 | Phase 6 — Approval Workflow | Pending |
+| APR-03 | Phase 6 — Approval Workflow | Pending |
+| APR-04 | Phase 6 — Approval Workflow | Pending |
+| APR-05 | Phase 6 — Approval Workflow | Pending |
+| ACC-01 | Phase 7 — Accounts & Finance | Pending |
+| ACC-02 | Phase 7 — Accounts & Finance | Pending |
+| ACC-03 | Phase 7 — Accounts & Finance | Pending |
+| ACC-04 | Phase 7 — Accounts & Finance | Pending |
+| ACC-05 | Phase 7 — Accounts & Finance | Pending |
+| RPT-01 | Phase 9 — Reports | Pending |
+| RPT-02 | Phase 9 — Reports | Pending |
+| RPT-03 | Phase 9 — Reports | Pending |
+| RPT-04 | Phase 9 — Reports | Pending |
+| RPT-05 | Phase 9 — Reports | Pending |
+| DASH-01 | Phase 8 — Dashboard | Pending |
+| DASH-02 | Phase 8 — Dashboard | Pending |
+| DASH-03 | Phase 8 — Dashboard | Pending |
+| ADMIN-01 | Phase 3 — Administration & Lookup Setup | Pending |
+| ADMIN-02 | Phase 3 — Administration & Lookup Setup | Pending |
+| ADMIN-03 | Phase 3 — Administration & Lookup Setup | Pending |
+| SETUP-01 | Phase 3 — Administration & Lookup Setup | Pending |
+| SETUP-02 | Phase 3 — Administration & Lookup Setup | Pending |
+| SETUP-03 | Phase 3 — Administration & Lookup Setup | Pending |
+| SETUP-04 | Phase 3 — Administration & Lookup Setup | Pending |
+| SETUP-05 | Phase 3 — Administration & Lookup Setup | Pending |
+| SEC-01 | Phase 10 — Security Hardening & Launch | Pending |
+| SEC-02 | Phase 10 — Security Hardening & Launch | Pending |
+| SEC-03 | Phase 10 — Security Hardening & Launch | Pending |
+| SEC-04 | Phase 10 — Security Hardening & Launch | Pending |
+| SEC-05 | Phase 10 — Security Hardening & Launch | Pending |
+| SEC-06 | Phase 10 — Security Hardening & Launch | Pending |
+| SEC-07 | Phase 10 — Security Hardening & Launch | Pending |
+| SEC-08 | Phase 10 — Security Hardening & Launch | Pending |
+| SEC-09 | Phase 10 — Security Hardening & Launch | Pending |
+| PERF-01 | Phase 10 — Security Hardening & Launch | Pending |
+| PERF-02 | Phase 10 — Security Hardening & Launch | Pending |
 
 **Coverage:**
-- v1 requirements: 62 total
-- Mapped to phases: 62
-- Unmapped: 0 ✓
+- v1 requirements: 72 total (note: original file stated 62; actual count from requirements list is 72)
+- Mapped to phases: 72
+- Unmapped: 0
+
+**Phase 1 (Foundation) maps no functional requirements** — it is the infrastructure phase. All SEC/PERF non-functional requirements are consolidated in Phase 10 where they are verified and hardened for production.
 
 ---
 *Requirements defined: 2026-04-04*
-*Last updated: 2026-04-04 after initialization from FameFMS_Technical_PRD.docx*
+*Last updated: 2026-04-04 — Traceability updated to reflect ROADMAP.md phase structure (10 phases)*
