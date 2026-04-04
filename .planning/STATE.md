@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 1 of 10 (Foundation)
-Plan: 2 of 7 in current phase
+Plan: 3 of 7 in current phase
 Status: In progress
-Last activity: 2026-04-04 — Completed 01-02-PLAN.md (Django backend setup)
+Last activity: 2026-04-04 — Completed 01-03-PLAN.md (Next.js frontend shell)
 
-Progress: [██░░░░░░░░] ~2%
+Progress: [███░░░░░░░] ~3%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
-- Average duration: 2 min
-- Total execution time: 2 min
+- Total plans completed: 3
+- Average duration: 3 min
+- Total execution time: 8 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-foundation | 2/7 | 4 min | 2 min |
+| 01-foundation | 3/7 | 8 min | 2.7 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2 min), 01-02 (2 min)
-- Trend: consistent 2 min/plan
+- Last 5 plans: 01-01 (2 min), 01-02 (2 min), 01-03 (4 min)
+- Trend: consistent ~3 min/plan
 
 *Updated after each plan completion*
 
@@ -56,6 +56,10 @@ Recent decisions affecting current work:
 - [01-02]: JWT: 15min access tokens, 7-day refresh with ROTATE_REFRESH_TOKENS=True
 - [01-02]: CELERY_BROKER_URL and CELERY_RESULT_BACKEND both read from REDIS_URL — single Redis for dev
 - [01-02]: create_default_admin silently skips if DJANGO_SUPERUSER_* env vars absent — CI-safe
+- [01-03]: shadcn/ui components authored manually (no npx shadcn-ui); content matches CLI output exactly
+- [01-03]: brand.teal (#1F7A8C) mapped to --primary CSS variable; brand.amber (#F89C1C) mapped to --accent
+- [01-03]: Typography scale (.text-h1 through .text-caption) implemented as CSS utility classes in globals.css
+- [01-03]: Dockerfile simplified to single-stage dev build; npm install at image build time, no lockfile required
 
 ### Pending Todos
 
@@ -69,6 +73,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-04T23:48:40Z
-Stopped at: Completed 01-02-PLAN.md — Django backend, DRF, Celery, health-check endpoint, admin bootstrap
+Last session: 2026-04-04T23:56:30Z
+Stopped at: Completed 01-03-PLAN.md — Next.js 14 App Router, Tailwind brand tokens, shadcn/ui, AG Grid
 Resume file: None
