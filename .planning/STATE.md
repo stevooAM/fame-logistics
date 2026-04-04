@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 1 of 10 (Foundation)
-Plan: 1 of 7 in current phase
+Plan: 2 of 7 in current phase
 Status: In progress
-Last activity: 2026-04-04 — Completed 01-01-PLAN.md (monorepo structure + Docker Compose)
+Last activity: 2026-04-04 — Completed 01-02-PLAN.md (Django backend setup)
 
-Progress: [█░░░░░░░░░] ~1%
+Progress: [██░░░░░░░░] ~2%
 
 ## Performance Metrics
 
@@ -27,11 +27,11 @@ Progress: [█░░░░░░░░░] ~1%
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-foundation | 1/7 | 2 min | 2 min |
+| 01-foundation | 2/7 | 4 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2 min)
-- Trend: establishing baseline
+- Last 5 plans: 01-01 (2 min), 01-02 (2 min)
+- Trend: consistent 2 min/plan
 
 *Updated after each plan completion*
 
@@ -51,6 +51,11 @@ Recent decisions affecting current work:
 - [01-01]: node:20-alpine chosen for Next.js container — minimal image size
 - [01-01]: Health check gating: backend depends_on db+redis with condition: service_healthy
 - [01-01]: /app/node_modules anonymous volume prevents host bind mount from overwriting container modules
+- [01-02]: config/ package name chosen — settings at backend/config/settings.py, avoids module name collision
+- [01-02]: AllowAny on /api/health/ only — all other DRF views default to IsAuthenticated
+- [01-02]: JWT: 15min access tokens, 7-day refresh with ROTATE_REFRESH_TOKENS=True
+- [01-02]: CELERY_BROKER_URL and CELERY_RESULT_BACKEND both read from REDIS_URL — single Redis for dev
+- [01-02]: create_default_admin silently skips if DJANGO_SUPERUSER_* env vars absent — CI-safe
 
 ### Pending Todos
 
@@ -64,6 +69,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-04T23:43:12Z
-Stopped at: Completed 01-01-PLAN.md — monorepo structure, Docker Compose, Dockerfiles, env vars
+Last session: 2026-04-04T23:48:40Z
+Stopped at: Completed 01-02-PLAN.md — Django backend, DRF, Celery, health-check endpoint, admin bootstrap
 Resume file: None
