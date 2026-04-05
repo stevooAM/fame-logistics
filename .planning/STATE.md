@@ -10,27 +10,27 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 1 of 10 (Foundation)
-Plan: 5 of 7 in current phase
+Plan: 7 of 7 in current phase (01-06 pending checkpoint approval; 01-07 complete)
 Status: In progress
-Last activity: 2026-04-05 — Completed 01-05-PLAN.md (core/customers/jobs models and migrations)
+Last activity: 2026-04-05 — Completed 01-07-PLAN.md (approvals/accounts/setup models, seed fixtures)
 
-Progress: [████░░░░░░] ~4%
+Progress: [████░░░░░░] ~6%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4 (01-04 auto tasks done, checkpoint pending)
-- Average duration: 3.3 min
-- Total execution time: 13 min
+- Total plans completed: 6 (01-06 checkpoint pending, all others done)
+- Average duration: 3.2 min
+- Total execution time: 16 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-foundation | 4/7 | 13 min | 3.3 min |
+| 01-foundation | 6/7 | 16 min | 2.7 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2 min), 01-02 (2 min), 01-03 (4 min), 01-04 (5 min), 01-05 (2 min)
+- Last 6 plans: 01-01 (2 min), 01-02 (2 min), 01-03 (4 min), 01-04 (5 min), 01-05 (2 min), 01-07 (3 min)
 - Trend: consistent ~2-5 min/plan
 
 *Updated after each plan completion*
@@ -68,6 +68,11 @@ Recent decisions affecting current work:
 - [01-05]: Job.customer uses on_delete=PROTECT — prevents accidental customer deletion with active jobs
 - [01-05]: JobDocument.document_type uses string FK "setup.DocumentType" — resolves after plan 01-07
 - [01-05]: Customer soft delete via is_active BooleanField — preserves historical job references
+- [01-07]: accounts.Invoice.currency uses string FK "setup.Currency" — lazy resolution avoids circular import
+- [01-07]: CompanyProfile singleton enforced in save() — single profile per instance, no DB constraint needed
+- [01-07]: seed_dev_data is idempotent — checks Role and Customer existence before loading fixtures
+- [01-07]: Invoice FK to job/customer uses on_delete=PROTECT — financial records must not cascade-delete
+- [01-07]: Full FMS schema complete — all models from all 10 phases now defined (setup, approvals, accounts added)
 
 ### Pending Todos
 
@@ -81,6 +86,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-05T00:10:20Z
-Stopped at: Completed 01-05-PLAN.md — core/customers/jobs models defined with manual migrations
+Last session: 2026-04-05T00:17:34Z
+Stopped at: Completed 01-07-PLAN.md — approvals/accounts/setup models, seed fixtures, write/read tests
 Resume file: None
