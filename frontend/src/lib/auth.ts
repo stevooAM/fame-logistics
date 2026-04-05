@@ -4,12 +4,18 @@ import { apiFetch, API_BASE_URL, ApiError } from "./api";
 // Type definitions
 // ---------------------------------------------------------------------------
 
+export interface UserRole {
+  id: number;
+  name: string;
+}
+
 export interface UserProfile {
   id: number;
   username: string;
   email: string;
-  full_name: string;
-  role: string;
+  first_name: string;
+  last_name: string;
+  role: UserRole | null;
   is_force_password_change: boolean;
 }
 
