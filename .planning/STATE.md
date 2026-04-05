@@ -88,4 +88,5 @@ None yet.
 
 Last session: 2026-04-05T00:17:34Z
 Stopped at: Completed 01-07-PLAN.md — approvals/accounts/setup models, seed fixtures, write/read tests
+Note: 01-04 (login UI + sidebar shell) human-verify checkpoint approved 2026-04-05; SUMMARY updated
 Resume file: None
