@@ -1,6 +1,7 @@
 """
-Core serializers — custom JWT token with RBAC role claims.
+Core serializers — custom JWT token with RBAC role claims + auth endpoint serializers.
 """
+from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -44,3 +45,64 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     """View wired to CustomTokenObtainPairSerializer."""
 
     serializer_class = CustomTokenObtainPairSerializer
+
+
+# ---------------------------------------------------------------------------
+# Auth endpoint serializers
+# ---------------------------------------------------------------------------
+
+
+class LoginSerializer(serializers.Serializer):
+    """Credentials for login endpoint."""
+
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+    remember_me = serializers.BooleanField(default=False, required=False)
+
+
+class PasswordResetRequestSerializer(serializers.Serializer):
+    """Email address for password-reset request."""
+
+    email = serializers.EmailField()
+
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    """Token + new password for password-reset confirmation."""
+
+    token = serializers.UUIDField()
+    new_password = serializers.CharField(write_only=True, min_length=8)
+
+
+class PasswordChangeSerializer(serializers.Serializer):
+    """Old and new passwords for authenticated password change."""
+
+    old_password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True, min_length=8)
+
+
+class RoleSerializer(serializers.Serializer):
+    """Minimal role representation embedded in user profile."""
+
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+
+
+class UserProfileSerializer(serializers.Serializer):
+    """Current user profile — returned by GET /api/auth/me/."""
+
+    id = serializers.IntegerField(source="user.id")
+    username = serializers.CharField(source="user.username")
+    email = serializers.EmailField(source="user.email")
+    first_name = serializers.CharField(source="user.first_name")
+    last_name = serializers.CharField(source="user.last_name")
+    role = serializers.SerializerMethodField()
+    is_force_password_change = serializers.BooleanField()
+
+    def get_role(self, obj):
+        if obj.role:
+            return RoleSerializer(obj.role).data
+        return None
+
+    class Meta:
+        # Not a ModelSerializer, but declaring the source model for clarity
+        pass

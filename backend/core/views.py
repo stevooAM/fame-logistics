@@ -1,9 +1,87 @@
-from django.conf import settings
-from django.db import connection
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
+"""
+Core views — health check + all auth API endpoints.
 
+Auth endpoints use HttpOnly cookies for JWT storage (access + refresh tokens).
+No tokens are ever returned in the response body — cookie-only for XSS protection.
+"""
+
+import logging
+
+from django.conf import settings
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError as DjangoValidationError
+from django.db import connection
+from django.utils import timezone
+from datetime import timedelta
+from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from core.models import AuditLog, PasswordResetToken
+from core.serializers import (
+    LoginSerializer,
+    PasswordChangeSerializer,
+    PasswordResetConfirmSerializer,
+    PasswordResetRequestSerializer,
+    UserProfileSerializer,
+)
+from core.utils import get_client_ip
+
+logger = logging.getLogger(__name__)
+
+# ---------------------------------------------------------------------------
+# Cookie constants
+# ---------------------------------------------------------------------------
+
+ACCESS_TOKEN_COOKIE = "access_token"
+REFRESH_TOKEN_COOKIE = "refresh_token"
+
+ACCESS_TOKEN_MAX_AGE = 900          # 15 minutes (seconds)
+REFRESH_TOKEN_MAX_AGE = 604800      # 7 days (seconds)
+REMEMBER_ME_ACCESS_MAX_AGE = 604800 # 7 days when remember_me=True
+
+
+def _set_auth_cookies(response: Response, access_token: str, refresh_token: str, remember_me: bool = False) -> None:
+    """Set HttpOnly JWT cookies on the response."""
+    secure = not settings.DEBUG
+    access_max_age = REMEMBER_ME_ACCESS_MAX_AGE if remember_me else ACCESS_TOKEN_MAX_AGE
+
+    response.set_cookie(
+        ACCESS_TOKEN_COOKIE,
+        access_token,
+        max_age=access_max_age,
+        httponly=True,
+        secure=secure,
+        samesite="Lax",
+        path="/",
+    )
+    response.set_cookie(
+        REFRESH_TOKEN_COOKIE,
+        refresh_token,
+        max_age=REFRESH_TOKEN_MAX_AGE,
+        httponly=True,
+        secure=secure,
+        samesite="Lax",
+        path="/",
+    )
+
+
+def _delete_auth_cookies(response: Response) -> None:
+    """Clear JWT cookies from the browser."""
+    response.delete_cookie(ACCESS_TOKEN_COOKIE, path="/")
+    response.delete_cookie(REFRESH_TOKEN_COOKIE, path="/")
+
+
+# ---------------------------------------------------------------------------
+# Health check (existing)
+# ---------------------------------------------------------------------------
 
 @api_view(["GET"])
 @permission_classes([AllowAny])
@@ -38,3 +116,368 @@ def health_check(request):
             "redis": redis_ok,
         }
     )
+
+
+# ---------------------------------------------------------------------------
+# Login
+# ---------------------------------------------------------------------------
+
+class LoginView(APIView):
+    """
+    POST /api/auth/login/
+
+    Authenticate with username + password.
+    On success: set HttpOnly JWT cookies and return user profile.
+    On failure: return 401 with generic error (no credential enumeration).
+    """
+
+    permission_classes = [AllowAny]
+
+    def post(self, request: Request) -> Response:
+        serializer = LoginSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        username = serializer.validated_data["username"]
+        password = serializer.validated_data["password"]
+        remember_me = serializer.validated_data.get("remember_me", False)
+
+        user = authenticate(request, username=username, password=password)
+        if user is None:
+            return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        if not user.is_active:
+            return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        # Generate tokens
+        from core.serializers import CustomTokenObtainPairSerializer
+        refresh = CustomTokenObtainPairSerializer.get_token(user)
+        access_token = str(refresh.access_token)
+        refresh_token = str(refresh)
+
+        # Build profile response — requires UserProfile
+        try:
+            profile = user.profile
+            profile_data = UserProfileSerializer(profile).data
+        except Exception:
+            profile_data = {
+                "id": user.id,
+                "username": user.username,
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "role": None,
+                "is_force_password_change": False,
+            }
+
+        response = Response({"user": profile_data}, status=status.HTTP_200_OK)
+        _set_auth_cookies(response, access_token, refresh_token, remember_me)
+
+        # Audit log
+        try:
+            AuditLog.objects.create(
+                user=user,
+                action="LOGIN",
+                model_name="User",
+                object_id=str(user.id),
+                object_repr=user.username,
+                changes={},
+                ip_address=get_client_ip(request),
+            )
+        except Exception:
+            logger.exception("Failed to write LOGIN audit log for user %s", user.username)
+
+        return response
+
+
+# ---------------------------------------------------------------------------
+# Logout
+# ---------------------------------------------------------------------------
+
+class LogoutView(APIView):
+    """
+    POST /api/auth/logout/
+
+    Blacklist the refresh token and clear both JWT cookies.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request: Request) -> Response:
+        refresh_token_value = request.COOKIES.get(REFRESH_TOKEN_COOKIE)
+
+        if refresh_token_value:
+            try:
+                token = RefreshToken(refresh_token_value)
+                token.blacklist()
+            except TokenError:
+                # Token already blacklisted or invalid — proceed with logout anyway
+                pass
+            except Exception:
+                logger.exception("Unexpected error blacklisting refresh token during logout")
+
+        # Audit log
+        try:
+            AuditLog.objects.create(
+                user=request.user,
+                action="LOGOUT",
+                model_name="User",
+                object_id=str(request.user.id),
+                object_repr=request.user.username,
+                changes={},
+                ip_address=get_client_ip(request),
+            )
+        except Exception:
+            logger.exception("Failed to write LOGOUT audit log for user %s", request.user.username)
+
+        response = Response({"message": "Logged out"}, status=status.HTTP_200_OK)
+        _delete_auth_cookies(response)
+        return response
+
+
+# ---------------------------------------------------------------------------
+# Token refresh
+# ---------------------------------------------------------------------------
+
+class RefreshView(APIView):
+    """
+    POST /api/auth/refresh/
+
+    Read refresh token from cookie, issue new access token cookie.
+    Implements refresh token rotation (ROTATE_REFRESH_TOKENS=True in settings).
+    """
+
+    permission_classes = [AllowAny]
+
+    def post(self, request: Request) -> Response:
+        refresh_token_value = request.COOKIES.get(REFRESH_TOKEN_COOKIE)
+
+        if not refresh_token_value:
+            return Response({"error": "No refresh token"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        try:
+            refresh = RefreshToken(refresh_token_value)
+            new_access_token = str(refresh.access_token)
+
+            # Rotate refresh token if configured
+            if settings.SIMPLE_JWT.get("ROTATE_REFRESH_TOKENS", False):
+                refresh.blacklist()
+                # Create a new refresh token for the user
+                user_id = refresh.payload.get("user_id")
+                user = User.objects.get(id=user_id)
+                from core.serializers import CustomTokenObtainPairSerializer
+                new_refresh = CustomTokenObtainPairSerializer.get_token(user)
+                new_refresh_token = str(new_refresh)
+            else:
+                new_refresh_token = refresh_token_value
+
+        except TokenError:
+            response = Response({"error": "Invalid or expired token"}, status=status.HTTP_401_UNAUTHORIZED)
+            _delete_auth_cookies(response)
+            return response
+        except User.DoesNotExist:
+            response = Response({"error": "Invalid token"}, status=status.HTTP_401_UNAUTHORIZED)
+            _delete_auth_cookies(response)
+            return response
+        except Exception:
+            logger.exception("Unexpected error during token refresh")
+            response = Response({"error": "Token refresh failed"}, status=status.HTTP_401_UNAUTHORIZED)
+            _delete_auth_cookies(response)
+            return response
+
+        response = Response({"message": "Token refreshed"}, status=status.HTTP_200_OK)
+        secure = not settings.DEBUG
+        response.set_cookie(
+            ACCESS_TOKEN_COOKIE,
+            new_access_token,
+            max_age=ACCESS_TOKEN_MAX_AGE,
+            httponly=True,
+            secure=secure,
+            samesite="Lax",
+            path="/",
+        )
+        if new_refresh_token != refresh_token_value:
+            response.set_cookie(
+                REFRESH_TOKEN_COOKIE,
+                new_refresh_token,
+                max_age=REFRESH_TOKEN_MAX_AGE,
+                httponly=True,
+                secure=secure,
+                samesite="Lax",
+                path="/",
+            )
+        return response
+
+
+# ---------------------------------------------------------------------------
+# Me (current user profile)
+# ---------------------------------------------------------------------------
+
+class MeView(APIView):
+    """
+    GET /api/auth/me/
+
+    Return the authenticated user's profile with role.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request) -> Response:
+        try:
+            profile = request.user.profile
+            data = UserProfileSerializer(profile).data
+        except Exception:
+            # UserProfile does not exist — return minimal data
+            data = {
+                "id": request.user.id,
+                "username": request.user.username,
+                "email": request.user.email,
+                "first_name": request.user.first_name,
+                "last_name": request.user.last_name,
+                "role": None,
+                "is_force_password_change": False,
+            }
+        return Response(data, status=status.HTTP_200_OK)
+
+
+# ---------------------------------------------------------------------------
+# Password reset (self-service)
+# ---------------------------------------------------------------------------
+
+class PasswordResetRequestView(APIView):
+    """
+    POST /api/auth/password-reset/request/
+
+    Accept email. Create a reset token if a user exists.
+    Always returns 200 to prevent email enumeration.
+    """
+
+    permission_classes = [AllowAny]
+
+    def post(self, request: Request) -> Response:
+        serializer = PasswordResetRequestSerializer(data=request.data)
+        if not serializer.is_valid():
+            # Return 200 regardless — do not reveal validation details
+            return Response({"message": "If that email exists, a reset link has been sent."}, status=status.HTTP_200_OK)
+
+        email = serializer.validated_data["email"]
+
+        try:
+            user = User.objects.get(email=email)
+            # Create a reset token valid for 1 hour
+            PasswordResetToken.objects.create(
+                user=user,
+                expires_at=timezone.now() + timedelta(hours=1),
+            )
+            logger.info("Password reset token created for user %s", user.username)
+        except User.DoesNotExist:
+            # Silently succeed — do not reveal that the email was not found
+            pass
+        except Exception:
+            logger.exception("Error creating password reset token for email %s", email)
+
+        return Response(
+            {"message": "If that email exists, a reset link has been sent."},
+            status=status.HTTP_200_OK,
+        )
+
+
+class PasswordResetConfirmView(APIView):
+    """
+    POST /api/auth/password-reset/confirm/
+
+    Accept token UUID + new_password. Validate token, set password, mark token used.
+    """
+
+    permission_classes = [AllowAny]
+
+    def post(self, request: Request) -> Response:
+        serializer = PasswordResetConfirmSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        token_uuid = serializer.validated_data["token"]
+        new_password = serializer.validated_data["new_password"]
+
+        try:
+            reset_token = PasswordResetToken.objects.select_related("user").get(token=token_uuid)
+        except PasswordResetToken.DoesNotExist:
+            return Response({"error": "Invalid or expired token."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not reset_token.is_valid():
+            return Response({"error": "Invalid or expired token."}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = reset_token.user
+
+        # Validate new password against Django password validators
+        try:
+            validate_password(new_password, user=user)
+        except DjangoValidationError as exc:
+            return Response({"error": list(exc.messages)}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.set_password(new_password)
+        user.save(update_fields=["password"])
+
+        # Clear force password change flag if set
+        try:
+            profile = user.profile
+            if profile.is_force_password_change:
+                profile.is_force_password_change = False
+                profile.save(update_fields=["is_force_password_change"])
+        except Exception:
+            pass
+
+        # Mark token as used
+        reset_token.is_used = True
+        reset_token.save(update_fields=["is_used"])
+
+        logger.info("Password reset completed for user %s", user.username)
+        return Response({"message": "Password has been reset successfully."}, status=status.HTTP_200_OK)
+
+
+# ---------------------------------------------------------------------------
+# Password change (authenticated — force-reset flow)
+# ---------------------------------------------------------------------------
+
+class PasswordChangeView(APIView):
+    """
+    POST /api/auth/password-change/
+
+    Allow an authenticated user to change their own password.
+    Used in the forced-password-change flow after first login.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request: Request) -> Response:
+        serializer = PasswordChangeSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        old_password = serializer.validated_data["old_password"]
+        new_password = serializer.validated_data["new_password"]
+
+        # Verify current password
+        if not request.user.check_password(old_password):
+            return Response({"error": "Current password is incorrect."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Validate new password against Django validators
+        try:
+            validate_password(new_password, user=request.user)
+        except DjangoValidationError as exc:
+            return Response({"error": list(exc.messages)}, status=status.HTTP_400_BAD_REQUEST)
+
+        request.user.set_password(new_password)
+        request.user.save(update_fields=["password"])
+
+        # Clear force password change flag
+        try:
+            profile = request.user.profile
+            if profile.is_force_password_change:
+                profile.is_force_password_change = False
+                profile.save(update_fields=["is_force_password_change"])
+        except Exception:
+            pass
+
+        logger.info("Password changed by user %s", request.user.username)
+        return Response({"message": "Password changed successfully."}, status=status.HTTP_200_OK)

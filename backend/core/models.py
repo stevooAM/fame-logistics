@@ -1,5 +1,8 @@
+import uuid
+
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 
 
 class TimeStampedModel(models.Model):
@@ -81,3 +84,26 @@ class AuditLog(models.Model):
 
     def __str__(self) -> str:
         return f"{self.action} on {self.model_name} by {self.user} at {self.timestamp}"
+
+
+class PasswordResetToken(models.Model):
+    """Single-use token for self-service password reset."""
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="password_reset_tokens")
+    token = models.UUIDField(default=uuid.uuid4, unique=True, db_index=True)
+    expires_at = models.DateTimeField()
+    is_used = models.BooleanField(default=False)
+
+    def is_valid(self) -> bool:
+        """Return True if the token has not been used and has not expired."""
+        return not self.is_used and self.expires_at > timezone.now()
+
+    def __str__(self) -> str:
+        return f"PasswordResetToken for {self.user.username} (used={self.is_used})"
+
+    class Meta:
+        ordering = ["-expires_at"]
+        indexes = [
+            models.Index(fields=["token"]),
+            models.Index(fields=["user"]),
+        ]
