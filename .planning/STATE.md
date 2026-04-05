@@ -10,24 +10,25 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 2 of 10 (Authentication & RBAC)
-Plan: 3 of 7 in current phase
-Status: In progress — 02-01, 02-02, and 02-03 complete
-Last activity: 2026-04-05 — Completed 02-03-PLAN.md (auth API endpoints + rate limiting)
+Plan: 4 of 7 in current phase
+Status: In progress — 02-01, 02-02, 02-03, and 02-04 complete
+Last activity: 2026-04-05 — Completed 02-04-PLAN.md (login page wiring + API client)
 
-Progress: [██░░░░░░░░] ~15%
+Progress: [███░░░░░░░] ~18%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
+- Total plans completed: 8
 - Average duration: ~3 min
-- Total execution time: ~21 min
+- Total execution time: ~22 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation | 7/7 | ~21 min | ~3 min |
+| 02-authentication-rbac | 4/7 | ~1 min | ~1 min |
 
 *Updated after each plan completion*
 
@@ -60,6 +61,9 @@ Progress: [██░░░░░░░░] ~15%
 - [02-03]: LoginRateLimitMiddleware positioned after ImpersonationMiddleware — 10 failed attempts/IP/15min → 429
 - [02-03]: RefreshView performs full refresh token rotation (blacklists old, issues new)
 - [02-03]: PasswordResetToken model uses UUID token field with 1-hour TTL for self-service reset
+- [02-04]: apiFetch<T> is the standard frontend client — all feature modules must use it
+- [02-04]: login() uses raw fetch (not apiFetch) to avoid 401-retry on wrong credentials
+- [02-04]: rememberMe sends X-Remember-Me: true header; backend honours with 7-day TTL
 
 ### Pending Todos
 
@@ -67,7 +71,6 @@ None.
 
 ### Blockers/Concerns
 
-- [Phase 2]: Login form at /login is not wired to auth API — 02-03 built all endpoints, still needs frontend wiring
 - [Phase 4]: Excel file `fame_logistic_customers.xlsx` must be available at migration time — confirm location before Phase 4 planning
 - [Phase 10]: Production hosting target (Railway vs Render vs VPS) not yet decided
 - [Note]: Docker CLI not available in execution environment — runtime container verification deferred to developer machine
@@ -75,6 +78,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-05T11:49:20Z
-Stopped at: Completed 02-03-PLAN.md (auth API endpoints + rate limiting)
+Last session: 2026-04-05T11:53:21Z
+Stopped at: Completed 02-04-PLAN.md (login page wiring + API client)
 Resume file: None
