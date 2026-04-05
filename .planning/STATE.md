@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 2 of 10 (Authentication & RBAC)
-Plan: 5 of 7 in current phase
-Status: In progress — 02-01, 02-02, 02-03, 02-04, and 02-05 complete
-Last activity: 2026-04-05 — Completed 02-05-PLAN.md (session management: idle timeout + warning dialog + token refresh)
+Plan: 6 of 7 in current phase
+Status: In progress — 02-01 through 02-06 complete
+Last activity: 2026-04-05 — Completed 02-06-PLAN.md (frontend RBAC wiring: AuthProvider, middleware, sidebar)
 
-Progress: [████░░░░░░] ~20%
+Progress: [████░░░░░░] ~21%
 
 ## Performance Metrics
 
@@ -28,7 +28,7 @@ Progress: [████░░░░░░] ~20%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation | 7/7 | ~21 min | ~3 min |
-| 02-authentication-rbac | 5/7 | ~2 min | ~1 min |
+| 02-authentication-rbac | 6/7 | ~4 min | ~1 min |
 
 *Updated after each plan completion*
 
@@ -67,6 +67,10 @@ Progress: [████░░░░░░] ~20%
 - [02-05]: Activity throttled to 30s intervals in useIdleTimeout — avoids timer churn during active use
 - [02-05]: SessionWarningDialog blocks Escape/backdrop — user must explicitly choose Stay or Logout
 - [02-05]: setupTokenRefresh interval is 13 min (proactive refresh before 15-min access token expiry)
+- [02-06]: UserProfile.role is {id, name} object — role comparisons use user.role.name.toLowerCase()
+- [02-06]: middleware.ts cookie name is access_token — must stay in sync with backend cookie name
+- [02-06]: AuthProvider loading spinner shown before routing guard — prevents dashboard flash
+- [02-06]: Sidebar role comparisons: filterNavByRole(navItems, lowercasedRole)
 
 ### Pending Todos
 
@@ -81,6 +85,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-05T11:53:35Z
-Stopped at: Completed 02-05-PLAN.md (session management: idle timeout + warning dialog + token refresh)
+Last session: 2026-04-05T11:57:37Z
+Stopped at: Completed 02-06-PLAN.md (frontend RBAC: AuthProvider, edge middleware, sidebar nav/user)
 Resume file: None
