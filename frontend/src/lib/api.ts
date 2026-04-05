@@ -99,3 +99,35 @@ export class ApiError extends Error {
     this.data = data;
   }
 }
+
+/**
+ * Sets up a background interval that silently refreshes the JWT access token
+ * every 13 minutes — well before the 15-minute access token expiry.
+ *
+ * Call once on application mount (e.g. inside a root layout or auth provider).
+ * Returns a cleanup function that clears the interval; call it on unmount.
+ *
+ * @example
+ * useEffect(() => {
+ *   const stop = setupTokenRefresh();
+ *   return stop;
+ * }, []);
+ */
+export function setupTokenRefresh(): () => void {
+  const REFRESH_INTERVAL_MS = 13 * 60 * 1000; // 13 minutes
+
+  const intervalId = setInterval(async () => {
+    try {
+      await fetch(`${API_BASE_URL}/api/auth/refresh/`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+      });
+      // Silently ignore failures — the next apiFetch call will handle 401
+    } catch {
+      // Network error: ignore, apiFetch retry logic will handle it
+    }
+  }, REFRESH_INTERVAL_MS);
+
+  return () => clearInterval(intervalId);
+}
