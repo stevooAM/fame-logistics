@@ -24,13 +24,19 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from core.models import AuditLog, PasswordResetToken
+from core.models import AuditLog, PasswordResetToken, Role, UserProfile
+from core.permissions import IsAdmin
 from core.serializers import (
+    ChangePasswordSerializer,
     LoginSerializer,
     PasswordChangeSerializer,
     PasswordResetConfirmSerializer,
     PasswordResetRequestSerializer,
+    RoleSerializer,
+    UserCreateSerializer,
+    UserListSerializer,
     UserProfileSerializer,
+    UserUpdateSerializer,
 )
 from core.utils import get_client_ip
 
@@ -480,4 +486,311 @@ class PasswordChangeView(APIView):
             pass
 
         logger.info("Password changed by user %s", request.user.username)
+        return Response({"message": "Password changed successfully."}, status=status.HTTP_200_OK)
+
+
+# ---------------------------------------------------------------------------
+# User management views (Admin only, except ChangePasswordView)
+# ---------------------------------------------------------------------------
+
+class UserListCreateView(APIView):
+    """
+    GET  /api/users/  — list all users with pagination, search, and is_active filter.
+    POST /api/users/  — create a new user and return temp_password.
+    """
+
+    permission_classes = [IsAdmin]
+
+    def get(self, request: Request) -> Response:
+        queryset = UserProfile.objects.select_related("user", "role").order_by("user__username")
+
+        # ?search= — filter by username, email, first_name, last_name
+        search = request.query_params.get("search", "").strip()
+        if search:
+            from django.db.models import Q
+            queryset = queryset.filter(
+                Q(user__username__icontains=search)
+                | Q(user__email__icontains=search)
+                | Q(user__first_name__icontains=search)
+                | Q(user__last_name__icontains=search)
+            )
+
+        # ?is_active= — filter by active status (true/false string)
+        is_active_param = request.query_params.get("is_active", "").strip().lower()
+        if is_active_param == "true":
+            queryset = queryset.filter(user__is_active=True)
+        elif is_active_param == "false":
+            queryset = queryset.filter(user__is_active=False)
+
+        # Server-side pagination (page_size=20)
+        page_size = 20
+        try:
+            page = max(1, int(request.query_params.get("page", 1)))
+        except (ValueError, TypeError):
+            page = 1
+
+        total_count = queryset.count()
+        offset = (page - 1) * page_size
+        page_qs = queryset[offset: offset + page_size]
+
+        serializer = UserListSerializer(page_qs, many=True)
+
+        # Build next/previous URLs
+        base_url = request.build_absolute_uri(request.path)
+        next_url = f"{base_url}?page={page + 1}" if offset + page_size < total_count else None
+        prev_url = f"{base_url}?page={page - 1}" if page > 1 else None
+
+        return Response(
+            {
+                "count": total_count,
+                "next": next_url,
+                "previous": prev_url,
+                "results": serializer.data,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+    def post(self, request: Request) -> Response:
+        serializer = UserCreateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        result = serializer.save()
+        user = result["user"]
+        temp_password = result["temp_password"]
+
+        # Audit log
+        try:
+            AuditLog.objects.create(
+                user=request.user,
+                action="CREATE",
+                model_name="User",
+                object_id=str(user.id),
+                object_repr=user.username,
+                changes={"username": user.username, "email": user.email},
+                ip_address=get_client_ip(request),
+            )
+        except Exception:
+            logger.exception("Failed to write CREATE audit log for new user %s", user.username)
+
+        profile = user.profile
+        user_data = UserListSerializer(profile).data
+        return Response(
+            {"user": user_data, "temp_password": temp_password},
+            status=status.HTTP_201_CREATED,
+        )
+
+
+class UserDetailView(APIView):
+    """
+    GET   /api/users/{pk}/  — retrieve single user.
+    PATCH /api/users/{pk}/  — partial update of user fields.
+    """
+
+    permission_classes = [IsAdmin]
+
+    def _get_user_profile(self, pk: int):
+        """Return (user, profile) or raise Http404."""
+        from django.http import Http404
+        try:
+            user = User.objects.select_related("profile__role").get(pk=pk)
+            return user, user.profile
+        except User.DoesNotExist:
+            raise Http404
+
+    def get(self, request: Request, pk: int) -> Response:
+        user, profile = self._get_user_profile(pk)
+        serializer = UserListSerializer(profile)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def patch(self, request: Request, pk: int) -> Response:
+        user, profile = self._get_user_profile(pk)
+
+        serializer = UserUpdateSerializer(data=request.data, instance_user=user)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        validated = serializer.validated_data
+        changes = {}
+
+        # Update User fields
+        user_fields_changed = False
+        for field in ("email", "first_name", "last_name"):
+            if field in validated:
+                old_val = getattr(user, field)
+                new_val = validated[field]
+                if old_val != new_val:
+                    changes[field] = {"old": old_val, "new": new_val}
+                    setattr(user, field, new_val)
+                    user_fields_changed = True
+        if user_fields_changed:
+            user.save(update_fields=[f for f in ("email", "first_name", "last_name") if f in validated])
+
+        # Update UserProfile fields
+        profile_fields_changed = False
+        for field in ("phone", "department"):
+            if field in validated:
+                old_val = getattr(profile, field)
+                new_val = validated[field]
+                if old_val != new_val:
+                    changes[field] = {"old": old_val, "new": new_val}
+                    setattr(profile, field, new_val)
+                    profile_fields_changed = True
+
+        if "role_id" in validated:
+            role = Role.objects.get(id=validated["role_id"])
+            old_role = profile.role.name if profile.role else None
+            if old_role != role.name:
+                changes["role"] = {"old": old_role, "new": role.name}
+            profile.role = role
+            profile_fields_changed = True
+
+        if profile_fields_changed:
+            save_fields = []
+            if "phone" in validated:
+                save_fields.append("phone")
+            if "department" in validated:
+                save_fields.append("department")
+            if "role_id" in validated:
+                save_fields.append("role")
+            profile.save(update_fields=save_fields)
+
+        # Audit log
+        try:
+            AuditLog.objects.create(
+                user=request.user,
+                action="UPDATE",
+                model_name="User",
+                object_id=str(user.id),
+                object_repr=user.username,
+                changes=changes,
+                ip_address=get_client_ip(request),
+            )
+        except Exception:
+            logger.exception("Failed to write UPDATE audit log for user %s", user.username)
+
+        profile.refresh_from_db()
+        serializer = UserListSerializer(profile)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UserDeactivateView(APIView):
+    """POST /api/users/{pk}/deactivate/ — deactivate user and blacklist all tokens."""
+
+    permission_classes = [IsAdmin]
+
+    def post(self, request: Request, pk: int) -> Response:
+        from django.http import Http404
+        try:
+            user = User.objects.select_related("profile").get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+
+        # Deactivate
+        user.is_active = False
+        user.save(update_fields=["is_active"])
+        user.profile.is_active = False
+        user.profile.save(update_fields=["is_active"])
+
+        # Blacklist all outstanding refresh tokens for this user
+        try:
+            from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
+            outstanding_tokens = OutstandingToken.objects.filter(user=user)
+            for token in outstanding_tokens:
+                BlacklistedToken.objects.get_or_create(token=token)
+        except Exception:
+            logger.exception("Failed to blacklist tokens for user %s during deactivation", user.username)
+
+        # Audit log
+        try:
+            AuditLog.objects.create(
+                user=request.user,
+                action="UPDATE",
+                model_name="User",
+                object_id=str(user.id),
+                object_repr=user.username,
+                changes={"description": f"Deactivated user: {user.username}"},
+                ip_address=get_client_ip(request),
+            )
+        except Exception:
+            logger.exception("Failed to write UPDATE audit log for deactivation of user %s", user.username)
+
+        return Response({"message": f"User '{user.username}' has been deactivated."}, status=status.HTTP_200_OK)
+
+
+class UserActivateView(APIView):
+    """POST /api/users/{pk}/activate/ — reactivate a deactivated user."""
+
+    permission_classes = [IsAdmin]
+
+    def post(self, request: Request, pk: int) -> Response:
+        from django.http import Http404
+        try:
+            user = User.objects.select_related("profile").get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+
+        user.is_active = True
+        user.save(update_fields=["is_active"])
+        user.profile.is_active = True
+        user.profile.save(update_fields=["is_active"])
+
+        # Audit log
+        try:
+            AuditLog.objects.create(
+                user=request.user,
+                action="UPDATE",
+                model_name="User",
+                object_id=str(user.id),
+                object_repr=user.username,
+                changes={"description": f"Activated user: {user.username}"},
+                ip_address=get_client_ip(request),
+            )
+        except Exception:
+            logger.exception("Failed to write UPDATE audit log for activation of user %s", user.username)
+
+        return Response({"message": f"User '{user.username}' has been activated."}, status=status.HTTP_200_OK)
+
+
+class RoleListView(APIView):
+    """GET /api/roles/ — return all roles (no pagination; only 3 rows)."""
+
+    permission_classes = [IsAdmin]
+
+    def get(self, request: Request) -> Response:
+        roles = Role.objects.all()
+        serializer = RoleSerializer(roles, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ChangePasswordView(APIView):
+    """
+    POST /api/users/change-password/
+
+    Allow any authenticated user to change their own password.
+    Clears is_force_password_change flag on success.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request: Request) -> Response:
+        serializer = ChangePasswordSerializer(data=request.data, context={"request": request})
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        new_password = serializer.validated_data["new_password"]
+
+        request.user.set_password(new_password)
+        request.user.save(update_fields=["password"])
+
+        # Clear force password change flag
+        try:
+            profile = request.user.profile
+            if profile.is_force_password_change:
+                profile.is_force_password_change = False
+                profile.save(update_fields=["is_force_password_change"])
+        except Exception:
+            logger.exception("Failed to clear is_force_password_change for user %s", request.user.username)
+
+        logger.info("Password changed via /api/users/change-password/ by user %s", request.user.username)
         return Response({"message": "Password changed successfully."}, status=status.HTTP_200_OK)
