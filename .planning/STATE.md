@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 1 of 10 (Foundation)
-Plan: 3 of 7 in current phase
+Plan: 4 of 7 in current phase (checkpoint: awaiting human verify)
 Status: In progress
-Last activity: 2026-04-04 — Completed 01-03-PLAN.md (Next.js frontend shell)
+Last activity: 2026-04-05 — Completed 01-04-PLAN.md auto tasks (login page + sidebar shell), checkpoint awaiting approval
 
-Progress: [███░░░░░░░] ~3%
+Progress: [████░░░░░░] ~4%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: 3 min
-- Total execution time: 8 min
+- Total plans completed: 4 (01-04 auto tasks done, checkpoint pending)
+- Average duration: 3.3 min
+- Total execution time: 13 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-foundation | 3/7 | 8 min | 2.7 min |
+| 01-foundation | 4/7 | 13 min | 3.3 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2 min), 01-02 (2 min), 01-03 (4 min)
-- Trend: consistent ~3 min/plan
+- Last 5 plans: 01-01 (2 min), 01-02 (2 min), 01-03 (4 min), 01-04 (5 min)
+- Trend: consistent ~3-5 min/plan
 
 *Updated after each plan completion*
 
@@ -60,6 +60,10 @@ Recent decisions affecting current work:
 - [01-03]: brand.teal (#1F7A8C) mapped to --primary CSS variable; brand.amber (#F89C1C) mapped to --accent
 - [01-03]: Typography scale (.text-h1 through .text-caption) implemented as CSS utility classes in globals.css
 - [01-03]: Dockerfile simplified to single-stage dev build; npm install at image build time, no lockfile required
+- [01-04]: (dashboard) route group isolates sidebar layout from /login — no conditional rendering needed
+- [01-04]: Sidebar collapsed state uses local useState (not Zustand) — no cross-component sync needed yet
+- [01-04]: filterNavByRole called with no role for now — shows all 7 items in dev; Phase 2 passes real role
+- [01-04]: AG Grid CSS imported in ag-grid-demo.tsx — colocation with component that uses it
 
 ### Pending Todos
 
@@ -73,6 +77,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-04T23:56:30Z
-Stopped at: Completed 01-03-PLAN.md — Next.js 14 App Router, Tailwind brand tokens, shadcn/ui, AG Grid
+Last session: 2026-04-05T00:04:30Z
+Stopped at: 01-04-PLAN.md auto tasks complete — checkpoint:human-verify pending user approval
 Resume file: None
