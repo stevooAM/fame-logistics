@@ -49,6 +49,10 @@ Progress: [██░░░░░░░░] ~12%
 - [01-05]: All 6 migration files created manually (Docker CLI not available in execution environment)
 - [01-06]: Vercel setup deferred by user — can connect at any time via vercel.com/new
 - [Phase 1 fix]: docker-compose.yml healthcheck blocks added to backend and frontend services post-verification
+- [02-01]: Role model locked to 3 roles: Admin, Operations, Finance (Manager/Viewer removed permanently)
+- [02-01]: BCryptSHA256PasswordHasher set as primary hasher; existing PBKDF2 hashes auto-upgrade on next login
+- [02-01]: JWT access token carries role/username/email/full_name/is_force_password_change claims — token structure final
+- [02-01]: TOKEN_OBTAIN_SERIALIZER global override used instead of per-view override for consistency
 - [02-02]: Role checked from UserProfile.role.name (database), not JWT claims — RBAC-02 server-side enforcement
 - [02-02]: Non-Admin X-Impersonate-User requests silently ignored — no capability disclosure
 - [02-02]: ImpersonationMiddleware positioned after AuthenticationMiddleware in MIDDLEWARE stack
