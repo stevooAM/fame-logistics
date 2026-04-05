@@ -2,6 +2,15 @@
 Fame FMS Custom Middleware
 ==========================
 
+LoginRateLimitMiddleware
+------------------------
+Protects POST /api/auth/login/ against brute-force attacks.
+- Tracks failed login attempts per IP address in Django cache (Redis)
+- Blocks after LOGIN_RATE_LIMIT_MAX failures within LOGIN_RATE_LIMIT_WINDOW seconds
+- Returns 429 with a descriptive error message when limit exceeded
+- Clears counter on successful login
+- Keys expire automatically via TTL — no manual cleanup needed
+
 ImpersonationMiddleware
 -----------------------
 Allows Admin users to act as another user for support/troubleshooting purposes.
@@ -23,9 +32,86 @@ import json
 import logging
 
 from django.contrib.auth.models import User
-from django.http import HttpRequest, HttpResponse
+from django.core.cache import cache
+from django.http import HttpRequest, HttpResponse, JsonResponse
 
 logger = logging.getLogger(__name__)
+
+# ---------------------------------------------------------------------------
+# Rate limiting constants
+# ---------------------------------------------------------------------------
+
+LOGIN_RATE_LIMIT_MAX = 10      # Maximum failed attempts before block
+LOGIN_RATE_LIMIT_WINDOW = 900  # Tracking window: 15 minutes (seconds)
+LOGIN_PATH = "/api/auth/login/"
+
+
+class LoginRateLimitMiddleware:
+    """
+    Middleware that blocks brute-force login attempts.
+
+    Tracks failed POST /api/auth/login/ attempts per IP address in Redis cache.
+    After LOGIN_RATE_LIMIT_MAX failures within LOGIN_RATE_LIMIT_WINDOW seconds,
+    subsequent attempts receive a 429 response.
+
+    Counter is cleared on successful login (201 or 200 response from LoginView).
+
+    Must be placed BEFORE the view layer in MIDDLEWARE so it can inspect
+    both the incoming request and the outgoing response.
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request: HttpRequest) -> HttpResponse:
+        # Only apply rate limiting to POST /api/auth/login/
+        if request.method != "POST" or request.path != LOGIN_PATH:
+            return self.get_response(request)
+
+        ip = self._get_ip(request)
+        cache_key = f"login_attempts:{ip}"
+
+        # Check current attempt count
+        attempt_count = cache.get(cache_key, 0)
+        if attempt_count >= LOGIN_RATE_LIMIT_MAX:
+            logger.warning(
+                "Login rate limit exceeded for IP %s (%d attempts)",
+                ip,
+                attempt_count,
+            )
+            return JsonResponse(
+                {"error": "Too many login attempts. Please try again in 15 minutes."},
+                status=429,
+            )
+
+        # Let the request through and observe the response
+        response = self.get_response(request)
+
+        if response.status_code == 401:
+            # Failed login — increment counter with TTL on first failure
+            if attempt_count == 0:
+                cache.set(cache_key, 1, timeout=LOGIN_RATE_LIMIT_WINDOW)
+            else:
+                cache.incr(cache_key)
+            logger.debug(
+                "Failed login from IP %s — attempt %d/%d",
+                ip,
+                attempt_count + 1,
+                LOGIN_RATE_LIMIT_MAX,
+            )
+        elif response.status_code == 200:
+            # Successful login — reset counter
+            cache.delete(cache_key)
+
+        return response
+
+    @staticmethod
+    def _get_ip(request: HttpRequest) -> str:
+        """Extract client IP (respects X-Forwarded-For)."""
+        x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR", "")
+        if x_forwarded_for:
+            return x_forwarded_for.split(",")[0].strip()
+        return request.META.get("REMOTE_ADDR", "unknown")
 
 _IMPERSONATE_HEADER = "HTTP_X_IMPERSONATE_USER"  # Django converts - to _ and uppercases
 
