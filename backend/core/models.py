@@ -13,20 +13,16 @@ class TimeStampedModel(models.Model):
 
 
 class Role(TimeStampedModel):
-    """User roles for RBAC."""
+    """User roles for RBAC — exactly 3 roles: Admin, Operations, Finance."""
 
     ADMIN = "Admin"
-    MANAGER = "Manager"
     OPERATIONS = "Operations"
     FINANCE = "Finance"
-    VIEWER = "Viewer"
 
     ROLE_CHOICES = [
         (ADMIN, "Admin"),
-        (MANAGER, "Manager"),
         (OPERATIONS, "Operations"),
         (FINANCE, "Finance"),
-        (VIEWER, "Viewer"),
     ]
 
     name = models.CharField(max_length=50, unique=True, choices=ROLE_CHOICES)
@@ -47,6 +43,7 @@ class UserProfile(TimeStampedModel):
     is_active = models.BooleanField(default=True)
     phone = models.CharField(max_length=50, blank=True)
     department = models.CharField(max_length=100, blank=True)
+    is_force_password_change = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return f"{self.user.username} ({self.role})"
@@ -64,6 +61,7 @@ class AuditLog(models.Model):
             ("DELETE", "Delete"),
             ("LOGIN", "Login"),
             ("LOGOUT", "Logout"),
+            ("IMPERSONATE", "Impersonate"),
         ],
     )
     model_name = models.CharField(max_length=100)
