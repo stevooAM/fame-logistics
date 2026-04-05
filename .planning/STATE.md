@@ -10,25 +10,25 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 2 of 10 (Authentication & RBAC)
-Plan: 4 of 7 in current phase
-Status: In progress — 02-01, 02-02, 02-03, and 02-04 complete
-Last activity: 2026-04-05 — Completed 02-04-PLAN.md (login page wiring + API client)
+Plan: 5 of 7 in current phase
+Status: In progress — 02-01, 02-02, 02-03, 02-04, and 02-05 complete
+Last activity: 2026-04-05 — Completed 02-05-PLAN.md (session management: idle timeout + warning dialog + token refresh)
 
-Progress: [███░░░░░░░] ~18%
+Progress: [████░░░░░░] ~20%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
+- Total plans completed: 9
 - Average duration: ~3 min
-- Total execution time: ~22 min
+- Total execution time: ~23 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation | 7/7 | ~21 min | ~3 min |
-| 02-authentication-rbac | 4/7 | ~1 min | ~1 min |
+| 02-authentication-rbac | 5/7 | ~2 min | ~1 min |
 
 *Updated after each plan completion*
 
@@ -64,6 +64,9 @@ Progress: [███░░░░░░░] ~18%
 - [02-04]: apiFetch<T> is the standard frontend client — all feature modules must use it
 - [02-04]: login() uses raw fetch (not apiFetch) to avoid 401-retry on wrong credentials
 - [02-04]: rememberMe sends X-Remember-Me: true header; backend honours with 7-day TTL
+- [02-05]: Activity throttled to 30s intervals in useIdleTimeout — avoids timer churn during active use
+- [02-05]: SessionWarningDialog blocks Escape/backdrop — user must explicitly choose Stay or Logout
+- [02-05]: setupTokenRefresh interval is 13 min (proactive refresh before 15-min access token expiry)
 
 ### Pending Todos
 
@@ -78,6 +81,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-05T11:53:21Z
-Stopped at: Completed 02-04-PLAN.md (login page wiring + API client)
+Last session: 2026-04-05T11:53:35Z
+Stopped at: Completed 02-05-PLAN.md (session management: idle timeout + warning dialog + token refresh)
 Resume file: None
