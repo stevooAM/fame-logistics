@@ -9,20 +9,20 @@
 
 ### Authentication & Session Management
 
-- [ ] **AUTH-01**: User can log in with username and password via login form
-- [ ] **AUTH-02**: Unauthenticated requests redirect to /login
-- [ ] **AUTH-03**: Session persists across page navigation without re-login (JWT + refresh token)
-- [ ] **AUTH-04**: Logout terminates session and redirects to login
-- [ ] **AUTH-05**: Failed login shows error without revealing which field is wrong
-- [ ] **AUTH-06**: Session times out after configurable idle period (default 30 min)
-- [ ] **AUTH-07**: Password reset flow (admin-reset or email-based)
+- [x] **AUTH-01**: User can log in with username and password via login form
+- [x] **AUTH-02**: Unauthenticated requests redirect to /login
+- [x] **AUTH-03**: Session persists across page navigation without re-login (JWT + refresh token)
+- [x] **AUTH-04**: Logout terminates session and redirects to login
+- [x] **AUTH-05**: Failed login shows error without revealing which field is wrong
+- [x] **AUTH-06**: Session times out after configurable idle period (default 30 min)
+- [x] **AUTH-07**: Password reset flow (admin-reset or email-based)
 
 ### Role-Based Access Control
 
-- [ ] **RBAC-01**: Five roles defined — Admin, Manager, Operations, Finance, Viewer
-- [ ] **RBAC-02**: Role permissions enforced server-side (not just UI-level)
-- [ ] **RBAC-03**: Admin can create, edit, and deactivate users; assign roles
-- [ ] **RBAC-04**: Module access restricted per role per RBAC matrix in PRD section 10
+- [x] **RBAC-01**: Three roles defined — Admin, Operations, Finance
+- [x] **RBAC-02**: Role permissions enforced server-side (not just UI-level)
+- [x] **RBAC-03**: Admin can create, edit, and deactivate users; assign roles
+- [x] **RBAC-04**: Module access restricted per role per RBAC matrix in PRD section 10
 
 ### Customer Management
 
@@ -154,17 +154,17 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 2 — Authentication & RBAC | Pending |
-| AUTH-02 | Phase 2 — Authentication & RBAC | Pending |
-| AUTH-03 | Phase 2 — Authentication & RBAC | Pending |
-| AUTH-04 | Phase 2 — Authentication & RBAC | Pending |
-| AUTH-05 | Phase 2 — Authentication & RBAC | Pending |
-| AUTH-06 | Phase 2 — Authentication & RBAC | Pending |
-| AUTH-07 | Phase 2 — Authentication & RBAC | Pending |
-| RBAC-01 | Phase 2 — Authentication & RBAC | Pending |
-| RBAC-02 | Phase 2 — Authentication & RBAC | Pending |
-| RBAC-03 | Phase 2 — Authentication & RBAC | Pending |
-| RBAC-04 | Phase 2 — Authentication & RBAC | Pending |
+| AUTH-01 | Phase 2 — Authentication & RBAC | Complete |
+| AUTH-02 | Phase 2 — Authentication & RBAC | Complete |
+| AUTH-03 | Phase 2 — Authentication & RBAC | Complete |
+| AUTH-04 | Phase 2 — Authentication & RBAC | Complete |
+| AUTH-05 | Phase 2 — Authentication & RBAC | Complete |
+| AUTH-06 | Phase 2 — Authentication & RBAC | Complete |
+| AUTH-07 | Phase 2 — Authentication & RBAC | Complete |
+| RBAC-01 | Phase 2 — Authentication & RBAC | Complete |
+| RBAC-02 | Phase 2 — Authentication & RBAC | Complete |
+| RBAC-03 | Phase 2 — Authentication & RBAC | Complete |
+| RBAC-04 | Phase 2 — Authentication & RBAC | Complete |
 | CUST-01 | Phase 4 — Customer Management | Pending |
 | CUST-02 | Phase 4 — Customer Management | Pending |
 | CUST-03 | Phase 4 — Customer Management | Pending |

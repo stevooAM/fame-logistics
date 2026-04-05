@@ -11,7 +11,7 @@ This roadmap rebuilds the Fame Logistics freight management system from a legacy
 ## Phases
 
 - [x] **Phase 1: Foundation** — Project scaffold, Docker, PostgreSQL, CI/CD, design system *(completed 2026-04-05)*
-- [ ] **Phase 2: Authentication & RBAC** — Login, session management, role enforcement
+- [x] **Phase 2: Authentication & RBAC** — Login, session management, role enforcement *(completed 2026-04-05)*
 - [ ] **Phase 3: Administration & Lookup Setup** — User admin, audit log, lookup tables, company profile
 - [ ] **Phase 4: Customer Management** — Customer CRUD, AG Grid list, data seed, Excel export
 - [ ] **Phase 5: Job Management** — Job creation, workflow statuses, document attachments
@@ -299,7 +299,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 7/7 | ✓ Complete | 2026-04-05 |
-| 2. Authentication & RBAC | 0/6 | Planned | - |
+| 2. Authentication & RBAC | 6/6 | ✓ Complete | 2026-04-05 |
 | 3. Administration & Lookup Setup | 0/7 | Not started | - |
 | 4. Customer Management | 0/7 | Not started | - |
 | 5. Job Management | 0/7 | Not started | - |
