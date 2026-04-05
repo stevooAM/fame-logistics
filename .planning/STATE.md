@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 1 of 10 (Foundation)
-Plan: 7 of 7 in current phase (01-06 pending checkpoint approval; 01-07 complete)
+Plan: 7 of 7 in current phase (01-06 at checkpoint — CI/CD pipeline built, awaiting GitHub CI green approval)
 Status: In progress
-Last activity: 2026-04-05 — Completed 01-07-PLAN.md (approvals/accounts/setup models, seed fixtures)
+Last activity: 2026-04-05 — Completed 01-06 auto tasks (CI pipeline + integration verification); awaiting human checkpoint approval
 
 Progress: [████░░░░░░] ~6%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6 (01-06 checkpoint pending, all others done)
-- Average duration: 3.2 min
-- Total execution time: 16 min
+- Total plans completed: 6 (01-06 at checkpoint — auto tasks done, awaiting human approval)
+- Average duration: 3.4 min
+- Total execution time: 26 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-foundation | 6/7 | 16 min | 2.7 min |
+| 01-foundation | 6/7 | 26 min | 3.7 min |
 
 **Recent Trend:**
-- Last 6 plans: 01-01 (2 min), 01-02 (2 min), 01-03 (4 min), 01-04 (5 min), 01-05 (2 min), 01-07 (3 min)
-- Trend: consistent ~2-5 min/plan
+- Last 7 plans: 01-01 (2 min), 01-02 (2 min), 01-03 (4 min), 01-04 (5 min), 01-05 (2 min), 01-07 (3 min), 01-06 (10 min)
+- Trend: consistent ~2-10 min/plan
 
 *Updated after each plan completion*
 
@@ -73,6 +73,10 @@ Recent decisions affecting current work:
 - [01-07]: seed_dev_data is idempotent — checks Role and Customer existence before loading fixtures
 - [01-07]: Invoice FK to job/customer uses on_delete=PROTECT — financial records must not cascade-delete
 - [01-07]: Full FMS schema complete — all models from all 10 phases now defined (setup, approvals, accounts added)
+- [01-06]: 4 parallel CI jobs (backend-lint, backend-test, frontend-lint+typecheck, frontend-build) — parallel reduces CI time
+- [01-06]: postgres:16-alpine + redis:7-alpine service containers in CI — real DB engine, not SQLite
+- [01-06]: ruff replaces flake8+isort+black as single Python lint/format tool; line-length=120
+- [01-06]: Vercel integration via Dashboard comments in ci.yml (not GitHub Actions step) — native Git integration preferred
 
 ### Pending Todos
 
@@ -86,7 +90,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-05T00:17:34Z
-Stopped at: Completed 01-07-PLAN.md — approvals/accounts/setup models, seed fixtures, write/read tests
-Note: 01-04 (login UI + sidebar shell) human-verify checkpoint approved 2026-04-05; SUMMARY updated
+Last session: 2026-04-05T01:02:37Z
+Stopped at: 01-06 checkpoint — CI pipeline built, SUMMARY written, awaiting human-verify approval (CI green on GitHub)
+Note: 01-06 auto tasks complete; resume after user approves with "approved" or "skip-vercel"
 Resume file: None
