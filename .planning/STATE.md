@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 3 of 10 (Administration & Lookup Setup)
-Plan: 0 of 7 in current phase
-Status: Phase 2 complete — ready to plan Phase 3
-Last activity: 2026-04-05 — Phase 2 Authentication & RBAC complete. All 6 plans executed and verified.
+Plan: 1 of 7 in current phase
+Status: In progress — 03-01 complete
+Last activity: 2026-04-05 — Completed 03-01-PLAN.md (User Management API)
 
-Progress: [██░░░░░░░░] ~20%
+Progress: [██░░░░░░░░] ~21%
 
 ## Performance Metrics
 
@@ -71,6 +71,10 @@ Progress: [██░░░░░░░░] ~20%
 - [02-06]: middleware.ts cookie name is access_token — must stay in sync with backend cookie name
 - [02-06]: AuthProvider loading spinner shown before routing guard — prevents dashboard flash
 - [02-06]: Sidebar role comparisons: filterNavByRole(navItems, lowercasedRole)
+- [03-01]: ChangePasswordSerializer validates current_password via serializer context request — keeps view thin
+- [03-01]: change-password URL must precede <int:pk> pattern in urls.py — Django top-down URL resolution
+- [03-01]: Deactivation blacklists all OutstandingToken rows via get_or_create(BlacklistedToken) — immediate session invalidation
+- [03-01]: UserListSerializer sources is_active from user.is_active (Django User), not UserProfile.is_active
 
 ### Pending Todos
 
@@ -85,6 +89,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-05T11:57:37Z
-Stopped at: Completed 02-06-PLAN.md (frontend RBAC: AuthProvider, edge middleware, sidebar nav/user)
+Last session: 2026-04-05T21:19:31Z
+Stopped at: Completed 03-01-PLAN.md (User Management API)
 Resume file: None
