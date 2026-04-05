@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 2 of 10 (Authentication & RBAC)
-Plan: 0 of 7 in current phase
-Status: Phase 1 complete — ready to plan Phase 2
-Last activity: 2026-04-05 — Phase 1 Foundation complete. All 7 plans executed and verified (5/5 must-haves passed).
+Plan: 2 of 7 in current phase
+Status: In progress — 02-01 and 02-02 complete
+Last activity: 2026-04-05 — Completed 02-02-PLAN.md (RBAC permissions + impersonation middleware)
 
-Progress: [█░░░░░░░░░] ~10%
+Progress: [██░░░░░░░░] ~12%
 
 ## Performance Metrics
 
@@ -49,6 +49,9 @@ Progress: [█░░░░░░░░░] ~10%
 - [01-05]: All 6 migration files created manually (Docker CLI not available in execution environment)
 - [01-06]: Vercel setup deferred by user — can connect at any time via vercel.com/new
 - [Phase 1 fix]: docker-compose.yml healthcheck blocks added to backend and frontend services post-verification
+- [02-02]: Role checked from UserProfile.role.name (database), not JWT claims — RBAC-02 server-side enforcement
+- [02-02]: Non-Admin X-Impersonate-User requests silently ignored — no capability disclosure
+- [02-02]: ImpersonationMiddleware positioned after AuthenticationMiddleware in MIDDLEWARE stack
 
 ### Pending Todos
 
@@ -64,6 +67,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-05
-Stopped at: Phase 1 Foundation complete — all 7 plans executed, verified 5/5, ROADMAP updated
+Last session: 2026-04-05T11:43:36Z
+Stopped at: Completed 02-02-PLAN.md (RBAC permissions + impersonation middleware)
 Resume file: None
