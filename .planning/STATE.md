@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 2 of 10 (Authentication & RBAC)
-Plan: 2 of 7 in current phase
-Status: In progress — 02-01 and 02-02 complete
-Last activity: 2026-04-05 — Completed 02-02-PLAN.md (RBAC permissions + impersonation middleware)
+Plan: 3 of 7 in current phase
+Status: In progress — 02-01, 02-02, and 02-03 complete
+Last activity: 2026-04-05 — Completed 02-03-PLAN.md (auth API endpoints + rate limiting)
 
-Progress: [██░░░░░░░░] ~12%
+Progress: [██░░░░░░░░] ~15%
 
 ## Performance Metrics
 
@@ -56,6 +56,10 @@ Progress: [██░░░░░░░░] ~12%
 - [02-02]: Role checked from UserProfile.role.name (database), not JWT claims — RBAC-02 server-side enforcement
 - [02-02]: Non-Admin X-Impersonate-User requests silently ignored — no capability disclosure
 - [02-02]: ImpersonationMiddleware positioned after AuthenticationMiddleware in MIDDLEWARE stack
+- [02-03]: CookieJWTAuthentication replaces header-based JWTAuthentication — all DRF views now read JWT from HttpOnly cookie
+- [02-03]: LoginRateLimitMiddleware positioned after ImpersonationMiddleware — 10 failed attempts/IP/15min → 429
+- [02-03]: RefreshView performs full refresh token rotation (blacklists old, issues new)
+- [02-03]: PasswordResetToken model uses UUID token field with 1-hour TTL for self-service reset
 
 ### Pending Todos
 
@@ -63,7 +67,7 @@ None.
 
 ### Blockers/Concerns
 
-- [Phase 2]: Login form at /login is not wired to auth API — Phase 2 must connect it
+- [Phase 2]: Login form at /login is not wired to auth API — 02-03 built all endpoints, still needs frontend wiring
 - [Phase 4]: Excel file `fame_logistic_customers.xlsx` must be available at migration time — confirm location before Phase 4 planning
 - [Phase 10]: Production hosting target (Railway vs Render vs VPS) not yet decided
 - [Note]: Docker CLI not available in execution environment — runtime container verification deferred to developer machine
@@ -71,6 +75,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-05T11:43:36Z
-Stopped at: Completed 02-02-PLAN.md (RBAC permissions + impersonation middleware)
+Last session: 2026-04-05T11:49:20Z
+Stopped at: Completed 02-03-PLAN.md (auth API endpoints + rate limiting)
 Resume file: None
