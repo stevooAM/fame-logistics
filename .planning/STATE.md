@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 1 of 10 (Foundation)
-Plan: 4 of 7 in current phase (checkpoint: awaiting human verify)
+Plan: 5 of 7 in current phase
 Status: In progress
-Last activity: 2026-04-05 — Completed 01-04-PLAN.md auto tasks (login page + sidebar shell), checkpoint awaiting approval
+Last activity: 2026-04-05 — Completed 01-05-PLAN.md (core/customers/jobs models and migrations)
 
 Progress: [████░░░░░░] ~4%
 
@@ -30,8 +30,8 @@ Progress: [████░░░░░░] ~4%
 | 01-foundation | 4/7 | 13 min | 3.3 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2 min), 01-02 (2 min), 01-03 (4 min), 01-04 (5 min)
-- Trend: consistent ~3-5 min/plan
+- Last 5 plans: 01-01 (2 min), 01-02 (2 min), 01-03 (4 min), 01-04 (5 min), 01-05 (2 min)
+- Trend: consistent ~2-5 min/plan
 
 *Updated after each plan completion*
 
@@ -64,6 +64,10 @@ Recent decisions affecting current work:
 - [01-04]: Sidebar collapsed state uses local useState (not Zustand) — no cross-component sync needed yet
 - [01-04]: filterNavByRole called with no role for now — shows all 7 items in dev; Phase 2 passes real role
 - [01-04]: AG Grid CSS imported in ag-grid-demo.tsx — colocation with component that uses it
+- [01-05]: TimeStampedModel is abstract — no DB table, fields inherited by all concrete models
+- [01-05]: Job.customer uses on_delete=PROTECT — prevents accidental customer deletion with active jobs
+- [01-05]: JobDocument.document_type uses string FK "setup.DocumentType" — resolves after plan 01-07
+- [01-05]: Customer soft delete via is_active BooleanField — preserves historical job references
 
 ### Pending Todos
 
@@ -77,6 +81,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-05T00:04:30Z
-Stopped at: 01-04-PLAN.md auto tasks complete — checkpoint:human-verify pending user approval
+Last session: 2026-04-05T00:10:20Z
+Stopped at: Completed 01-05-PLAN.md — core/customers/jobs models defined with manual migrations
 Resume file: None
