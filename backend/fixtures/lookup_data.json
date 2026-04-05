@@ -1,0 +1,22 @@
+[
+  {"model": "setup.port", "pk": 1, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "Tema Port", "code": "TMA", "country": "Ghana", "is_active": true}},
+  {"model": "setup.port", "pk": 2, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "Takoradi Port", "code": "TAK", "country": "Ghana", "is_active": true}},
+  {"model": "setup.port", "pk": 3, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "Kotoka International Airport", "code": "ACC", "country": "Ghana", "is_active": true}},
+  {"model": "setup.port", "pk": 4, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "Lome Port", "code": "LFW", "country": "Togo", "is_active": true}},
+  {"model": "setup.port", "pk": 5, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "Abidjan Port", "code": "ABJ", "country": "Ivory Coast", "is_active": true}},
+  {"model": "setup.port", "pk": 6, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "Rotterdam Port", "code": "RTM", "country": "Netherlands", "is_active": true}},
+  {"model": "setup.port", "pk": 7, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "Hamburg Port", "code": "HAM", "country": "Germany", "is_active": true}},
+  {"model": "setup.cargotype", "pk": 1, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "General Cargo", "description": "Mixed general goods", "is_active": true}},
+  {"model": "setup.cargotype", "pk": 2, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "Container", "description": "Full or partial container load", "is_active": true}},
+  {"model": "setup.cargotype", "pk": 3, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "Bulk Cargo", "description": "Unpackaged bulk materials", "is_active": true}},
+  {"model": "setup.cargotype", "pk": 4, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "Vehicles", "description": "Automobiles and machinery", "is_active": true}},
+  {"model": "setup.cargotype", "pk": 5, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "Personal Effects", "description": "Household and personal belongings", "is_active": true}},
+  {"model": "setup.currency", "pk": 1, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "code": "GHS", "name": "Ghana Cedi", "symbol": "₵", "exchange_rate": "1.000000", "is_default": true, "is_active": true}},
+  {"model": "setup.currency", "pk": 2, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "code": "USD", "name": "US Dollar", "symbol": "$", "exchange_rate": "14.500000", "is_default": false, "is_active": true}},
+  {"model": "setup.currency", "pk": 3, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "code": "EUR", "name": "Euro", "symbol": "€", "exchange_rate": "15.800000", "is_default": false, "is_active": true}},
+  {"model": "setup.documenttype", "pk": 1, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "Bill of Lading", "description": "Shipping document issued by carrier", "is_active": true}},
+  {"model": "setup.documenttype", "pk": 2, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "Commercial Invoice", "description": "Invoice from seller to buyer", "is_active": true}},
+  {"model": "setup.documenttype", "pk": 3, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "Packing List", "description": "Detailed list of package contents", "is_active": true}},
+  {"model": "setup.documenttype", "pk": 4, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "Customs Declaration", "description": "Form declaring goods for customs clearance", "is_active": true}},
+  {"model": "setup.companyprofile", "pk": 1, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "Fame Logistics", "logo_url": "", "email": "info@famelogistics.com", "phone": "+233 XX XXX XXXX", "address": "Accra, Ghana", "website": "https://famelogistics.com", "tin": ""}}
+]

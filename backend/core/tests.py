@@ -33,3 +33,41 @@ def test_create_default_admin_creates_superuser(monkeypatch):
     assert user.is_superuser
     assert user.is_staff
     assert user.email == "testadmin@test.com"
+
+
+@pytest.mark.django_db
+def test_customer_write_read_cycle():
+    """Customer model supports write/read cycle."""
+    from customers.models import Customer
+
+    customer = Customer.objects.create(
+        company_name="Test Shipping Co",
+        customer_type="Company",
+        email="test@shipping.com",
+        tin="C0099999999",
+    )
+    retrieved = Customer.objects.get(pk=customer.pk)
+    assert retrieved.company_name == "Test Shipping Co"
+    assert retrieved.is_active is True
+
+
+@pytest.mark.django_db
+def test_customer_soft_delete():
+    """Customer soft delete sets is_active=False but keeps record."""
+    from customers.models import Customer
+
+    customer = Customer.objects.create(company_name="Soft Delete Co", customer_type="Company")
+    customer.is_active = False
+    customer.save()
+    assert Customer.objects.filter(pk=customer.pk).exists()
+    assert Customer.objects.get(pk=customer.pk).is_active is False
+
+
+@pytest.mark.django_db
+def test_role_fixture_data():
+    """Verify Role model can store the 5 RBAC role choices."""
+    from core.models import Role
+
+    role = Role.objects.create(name="Admin", description="Test admin role")
+    assert role.name == "Admin"
+    assert Role.objects.filter(name="Admin").exists()

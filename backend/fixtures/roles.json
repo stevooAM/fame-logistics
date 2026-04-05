@@ -1,0 +1,7 @@
+[
+  {"model": "core.role", "pk": 1, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "Admin", "description": "Full system access — manage users, configure system, view all modules"}},
+  {"model": "core.role", "pk": 2, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "Manager", "description": "Can approve/reject jobs, view all modules, manage operations"}},
+  {"model": "core.role", "pk": 3, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "Operations", "description": "Can create and manage customers and jobs"}},
+  {"model": "core.role", "pk": 4, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "Finance", "description": "Can manage invoices, payments, and financial reports"}},
+  {"model": "core.role", "pk": 5, "fields": {"created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z", "name": "Viewer", "description": "Read-only access to customers, jobs, and reports"}}
+]
