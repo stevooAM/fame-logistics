@@ -66,18 +66,17 @@ Plans:
 2. An unauthenticated request to any protected URL is redirected to `/login` — including direct URL entry
 3. A failed login attempt shows a generic "Invalid credentials" error without indicating which field is wrong
 4. An idle session (30 min default) expires and the user is redirected to `/login` on next interaction
-5. A user assigned the Viewer role cannot access Admin or Finance pages — enforced at the API layer (returns 403), not just hidden in the UI
+5. A user assigned the Finance role cannot access Customers or Jobs pages — enforced at the API layer (returns 403), not just hidden in the UI
 
-**Plans**: TBD (5–7 plans)
+**Plans:** 6 plans
 
 Plans:
-- [ ] 02-01: Django auth — User model extension, bcrypt hashing, JWT access + refresh tokens, simplejwt config
-- [ ] 02-02: RBAC model — Role model, permission matrix, server-side permission decorators / DRF permission classes
-- [ ] 02-03: Auth API endpoints — `/api/auth/login`, `/api/auth/logout`, `/api/auth/refresh`, `/api/auth/password-reset`
-- [ ] 02-04: Next.js login UI — Login form (React Hook Form + Zod), error states, redirect logic (use `/frontend-design` skill)
-- [ ] 02-05: Session management — JWT storage in HttpOnly cookies, idle timeout logic, token refresh middleware
-- [ ] 02-06: RBAC enforcement on frontend — route guards, sidebar nav filtered per role
-- [ ] 02-07: Rate limiting — max 10 failed login attempts per IP per 15 minutes (Django middleware or Redis-backed)
+- [ ] 02-01-PLAN.md — Django auth backend: 3-role model, bcrypt hashing, custom JWT claims, password validators
+- [ ] 02-02-PLAN.md — RBAC permissions: DRF permission classes, admin impersonation middleware
+- [ ] 02-03-PLAN.md — Auth API endpoints: login, logout, refresh, password reset, rate limiting
+- [ ] 02-04-PLAN.md — Login UI wiring: split layout, remember me, loading state, error handling
+- [ ] 02-05-PLAN.md — Session management: idle timeout hook, warning dialog, token auto-refresh
+- [ ] 02-06-PLAN.md — Frontend RBAC: auth provider, route guards, sidebar role filtering, logout
 
 ---
 
@@ -300,7 +299,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 7/7 | ✓ Complete | 2026-04-05 |
-| 2. Authentication & RBAC | 0/7 | Not started | - |
+| 2. Authentication & RBAC | 0/6 | Planned | - |
 | 3. Administration & Lookup Setup | 0/7 | Not started | - |
 | 4. Customer Management | 0/7 | Not started | - |
 | 5. Job Management | 0/7 | Not started | - |
@@ -310,7 +309,7 @@ Plans:
 | 9. Reports | 0/4 | Not started | - |
 | 10. Security Hardening & Launch | 0/7 | Not started | - |
 
-**Total plans (estimated):** 58 plans across 10 phases
+**Total plans (estimated):** 57 plans across 10 phases
 
 ---
 
