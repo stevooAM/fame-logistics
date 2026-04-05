@@ -95,16 +95,16 @@ Plans:
 4. All five lookup tables (ports/locations, cargo types, currencies, document types, company profile) are editable through the admin UI and changes persist on page reload
 5. Lookup values added here appear in downstream dropdowns (e.g., Port dropdown in Job creation)
 
-**Plans**: TBD (5–7 plans)
+**Plans:** 7 plans
 
 Plans:
-- [ ] 03-01: User management API — CRUD endpoints for users, role assignment, deactivation
-- [ ] 03-02: User management UI — user list, create/edit modal, role selector, deactivate action (use `/frontend-design` skill)
-- [ ] 03-03: Audit log model + middleware — log all CRUD ops with user/IP/timestamp; audit log API endpoint
-- [ ] 03-04: Audit log viewer UI — filterable table (by user, date, action type) (use `/frontend-design` skill)
-- [ ] 03-05: Session management — active session list API + terminate session action; UI panel
-- [ ] 03-06: Lookup table models + CRUD APIs — ports/locations, cargo types, currencies, document types
-- [ ] 03-07: Lookup table admin UI + company profile settings (name, logo upload, contact info) (use `/frontend-design` skill)
+- [ ] 03-01-PLAN.md — User management API: CRUD endpoints, role assignment, temp password, deactivation with session invalidation
+- [ ] 03-02-PLAN.md — User management UI: AG Grid list, create/edit modal, role selector, deactivate action, temp password display
+- [ ] 03-03-PLAN.md — Audit log infrastructure: AuditLogMixin, log_audit utility, filterable audit log API endpoint
+- [ ] 03-04-PLAN.md — Audit log viewer UI: filterable AG Grid table (by user, date range, action type, module)
+- [ ] 03-05-PLAN.md — Session management: active session list API, terminate session action, admin UI panel
+- [ ] 03-06-PLAN.md — Lookup table CRUD APIs: model updates (sort_order/code), ViewSets, seed command, dropdown endpoint
+- [ ] 03-07-PLAN.md — Lookup table admin UI (tabbed), company profile settings form with logo upload, admin hub page
 
 ---
 
@@ -300,7 +300,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Foundation | 7/7 | ✓ Complete | 2026-04-05 |
 | 2. Authentication & RBAC | 6/6 | ✓ Complete | 2026-04-05 |
-| 3. Administration & Lookup Setup | 0/7 | Not started | - |
+| 3. Administration & Lookup Setup | 0/7 | Planned | - |
 | 4. Customer Management | 0/7 | Not started | - |
 | 5. Job Management | 0/7 | Not started | - |
 | 6. Approval Workflow | 0/5 | Not started | - |
