@@ -12,6 +12,7 @@ import {
   Settings,
 } from "lucide-react";
 import { navItems, filterNavByRole } from "@/lib/navigation";
+import { useAuth } from "@/providers/auth-provider";
 import { cn } from "@/lib/utils";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -30,7 +31,11 @@ interface SidebarNavProps {
 
 export function SidebarNav({ collapsed }: SidebarNavProps) {
   const pathname = usePathname();
-  const items = filterNavByRole(navItems);
+  const { user } = useAuth();
+
+  // Role name from API is e.g. "Admin", "Operations", "Finance" — lowercase for matching
+  const userRole = user?.role?.name?.toLowerCase();
+  const items = filterNavByRole(navItems, userRole);
 
   return (
     <nav className="flex-1 px-2 py-4 space-y-1">
