@@ -124,16 +124,16 @@ Plans:
 5. The database already contains the 197 migrated customer records when the system is first deployed — no manual entry required
 6. The customer list can be exported to Excel/CSV with current filters applied
 
-**Plans**: TBD (5–7 plans)
+**Plans:** 7 plans
 
 Plans:
-- [ ] 04-01: Customer Django model — all fields, soft delete, TIN uniqueness constraint, migration
-- [ ] 04-02: Customer API endpoints — list (server-side pagination + filtering), create, update, soft-delete, export
-- [ ] 04-03: Customer data migration script — parse `fame_logistic_customers.xlsx`, validate, seed to PostgreSQL
-- [ ] 04-04: Customer AG Grid list UI — columns, inline filters, pagination controls, action buttons (use `/frontend-design` skill)
-- [ ] 04-05: Customer create/edit modal — React Hook Form + Zod validation, TIN/phone field validators, duplicate TIN warning (use `/frontend-design` skill)
-- [ ] 04-06: Customer detail view — linked jobs tab, contact info panel (use `/frontend-design` skill)
-- [ ] 04-07: Excel/CSV export endpoint and frontend trigger
+- [ ] 04-01-PLAN.md — Customer model update: add business_type, preferred_port FK, currency_preference FK, credit_terms + migration
+- [ ] 04-02-PLAN.md — Customer API: serializers, ViewSet with pagination/filtering/soft-delete/TIN check, URL wiring
+- [ ] 04-03-PLAN.md — Customer data seed: openpyxl management command to import 197 records from Excel
+- [ ] 04-04-PLAN.md — Customer AG Grid list UI: paginated table, column filters, search, kebab actions
+- [ ] 04-05-PLAN.md — Customer create/edit: modal form (React Hook Form + Zod), inline editing, TIN duplicate warning
+- [ ] 04-06-PLAN.md — Customer detail page: two-column layout, inline-editable info, linked jobs placeholder
+- [ ] 04-07-PLAN.md — Excel/CSV export: backend endpoint + frontend download trigger
 
 ---
 
