@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 3 of 10 (Administration & Lookup Setup)
-Plan: 6 of 7 in current phase (03-01, 03-06 complete; 03-02 through 03-05 and 03-07 pending)
-Status: In progress — 03-06 complete
-Last activity: 2026-04-05 — Completed 03-06-PLAN.md (Lookup Table CRUD APIs)
+Plan: 7 of 7 in current phase (03-01, 03-03, 03-06 complete; 03-02, 03-04, 03-05, 03-07 pending)
+Status: In progress — 03-03 complete
+Last activity: 2026-04-06 — Completed 03-03-PLAN.md (Audit Log Infrastructure)
 
-Progress: [███░░░░░░░] ~30% (15/~50 plans estimated complete)
+Progress: [███░░░░░░░] ~32% (16/~50 plans estimated complete)
 
 ## Performance Metrics
 
@@ -79,6 +79,9 @@ Progress: [███░░░░░░░] ~30% (15/~50 plans estimated complete
 - [03-06]: Lookup soft-delete returns HTTP 200 with updated object (not 204) for frontend list-state update without re-fetch
 - [03-06]: LookupDropdownView uses IsAnyRole — all staff roles need dropdown values to populate form fields
 - [03-06]: AuditLog logged inline via AuditLog.objects.create() in setup/views.py (AuditLogMixin from 03-03 not yet available)
+- [03-03]: AuditLogMixin.perform_destroy() inlines AuditLog.objects.create() — instance.pk becomes None after deletion so the helper can't use the model instance
+- [03-03]: date_to filter adds timedelta(days=1) and uses timestamp__lt for inclusive end-of-day matching
+- [03-03]: Malformed date filter params are silently ignored — returns unfiltered results rather than 400 error
 
 ### Pending Todos
 
@@ -93,6 +96,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-05T21:21:15Z
-Stopped at: Completed 03-06-PLAN.md (Lookup Table CRUD APIs)
+Last session: 2026-04-06T02:18:00Z
+Stopped at: Completed 03-03-PLAN.md (Audit Log Infrastructure)
 Resume file: None
