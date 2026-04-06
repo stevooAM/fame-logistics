@@ -3,7 +3,8 @@ import { useState } from "react";
 import { CustomerTable } from "./components/CustomerTable";
 import { CustomerToolbar } from "./components/CustomerToolbar";
 import { BatchActionBar } from "./components/BatchActionBar";
-import type { CustomerFilters } from "@/types/customer";
+import { CustomerFormDialog } from "./components/CustomerFormDialog";
+import type { Customer, CustomerFilters } from "@/types/customer";
 
 export default function CustomersPage() {
   const [filters, setFilters] = useState<CustomerFilters>({ ordering: "company_name" });
@@ -14,6 +15,25 @@ export default function CustomersPage() {
   const [saveAllTrigger, setSaveAllTrigger] = useState(0);
   const [cancelAllTrigger, setCancelAllTrigger] = useState(0);
 
+  // Modal state
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
+
+  function handleAddCustomer() {
+    setEditingCustomer(null);
+    setIsFormOpen(true);
+  }
+
+  function handleEditCustomer(customer: Customer) {
+    setEditingCustomer(customer);
+    setIsFormOpen(true);
+  }
+
+  function handleFormSuccess() {
+    setIsFormOpen(false);
+    setRefreshTrigger((n) => n + 1);
+  }
+
   return (
     <div className="flex flex-col gap-6 p-6">
       <div>
@@ -22,7 +42,7 @@ export default function CustomersPage() {
       </div>
       <CustomerToolbar
         onSearch={(term) => setFilters((f) => ({ ...f, search: term }))}
-        onAddCustomer={() => console.log("open modal — wired in 04-05")}
+        onAddCustomer={handleAddCustomer}
         onAddInline={() => setAddInlineTrigger((n) => n + 1)}
         onExport={() => console.log("export — wired in 04-07")}
       />
@@ -41,12 +61,19 @@ export default function CustomersPage() {
         addInlineTrigger={addInlineTrigger}
         saveAllTrigger={saveAllTrigger}
         cancelAllTrigger={cancelAllTrigger}
-        onEditCustomer={(c) => console.log("edit — wired in 04-05", c)}
+        onEditCustomer={handleEditCustomer}
         onDirtyChange={setDirtyCount}
         onSaveComplete={() => {
           setIsSaving(false);
           setRefreshTrigger((n) => n + 1);
         }}
+      />
+
+      <CustomerFormDialog
+        open={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
+        customer={editingCustomer}
+        onSuccess={handleFormSuccess}
       />
     </div>
   );
