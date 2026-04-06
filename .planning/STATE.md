@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 4 of 10 (Customer Management)
-Plan: 3 of 7 in current phase
+Plan: 3 of 7 in current phase (04-02 and 04-03 complete)
 Status: In progress
-Last activity: 2026-04-06 — Completed 04-03 (Customer data seeding command)
+Last activity: 2026-04-06 — Completed 04-02 (Customer API: serializers, ViewSet, URLs)
 
 Progress: [███░░░░░░░] ~40% (25/~57 plans estimated complete)
 
@@ -86,6 +86,9 @@ Progress: [███░░░░░░░] ~40% (25/~57 plans estimated complete
 - [04-01]: business_type is free-text CharField (not choices) — CONTEXT uses "e.g." implying open-ended categories
 - [04-01]: Customer FKs to setup.Port and setup.Currency use SET_NULL, null=True, blank=True — preserves customer record if lookup deleted
 - [04-01]: Migration 0002 depends on setup.0002_add_sort_order_and_code_fields (latest setup migration)
+- [04-02]: check-tin searches ALL customers (including is_active=False) to prevent TIN re-use on deactivated records
+- [04-02]: invalid exclude_id in check-tin is silently ignored — consistent with malformed-param defensive pattern from 03-03
+- [04-02]: destroy() calls _log_action directly (not perform_destroy) — soft-delete does not remove the row so AuditLogMixin.perform_destroy would be misleading
 - [04-03]: Rows without TIN use placeholder "__NO_TIN__{company_name}"[:50] to satisfy Customer.tin blank=False — update_or_create keyed on company_name for these rows
 - [04-03]: preferred_port and currency_preference excluded from seed command — FK fields populated manually in new system only
 
@@ -102,6 +105,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-06T12:42:57Z
-Stopped at: Completed 04-03-PLAN.md (Customer data seeding command)
+Last session: 2026-04-06T12:43:14Z
+Stopped at: Completed 04-02-PLAN.md (Customer API: serializers, ViewSet, URLs)
 Resume file: None
