@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 4 of 10 (Customer Management)
-Plan: 0 of 7 in current phase
-Status: Phase 3 complete — ready to plan Phase 4
-Last activity: 2026-04-06 — Completed Phase 3 (Administration & Lookup Setup), all 7 plans verified
+Plan: 1 of 7 in current phase
+Status: In progress
+Last activity: 2026-04-06 — Completed 04-01 (Customer model fields update)
 
-Progress: [███░░░░░░░] ~40% (22/~57 plans estimated complete)
+Progress: [███░░░░░░░] ~40% (23/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -82,6 +82,10 @@ Progress: [███░░░░░░░] ~40% (22/~57 plans estimated complete
 - [03-03]: AuditLogMixin.perform_destroy() inlines AuditLog.objects.create() — instance.pk becomes None after deletion so the helper can't use the model instance
 - [03-03]: date_to filter adds timedelta(days=1) and uses timestamp__lt for inclusive end-of-day matching
 - [03-03]: Malformed date filter params are silently ignored — returns unfiltered results rather than 400 error
+- [04-01]: TIN field is required (blank=False) — locked user decision; legacy data seeding must use placeholder strategy for rows without TIN
+- [04-01]: business_type is free-text CharField (not choices) — CONTEXT uses "e.g." implying open-ended categories
+- [04-01]: Customer FKs to setup.Port and setup.Currency use SET_NULL, null=True, blank=True — preserves customer record if lookup deleted
+- [04-01]: Migration 0002 depends on setup.0002_add_sort_order_and_code_fields (latest setup migration)
 
 ### Pending Todos
 
@@ -97,5 +101,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-04-06
-Stopped at: Completed Phase 3 — all 7 plans executed, verified, approved
+Stopped at: Completed 04-01-PLAN.md (Customer model fields update)
 Resume file: None
