@@ -763,6 +763,105 @@ class RoleListView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+# ---------------------------------------------------------------------------
+# Audit log query API (Admin only)
+# ---------------------------------------------------------------------------
+
+class AuditLogListView(APIView):
+    """
+    GET /api/audit-log/
+
+    Return paginated, filterable audit log entries. Admin-only.
+
+    Query parameters:
+      ?user={username}        — filter by acting user (case-insensitive contains)
+      ?action={ACTION}        — filter by action type (CREATE, UPDATE, DELETE, LOGIN, LOGOUT)
+      ?module={model_name}    — filter by model_name (case-insensitive contains)
+      ?date_from={YYYY-MM-DD} — entries on or after this date
+      ?date_to={YYYY-MM-DD}   — entries on or before this date (inclusive)
+      ?search={text}          — search in object_repr (case-insensitive contains)
+      ?page={N}               — page number (default 1)
+
+    Response format:
+      { count, next, previous, results }
+    """
+
+    permission_classes = [IsAdmin]
+
+    PAGE_SIZE = 25
+
+    def get(self, request: Request) -> Response:
+        from datetime import datetime, timedelta
+        from django.db.models import Q
+
+        queryset = AuditLog.objects.select_related("user").order_by("-timestamp")
+
+        # Filter: ?user=
+        user_filter = request.query_params.get("user", "").strip()
+        if user_filter:
+            queryset = queryset.filter(user__username__icontains=user_filter)
+
+        # Filter: ?action=
+        action_filter = request.query_params.get("action", "").strip().upper()
+        if action_filter:
+            queryset = queryset.filter(action=action_filter)
+
+        # Filter: ?module=
+        module_filter = request.query_params.get("module", "").strip()
+        if module_filter:
+            queryset = queryset.filter(model_name__icontains=module_filter)
+
+        # Filter: ?date_from= (inclusive lower bound)
+        date_from = request.query_params.get("date_from", "").strip()
+        if date_from:
+            try:
+                dt_from = datetime.strptime(date_from, "%Y-%m-%d")
+                queryset = queryset.filter(timestamp__gte=dt_from)
+            except ValueError:
+                pass  # Ignore malformed dates — don't error out
+
+        # Filter: ?date_to= (inclusive upper bound — add 1 day, use <)
+        date_to = request.query_params.get("date_to", "").strip()
+        if date_to:
+            try:
+                dt_to = datetime.strptime(date_to, "%Y-%m-%d") + timedelta(days=1)
+                queryset = queryset.filter(timestamp__lt=dt_to)
+            except ValueError:
+                pass  # Ignore malformed dates
+
+        # Filter: ?search= (object_repr contains)
+        search = request.query_params.get("search", "").strip()
+        if search:
+            queryset = queryset.filter(object_repr__icontains=search)
+
+        # Server-side pagination
+        try:
+            page = max(1, int(request.query_params.get("page", 1)))
+        except (ValueError, TypeError):
+            page = 1
+
+        total_count = queryset.count()
+        offset = (page - 1) * self.PAGE_SIZE
+        page_qs = queryset[offset: offset + self.PAGE_SIZE]
+
+        from core.serializers import AuditLogSerializer
+        serializer = AuditLogSerializer(page_qs, many=True)
+
+        base_url = request.build_absolute_uri(request.path)
+        next_url = f"{base_url}?page={page + 1}" if offset + self.PAGE_SIZE < total_count else None
+        prev_url = f"{base_url}?page={page - 1}" if page > 1 else None
+
+        return Response(
+            {
+                "count": total_count,
+                "next": next_url,
+                "previous": prev_url,
+                "results": serializer.data,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
 class ChangePasswordView(APIView):
     """
     POST /api/users/change-password/

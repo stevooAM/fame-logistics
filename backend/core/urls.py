@@ -24,4 +24,7 @@ urlpatterns = [
 
     # Role list
     path("roles/", views.RoleListView.as_view(), name="role_list"),
+
+    # Audit log (Admin only, read-only)
+    path("audit-log/", views.AuditLogListView.as_view(), name="audit_log_list"),
 ]
