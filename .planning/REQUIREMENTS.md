@@ -86,14 +86,14 @@
 
 ### Administration & Setup
 
-- [ ] **ADMIN-01**: User management — create, edit, deactivate users
-- [ ] **ADMIN-02**: Audit log viewer — all CRUD actions with user, timestamp, IP, action type
-- [ ] **ADMIN-03**: Session management — admin can view and terminate active sessions
-- [ ] **SETUP-01**: Port/location master list configuration
-- [ ] **SETUP-02**: Cargo type categories configuration
-- [ ] **SETUP-03**: Currency and exchange rate configuration
-- [ ] **SETUP-04**: Document type configuration
-- [ ] **SETUP-05**: Company profile settings (name, logo, contact info)
+- [x] **ADMIN-01**: User management — create, edit, deactivate users
+- [x] **ADMIN-02**: Audit log viewer — all CRUD actions with user, timestamp, IP, action type
+- [x] **ADMIN-03**: Session management — admin can view and terminate active sessions
+- [x] **SETUP-01**: Port/location master list configuration
+- [x] **SETUP-02**: Cargo type categories configuration
+- [x] **SETUP-03**: Currency and exchange rate configuration
+- [x] **SETUP-04**: Document type configuration
+- [x] **SETUP-05**: Company profile settings (name, logo, contact info)
 
 ### Security & Non-Functional
 
@@ -207,14 +207,14 @@
 | DASH-01 | Phase 8 — Dashboard | Pending |
 | DASH-02 | Phase 8 — Dashboard | Pending |
 | DASH-03 | Phase 8 — Dashboard | Pending |
-| ADMIN-01 | Phase 3 — Administration & Lookup Setup | Pending |
-| ADMIN-02 | Phase 3 — Administration & Lookup Setup | Pending |
-| ADMIN-03 | Phase 3 — Administration & Lookup Setup | Pending |
-| SETUP-01 | Phase 3 — Administration & Lookup Setup | Pending |
-| SETUP-02 | Phase 3 — Administration & Lookup Setup | Pending |
-| SETUP-03 | Phase 3 — Administration & Lookup Setup | Pending |
-| SETUP-04 | Phase 3 — Administration & Lookup Setup | Pending |
-| SETUP-05 | Phase 3 — Administration & Lookup Setup | Pending |
+| ADMIN-01 | Phase 3 — Administration & Lookup Setup | Complete |
+| ADMIN-02 | Phase 3 — Administration & Lookup Setup | Complete |
+| ADMIN-03 | Phase 3 — Administration & Lookup Setup | Complete |
+| SETUP-01 | Phase 3 — Administration & Lookup Setup | Complete |
+| SETUP-02 | Phase 3 — Administration & Lookup Setup | Complete |
+| SETUP-03 | Phase 3 — Administration & Lookup Setup | Complete |
+| SETUP-04 | Phase 3 — Administration & Lookup Setup | Complete |
+| SETUP-05 | Phase 3 — Administration & Lookup Setup | Complete |
 | SEC-01 | Phase 10 — Security Hardening & Launch | Pending |
 | SEC-02 | Phase 10 — Security Hardening & Launch | Pending |
 | SEC-03 | Phase 10 — Security Hardening & Launch | Pending |
