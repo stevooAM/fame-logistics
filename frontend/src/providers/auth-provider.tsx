@@ -8,7 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { getMe, logout as authLogout, refreshToken, UserProfile } from "@/lib/auth";
 import { setupTokenRefresh } from "@/lib/api";
 import { useIdleTimeout } from "@/hooks/use-idle-timeout";
@@ -23,6 +23,7 @@ interface AuthContextValue {
   loading: boolean;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
+  updateUser: (patch: Partial<UserProfile>) => void;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -45,6 +46,7 @@ export function useAuth(): AuthContextValue {
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [showSessionWarning, setShowSessionWarning] = useState(false);
@@ -69,6 +71,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch {
       await logoutRef.current();
     }
+  }, []);
+
+  // Patch user state in-memory (e.g. clear is_force_password_change after change-password)
+  const updateUser = useCallback((patch: Partial<UserProfile>) => {
+    setUser((prev) => (prev ? { ...prev, ...patch } : prev));
   }, []);
 
   // Load user on mount
@@ -105,6 +112,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return stop;
   }, []);
 
+  // Force password change redirect guard
+  // After user is loaded, redirect to change-password if flag is set
+  useEffect(() => {
+    if (loading) return;
+    if (!user) return;
+    if (!user.is_force_password_change) return;
+    if (pathname === "/admin/change-password") return;
+    router.replace("/admin/change-password");
+  }, [loading, user, pathname, router]);
+
   // Idle timeout — warning at 28 min, logout at 30 min
   const { resetTimers } = useIdleTimeout({
     onWarning: useCallback(() => {
@@ -139,7 +156,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, logout, refreshUser }}>
+    <AuthContext.Provider value={{ user, loading, logout, refreshUser, updateUser }}>
       {children}
       <SessionWarningDialog
         open={showSessionWarning}
