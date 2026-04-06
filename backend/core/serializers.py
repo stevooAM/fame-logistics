@@ -12,7 +12,7 @@ from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from core.models import Role, UserProfile
+from core.models import AuditLog, Role, UserProfile
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -261,6 +261,43 @@ class UserDeactivateSerializer(serializers.Serializer):
     No input fields needed — it is a POST action endpoint.
     """
     pass
+
+
+# ---------------------------------------------------------------------------
+# Audit log serializer
+# ---------------------------------------------------------------------------
+
+
+class AuditLogSerializer(serializers.ModelSerializer):
+    """
+    Read-only serializer for AuditLog entries.
+
+    The user field returns the username string (or "System" if the user FK is
+    null) rather than a nested object — keeps the API response flat and
+    avoids leaking deleted-user IDs.
+    """
+
+    user = serializers.SerializerMethodField()
+
+    class Meta:
+        model = AuditLog
+        fields = [
+            "id",
+            "user",
+            "action",
+            "model_name",
+            "object_id",
+            "object_repr",
+            "changes",
+            "ip_address",
+            "timestamp",
+        ]
+        read_only_fields = fields
+
+    def get_user(self, obj) -> str:
+        if obj.user is None:
+            return "System"
+        return obj.user.username
 
 
 class ChangePasswordSerializer(serializers.Serializer):
