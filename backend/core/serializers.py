@@ -300,6 +300,24 @@ class AuditLogSerializer(serializers.ModelSerializer):
         return obj.user.username
 
 
+# ---------------------------------------------------------------------------
+# Session management serializer
+# ---------------------------------------------------------------------------
+
+
+class ActiveSessionSerializer(serializers.Serializer):
+    """Read-only serializer for active session entries returned by ActiveSessionListView."""
+
+    token_id = serializers.IntegerField()
+    user_id = serializers.IntegerField()
+    username = serializers.CharField()
+    full_name = serializers.CharField()
+    role = serializers.CharField(allow_blank=True)
+    ip_address = serializers.CharField(allow_null=True)
+    created_at = serializers.DateTimeField()
+    expires_at = serializers.DateTimeField()
+
+
 class ChangePasswordSerializer(serializers.Serializer):
     """
     Serializer for POST /api/users/change-password/.

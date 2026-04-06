@@ -27,4 +27,8 @@ urlpatterns = [
 
     # Audit log (Admin only, read-only)
     path("audit-log/", views.AuditLogListView.as_view(), name="audit_log_list"),
+
+    # Session management (Admin only)
+    path("sessions/", views.ActiveSessionListView.as_view(), name="active_session_list"),
+    path("sessions/<int:token_id>/terminate/", views.TerminateSessionView.as_view(), name="terminate_session"),
 ]

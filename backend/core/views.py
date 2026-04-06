@@ -893,3 +893,133 @@ class ChangePasswordView(APIView):
 
         logger.info("Password changed via /api/users/change-password/ by user %s", request.user.username)
         return Response({"message": "Password changed successfully."}, status=status.HTTP_200_OK)
+
+
+# ---------------------------------------------------------------------------
+# Session management views (Admin only)
+# ---------------------------------------------------------------------------
+
+class ActiveSessionListView(APIView):
+    """
+    GET /api/sessions/
+
+    Return a list of active sessions — users with at least one non-expired,
+    non-blacklisted refresh token. One entry per user, showing their most
+    recent token. Includes last-login IP from audit log.
+    """
+
+    permission_classes = [IsAdmin]
+
+    def get(self, request: Request) -> Response:
+        from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
+
+        # Non-expired tokens that are not blacklisted
+        active_tokens = (
+            OutstandingToken.objects.filter(
+                expires_at__gt=timezone.now()
+            )
+            .exclude(
+                id__in=BlacklistedToken.objects.values_list("token_id", flat=True)
+            )
+            .select_related("user")
+            .order_by("-created_at")
+        )
+
+        # Group by user — keep only the most recent token per user
+        seen_user_ids: set = set()
+        unique_sessions = []
+        for token in active_tokens:
+            if token.user_id not in seen_user_ids:
+                seen_user_ids.add(token.user_id)
+                unique_sessions.append(token)
+
+        # Build IP map from last LOGIN audit entry per user
+        ip_map: dict = {}
+        if seen_user_ids:
+            try:
+                login_audits = (
+                    AuditLog.objects.filter(
+                        user_id__in=seen_user_ids,
+                        action="LOGIN",
+                    )
+                    .order_by("user_id", "-timestamp")
+                    .distinct("user_id")
+                )
+                for entry in login_audits:
+                    ip_map[entry.user_id] = entry.ip_address
+            except Exception:
+                logger.exception("Failed to fetch login audit entries for session IP map")
+
+        # Serialize
+        from core.serializers import ActiveSessionSerializer
+        results = []
+        for token in unique_sessions:
+            user = token.user
+            try:
+                profile = user.profile
+                role_name = profile.role.name if profile.role else ""
+            except Exception:
+                role_name = ""
+
+            results.append({
+                "token_id": token.id,
+                "user_id": user.id,
+                "username": user.username,
+                "full_name": f"{user.first_name} {user.last_name}".strip(),
+                "role": role_name,
+                "ip_address": ip_map.get(user.id),
+                "created_at": token.created_at,
+                "expires_at": token.expires_at,
+            })
+
+        serializer = ActiveSessionSerializer(results, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class TerminateSessionView(APIView):
+    """
+    POST /api/sessions/{token_id}/terminate/
+
+    Blacklist the specified token and ALL other outstanding tokens for that
+    user — immediately invalidating every active session for that user.
+    """
+
+    permission_classes = [IsAdmin]
+
+    def post(self, request: Request, token_id: int) -> Response:
+        from django.http import Http404
+        from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
+
+        try:
+            target_token = OutstandingToken.objects.select_related("user").get(id=token_id)
+        except OutstandingToken.DoesNotExist:
+            raise Http404
+
+        target_user = target_token.user
+
+        # Blacklist all outstanding tokens for this user
+        outstanding = OutstandingToken.objects.filter(user=target_user)
+        blacklisted_count = 0
+        for token in outstanding:
+            _, created = BlacklistedToken.objects.get_or_create(token=token)
+            if created:
+                blacklisted_count += 1
+
+        # Audit log
+        try:
+            AuditLog.objects.create(
+                user=request.user,
+                action="DELETE",
+                model_name="Session",
+                object_id=str(target_user.id),
+                object_repr=f"Terminated sessions for {target_user.username}",
+                changes={"blacklisted_tokens": blacklisted_count},
+                ip_address=get_client_ip(request),
+            )
+        except Exception:
+            logger.exception(
+                "Failed to write audit log for session termination of user %s",
+                target_user.username,
+            )
+
+        return Response({"message": "Session terminated"}, status=status.HTTP_200_OK)
