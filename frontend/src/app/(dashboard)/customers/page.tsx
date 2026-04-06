@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { CustomerTable } from "./components/CustomerTable";
 import { CustomerToolbar } from "./components/CustomerToolbar";
+import { BatchActionBar } from "./components/BatchActionBar";
 import type { CustomerFilters } from "@/types/customer";
 
 export default function CustomersPage() {
@@ -24,6 +25,15 @@ export default function CustomersPage() {
         onAddCustomer={() => console.log("open modal — wired in 04-05")}
         onAddInline={() => setAddInlineTrigger((n) => n + 1)}
         onExport={() => console.log("export — wired in 04-07")}
+      />
+      <BatchActionBar
+        dirtyCount={dirtyCount}
+        isSaving={isSaving}
+        onSaveAll={() => {
+          setIsSaving(true);
+          setSaveAllTrigger((n) => n + 1);
+        }}
+        onCancelAll={() => setCancelAllTrigger((n) => n + 1)}
       />
       <CustomerTable
         filters={filters}
