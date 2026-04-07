@@ -4,6 +4,7 @@ import { CustomerTable } from "./components/CustomerTable";
 import { CustomerToolbar } from "./components/CustomerToolbar";
 import { BatchActionBar } from "./components/BatchActionBar";
 import { CustomerFormDialog } from "./components/CustomerFormDialog";
+import { apiFetchBlob } from "@/lib/api";
 import type { Customer, CustomerFilters } from "@/types/customer";
 
 export default function CustomersPage() {
@@ -34,6 +35,26 @@ export default function CustomersPage() {
     setRefreshTrigger((n) => n + 1);
   }
 
+  async function handleExport(format: "xlsx" | "csv") {
+    const params = new URLSearchParams();
+    params.set("format", format);
+    if (filters.search) params.set("search", filters.search);
+    if (filters.company_name) params.set("company_name", filters.company_name);
+    if (filters.tin) params.set("tin", filters.tin);
+    if (filters.business_type) params.set("business_type", filters.business_type);
+    if (filters.customer_type) params.set("customer_type", filters.customer_type);
+    if (filters.credit_terms) params.set("credit_terms", filters.credit_terms);
+    if (filters.ordering) params.set("ordering", filters.ordering);
+
+    const blob = await apiFetchBlob(`/api/customers/export/?${params.toString()}`);
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `customers_export.${format === "xlsx" ? "xlsx" : "csv"}`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
   return (
     <div className="flex flex-col gap-6 p-6">
       <div>
@@ -44,7 +65,8 @@ export default function CustomersPage() {
         onSearch={(term) => setFilters((f) => ({ ...f, search: term }))}
         onAddCustomer={handleAddCustomer}
         onAddInline={() => setAddInlineTrigger((n) => n + 1)}
-        onExport={() => console.log("export — wired in 04-07")}
+        onExportExcel={() => handleExport("xlsx")}
+        onExportCsv={() => handleExport("csv")}
       />
       <BatchActionBar
         dirtyCount={dirtyCount}

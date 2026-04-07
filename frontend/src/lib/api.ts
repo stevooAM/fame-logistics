@@ -101,6 +101,63 @@ export class ApiError extends Error {
 }
 
 /**
+ * Fetch wrapper for binary/blob responses (e.g. file downloads).
+ *
+ * Mirrors apiFetch credential/cookie/CSRF handling exactly but returns a Blob
+ * instead of parsed JSON. Use this for Excel/CSV export endpoints.
+ *
+ * On 401: attempts silent token refresh then retries once.
+ * On failure after retry: redirects to /login.
+ */
+export async function apiFetchBlob(
+  path: string,
+  options: FetchOptions = {}
+): Promise<Blob> {
+  const { skipRefresh = false, ...fetchOptions } = options;
+
+  const url = path.startsWith("http") ? path : `${API_BASE_URL}${path}`;
+
+  const headers: HeadersInit = {
+    ...(fetchOptions.method && fetchOptions.method !== "GET"
+      ? { "Content-Type": "application/json" }
+      : {}),
+    ...(fetchOptions.headers as Record<string, string> | undefined),
+  };
+
+  const response = await fetch(url, {
+    ...fetchOptions,
+    credentials: "include",
+    headers,
+  });
+
+  if (response.status === 401 && !skipRefresh) {
+    const refreshed = await silentRefresh();
+    if (refreshed) {
+      const retryResponse = await fetch(url, {
+        ...fetchOptions,
+        credentials: "include",
+        headers,
+      });
+      if (!retryResponse.ok) {
+        redirectToLogin();
+        throw new Error("Session expired");
+      }
+      return retryResponse.blob();
+    } else {
+      redirectToLogin();
+      throw new Error("Session expired");
+    }
+  }
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new ApiError(response.status, errorData);
+  }
+
+  return response.blob();
+}
+
+/**
  * Sets up a background interval that silently refreshes the JWT access token
  * every 13 minutes — well before the 15-minute access token expiry.
  *
