@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 4 of 10 (Customer Management)
-Plan: 4 of 7 in current phase (04-02, 04-03, 04-04 complete)
+Plan: 5 of 7 in current phase (04-02, 04-03, 04-04, 04-05 complete)
 Status: In progress
-Last activity: 2026-04-06 — Completed 04-04 (Customer AG Grid List UI)
+Last activity: 2026-04-07 — Completed 04-05 (Customer Form Modal)
 
-Progress: [███░░░░░░░] ~44% (26/~57 plans estimated complete)
+Progress: [████░░░░░░] ~47% (27/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -91,6 +91,9 @@ Progress: [███░░░░░░░] ~44% (26/~57 plans estimated complete
 - [04-02]: destroy() calls _log_action directly (not perform_destroy) — soft-delete does not remove the row so AuditLogMixin.perform_destroy would be misleading
 - [04-03]: Rows without TIN use placeholder "__NO_TIN__{company_name}"[:50] to satisfy Customer.tin blank=False — update_or_create keyed on company_name for these rows
 - [04-03]: preferred_port and currency_preference excluded from seed command — FK fields populated manually in new system only
+- [04-05]: TIN check network failure is non-blocking — form proceeds to save; backend enforces uniqueness as authoritative check
+- [04-05]: FieldGroup helper component established as reusable section divider pattern for all future forms
+- [04-05]: inputStyle() helper used over shadcn Input for fine-grained teal focus ring control in Naval Ledger forms
 
 ### Pending Todos
 
@@ -105,6 +108,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-06T00:00:00Z
-Stopped at: Completed 04-04-PLAN.md (Customer AG Grid List UI)
+Last session: 2026-04-07T00:16:49Z
+Stopped at: Completed 04-05-PLAN.md (Customer Form Modal)
 Resume file: None
