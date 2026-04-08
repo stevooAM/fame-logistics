@@ -146,9 +146,14 @@ SIMPLE_JWT = {
 }
 
 # CORS
-CORS_ALLOWED_ORIGINS = os.environ.get(
-    "CORS_ALLOWED_ORIGINS", "http://localhost:3000"
-).split(",")
+# In local dev (DEBUG=True) allow any localhost port (port changes with autoPort).
+# CORS_ALLOW_ALL_ORIGINS cannot be used with credentials — use regex instead.
+if DEBUG:
+    CORS_ALLOWED_ORIGIN_REGEXES = [r"^http://localhost:\d+$"]
+else:
+    CORS_ALLOWED_ORIGINS = os.environ.get(
+        "CORS_ALLOWED_ORIGINS", "http://localhost:3000"
+    ).split(",")
 CORS_ALLOW_CREDENTIALS = True
 
 # Celery
