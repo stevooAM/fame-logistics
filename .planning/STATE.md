@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 4 of 10 (Customer Management)
-Plan: 7 of 7 in current phase (04-02, 04-03, 04-04, 04-05, 04-07 complete)
-Status: In progress
-Last activity: 2026-04-07 — Completed 04-07 (Customer Export XLSX/CSV)
+Plan: 8 of 8 in current phase (04-02, 04-03, 04-04, 04-05, 04-07, 04-08 complete)
+Status: Phase complete
+Last activity: 2026-04-10 — Completed 04-08 (Docker Entrypoint Wiring)
 
-Progress: [█████░░░░░] ~50% (29/~57 plans estimated complete)
+Progress: [█████░░░░░] ~53% (31/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -98,6 +98,10 @@ Progress: [█████░░░░░] ~50% (29/~57 plans estimated complete
 - [04-07]: Export action reuses get_queryset() unchanged — guarantees identical filter semantics to list endpoint
 - [04-07]: No audit log on export — read-only operation; logging exports would pollute the audit trail
 - [04-07]: Custom export dropdown built with fixed-inset overlay (shadcn DropdownMenu not available in project)
+- [04-08]: entrypoint.sh uses #!/bin/sh (not bash) — python:3.12-slim base has sh, not bash
+- [04-08]: exec runserver replaces shell process — PID 1 receives SIGTERM correctly
+- [04-08]: seed_customers exits 0 on missing Excel file — set -e does not abort startup when file absent
+- [04-08]: chmod +x applied inside Dockerfile RUN step — host filesystem execute bit not required
 
 ### Pending Todos
 
@@ -112,6 +116,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-07T11:14:00Z
-Stopped at: Completed 04-07-PLAN.md (Customer Export XLSX/CSV)
+Last session: 2026-04-10T10:28:00Z
+Stopped at: Completed 04-08-PLAN.md (Docker Entrypoint Wiring)
 Resume file: None
