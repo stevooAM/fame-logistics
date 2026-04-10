@@ -153,16 +153,15 @@ Plans:
 4. Submitting a job for approval creates an entry in the Approval queue (Phase 6) — the submit action is only available to authorised roles
 5. Searching by job number, customer name, status, or date range returns correct results in the paginated AG Grid within 500ms
 
-**Plans**: TBD (5–7 plans)
+**Plans:** 6 plans
 
 Plans:
-- [ ] 05-01: Job Django model — all fields, status enum, FK to Customer, auto-number generation, migration
-- [ ] 05-02: Job audit trail model — status change log with user/timestamp FK
-- [ ] 05-03: Job API endpoints — create, update, status transition, list (server-side pagination + search), detail, submit-for-approval
-- [ ] 05-04: Cloud storage integration — document upload to Cloudflare R2 / AWS S3, signed URL retrieval
-- [ ] 05-05: Job list UI — AG Grid with search/filter controls, status badges, action column (use `/frontend-design` skill)
-- [ ] 05-06: Job create/edit form — all fields, customer picker, job type selector, status controls (use `/frontend-design` skill)
-- [ ] 05-07: Job detail view — field summary, document attachment panel, audit trail timeline (use `/frontend-design` skill)
+- [ ] 05-01-PLAN.md — Job model update: add assigned_to, eta, delivery_date fields + auto-number generation + migration
+- [ ] 05-02-PLAN.md — Cloud storage integration: boto3, R2/S3 config, upload/download/presigned URL utilities
+- [ ] 05-03-PLAN.md — Job API: serializers, ViewSet with CRUD, status transitions, document endpoints, pagination/search
+- [ ] 05-04-PLAN.md — Job list UI: AG Grid with search/filter controls, status badges, server-side pagination
+- [ ] 05-05-PLAN.md — Job create/edit form: all fields, customer picker, Zod validation
+- [ ] 05-06-PLAN.md — Job detail view: field summary, status transition dropdown, document panel, audit trail timeline
 
 ---
 
@@ -303,14 +302,14 @@ Plans:
 | 2. Authentication & RBAC | 6/6 | ✓ Complete | 2026-04-05 |
 | 3. Administration & Lookup Setup | 7/7 | ✓ Complete | 2026-04-06 |
 | 4. Customer Management | 8/8 | ✓ Complete | 2026-04-10 |
-| 5. Job Management | 0/7 | Not started | - |
+| 5. Job Management | 0/6 | Not started | - |
 | 6. Approval Workflow | 0/5 | Not started | - |
 | 7. Accounts & Finance | 0/6 | Not started | - |
 | 8. Dashboard | 0/2 | Not started | - |
 | 9. Reports | 0/4 | Not started | - |
 | 10. Security Hardening & Launch | 0/7 | Not started | - |
 
-**Total plans (estimated):** 57 plans across 10 phases
+**Total plans (estimated):** 56 plans across 10 phases
 
 ---
 
