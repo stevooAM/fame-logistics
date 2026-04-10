@@ -39,3 +39,6 @@ Thumbs.db
 
 # Docker
 docker-compose.override.yml
+
+# Client data — sensitive, not for version control
+backend/data/*.xlsx
