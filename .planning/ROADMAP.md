@@ -124,7 +124,7 @@ Plans:
 5. The database already contains the 197 migrated customer records when the system is first deployed — no manual entry required
 6. The customer list can be exported to Excel/CSV with current filters applied
 
-**Plans:** 7 plans
+**Plans:** 8 plans
 
 Plans:
 - [ ] 04-01-PLAN.md — Customer model update: add business_type, preferred_port FK, currency_preference FK, credit_terms + migration
@@ -134,6 +134,7 @@ Plans:
 - [ ] 04-05-PLAN.md — Customer create/edit: modal form (React Hook Form + Zod), inline editing, TIN duplicate warning
 - [ ] 04-06-PLAN.md — Customer detail page: two-column layout, inline-editable info, linked jobs placeholder
 - [ ] 04-07-PLAN.md — Excel/CSV export: backend endpoint + frontend download trigger
+- [ ] 04-08-PLAN.md — Gap closure: Docker entrypoint wiring migrate + seed_customers on first deploy
 
 ---
 
@@ -301,7 +302,7 @@ Plans:
 | 1. Foundation | 7/7 | ✓ Complete | 2026-04-05 |
 | 2. Authentication & RBAC | 6/6 | ✓ Complete | 2026-04-05 |
 | 3. Administration & Lookup Setup | 7/7 | ✓ Complete | 2026-04-06 |
-| 4. Customer Management | 0/7 | Not started | - |
+| 4. Customer Management | 0/8 | Not started | - |
 | 5. Job Management | 0/7 | Not started | - |
 | 6. Approval Workflow | 0/5 | Not started | - |
 | 7. Accounts & Finance | 0/6 | Not started | - |
