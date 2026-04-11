@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 5 of 10 (Job Management)
-Plan: 4 of 6 in current phase (05-01, 05-02, 05-03, 05-04 complete)
+Plan: 5 of 6 in current phase (05-01, 05-02, 05-03, 05-04, 05-05 complete)
 Status: In progress
-Last activity: 2026-04-11 — Completed 05-04 (Job List Page)
+Last activity: 2026-04-11 — Completed 05-05 (Job Form Dialog)
 
-Progress: [█████░░░░░] ~58% (35/~57 plans estimated complete)
+Progress: [█████░░░░░] ~60% (36/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -117,6 +117,10 @@ Progress: [█████░░░░░] ~58% (35/~57 plans estimated complete
 - [05-04]: AbortController used in JobTable fetch — cancels stale in-flight requests when filters change rapidly
 - [05-04]: View/Edit buttons (not kebab menu) for job row actions — plan preference for simpler UI confirmed
 - [05-04]: StatusBadge is reusable — import from jobs/components/StatusBadge for job detail and form pages
+- [05-05]: CustomerPicker uses Controller from react-hook-form to integrate custom onChange while keeping RHF validation flow
+- [05-05]: DRF field errors mapped via fieldMap + setError for per-field inline display; fallback to apiError banner if no field keys match
+- [05-05]: assigned_to uses simple select from /api/users/?page_size=100 — staff roster is small, no picker needed
+- [05-05]: weight_kg, volume_cbm, total_cost stored as strings in Zod schema with refine() for parseFloat validation; parseFloat() applied on submit
 
 ### Pending Todos
 
@@ -131,6 +135,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-11T04:03:31Z
-Stopped at: Completed 05-04-PLAN.md (Job List Page)
+Last session: 2026-04-11T04:05:23Z
+Stopped at: Completed 05-05-PLAN.md (Job Form Dialog)
 Resume file: None
