@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 5 of 10 (Job Management)
-Plan: 1 of 6 in current phase (05-01 complete)
+Plan: 2 of 6 in current phase (05-01, 05-02 complete)
 Status: In progress
-Last activity: 2026-04-11 — Completed 05-01 (Job Model Fields and Auto-Number Generation)
+Last activity: 2026-04-11 — Completed 05-02 (Cloud Storage Integration)
 
-Progress: [█████░░░░░] ~54% (32/~57 plans estimated complete)
+Progress: [█████░░░░░] ~55% (33/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -105,6 +105,10 @@ Progress: [█████░░░░░] ~54% (32/~57 plans estimated complete
 - [05-01]: generate_job_number() is module-level (not classmethod) to avoid forward-reference issues; uses select_for_update() for race-safe concurrent creation
 - [05-01]: Job.save() checks both not self.pk and not self.job_number — allows explicit job number override in bulk imports
 - [05-01]: FMS-{YEAR}-{SEQUENCE:05d} is the canonical job number format for all creation paths
+- [05-02]: Cached _s3_client at module level — boto3 client construction is not free per-call
+- [05-02]: delete_document logs errors without raising — deletion failure must never block a job record update
+- [05-02]: upload_document returns storage key (not URL) — presigned URLs generated on demand via get_presigned_url
+- [05-02]: AWS_S3_ENDPOINT_URL passed as None when blank — empty string would break boto3 client init; or None guard used
 
 ### Pending Todos
 
@@ -119,6 +123,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-11T03:51:30Z
-Stopped at: Completed 05-01-PLAN.md (Job Model Fields and Auto-Number Generation)
+Last session: 2026-04-11T03:52:43Z
+Stopped at: Completed 05-02-PLAN.md (Cloud Storage Integration)
 Resume file: None
