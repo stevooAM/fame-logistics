@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 5 of 10 (Job Management)
-Plan: 2 of 6 in current phase (05-01, 05-02 complete)
+Plan: 3 of 6 in current phase (05-01, 05-02, 05-03 complete)
 Status: In progress
-Last activity: 2026-04-11 — Completed 05-02 (Cloud Storage Integration)
+Last activity: 2026-04-11 — Completed 05-03 (Job API Layer)
 
-Progress: [█████░░░░░] ~55% (33/~57 plans estimated complete)
+Progress: [█████░░░░░] ~56% (34/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -109,6 +109,10 @@ Progress: [█████░░░░░] ~55% (33/~57 plans estimated complete
 - [05-02]: delete_document logs errors without raising — deletion failure must never block a job record update
 - [05-02]: upload_document returns storage key (not URL) — presigned URLs generated on demand via get_presigned_url
 - [05-02]: AWS_S3_ENDPOINT_URL passed as None when blank — empty string would break boto3 client init; or None guard used
+- [05-03]: perform_create bypasses AuditLogMixin.perform_create — calls serializer.save(created_by=...) directly to avoid double audit log while still creating JobAuditTrail CREATED entry
+- [05-03]: delete_document returns 204 No Content — no response body for document deletion
+- [05-03]: list_documents injects presigned_url per-document post-serialization; StorageError yields None (non-fatal)
+- [05-03]: Admin-only reversal check reads request.user.profile.role.name from DB — upholds RBAC-02, no JWT claim trust
 
 ### Pending Todos
 
@@ -123,6 +127,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-11T03:52:43Z
-Stopped at: Completed 05-02-PLAN.md (Cloud Storage Integration)
+Last session: 2026-04-11T03:58:14Z
+Stopped at: Completed 05-03-PLAN.md (Job API Layer)
 Resume file: None
