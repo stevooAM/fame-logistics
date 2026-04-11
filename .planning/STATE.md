@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 
 ## Current Position
 
-Phase: 4 of 10 (Customer Management)
-Plan: 8 of 8 in current phase (04-02, 04-03, 04-04, 04-05, 04-07, 04-08 complete)
-Status: Phase complete
-Last activity: 2026-04-10 — Completed 04-08 (Docker Entrypoint Wiring)
+Phase: 5 of 10 (Job Management)
+Plan: 1 of 6 in current phase (05-01 complete)
+Status: In progress
+Last activity: 2026-04-11 — Completed 05-01 (Job Model Fields and Auto-Number Generation)
 
-Progress: [█████░░░░░] ~53% (31/~57 plans estimated complete)
+Progress: [█████░░░░░] ~54% (32/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -102,6 +102,9 @@ Progress: [█████░░░░░] ~53% (31/~57 plans estimated complete
 - [04-08]: exec runserver replaces shell process — PID 1 receives SIGTERM correctly
 - [04-08]: seed_customers exits 0 on missing Excel file — set -e does not abort startup when file absent
 - [04-08]: chmod +x applied inside Dockerfile RUN step — host filesystem execute bit not required
+- [05-01]: generate_job_number() is module-level (not classmethod) to avoid forward-reference issues; uses select_for_update() for race-safe concurrent creation
+- [05-01]: Job.save() checks both not self.pk and not self.job_number — allows explicit job number override in bulk imports
+- [05-01]: FMS-{YEAR}-{SEQUENCE:05d} is the canonical job number format for all creation paths
 
 ### Pending Todos
 
@@ -116,6 +119,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-10T10:28:00Z
-Stopped at: Completed 04-08-PLAN.md (Docker Entrypoint Wiring)
+Last session: 2026-04-11T03:51:30Z
+Stopped at: Completed 05-01-PLAN.md (Job Model Fields and Auto-Number Generation)
 Resume file: None
