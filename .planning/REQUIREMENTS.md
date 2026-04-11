@@ -42,17 +42,17 @@
 
 ### Job Management
 
-- [ ] **JOB-01**: Create freight job linked to a customer
-- [ ] **JOB-02**: Auto-generate unique job number on creation (e.g., FMS-2026-00001)
-- [ ] **JOB-03**: Job type: Import / Export / Transit / Local
-- [ ] **JOB-04**: Job fields: Origin, Destination, Cargo Description, Bill of Lading, Container Number, Weight (kg), Volume (CBM), Total Cost, Notes
-- [ ] **JOB-05**: List all jobs in filterable, paginated AG Grid table
-- [ ] **JOB-06**: Full job detail single-record view
-- [ ] **JOB-07**: Job status workflow: Draft → Pending → In Progress → Customs → Delivered → Closed / Cancelled
-- [ ] **JOB-08**: Submit job for approval — triggers Approval queue entry
-- [ ] **JOB-09**: Search jobs by job number, customer, status, date range
-- [ ] **JOB-10**: Job audit trail — all state changes recorded with user and timestamp
-- [ ] **JOB-11**: Attach documents to job (Bill of Lading, manifests, invoices) via cloud storage
+- [x] **JOB-01**: Create freight job linked to a customer
+- [x] **JOB-02**: Auto-generate unique job number on creation (e.g., FMS-2026-00001)
+- [x] **JOB-03**: Job type: Import / Export / Transit / Local
+- [x] **JOB-04**: Job fields: Origin, Destination, Cargo Description, Bill of Lading, Container Number, Weight (kg), Volume (CBM), Total Cost, Notes
+- [x] **JOB-05**: List all jobs in filterable, paginated AG Grid table
+- [x] **JOB-06**: Full job detail single-record view
+- [x] **JOB-07**: Job status workflow: Draft → Pending → In Progress → Customs → Delivered → Closed / Cancelled
+- [x] **JOB-08**: Submit job for approval — triggers Approval queue entry
+- [x] **JOB-09**: Search jobs by job number, customer, status, date range
+- [x] **JOB-10**: Job audit trail — all state changes recorded with user and timestamp
+- [x] **JOB-11**: Attach documents to job (Bill of Lading, manifests, invoices) via cloud storage
 
 ### Approval Workflow
 
@@ -178,17 +178,17 @@
 | CUST-11 | Phase 4 — Customer Management | Complete |
 | CUST-12 | Phase 4 — Customer Management | Complete |
 | CUST-13 | Phase 4 — Customer Management | Complete |
-| JOB-01 | Phase 5 — Job Management | Pending |
-| JOB-02 | Phase 5 — Job Management | Pending |
-| JOB-03 | Phase 5 — Job Management | Pending |
-| JOB-04 | Phase 5 — Job Management | Pending |
-| JOB-05 | Phase 5 — Job Management | Pending |
-| JOB-06 | Phase 5 — Job Management | Pending |
-| JOB-07 | Phase 5 — Job Management | Pending |
-| JOB-08 | Phase 5 — Job Management | Pending |
-| JOB-09 | Phase 5 — Job Management | Pending |
-| JOB-10 | Phase 5 — Job Management | Pending |
-| JOB-11 | Phase 5 — Job Management | Pending |
+| JOB-01 | Phase 5 — Job Management | Complete |
+| JOB-02 | Phase 5 — Job Management | Complete |
+| JOB-03 | Phase 5 — Job Management | Complete |
+| JOB-04 | Phase 5 — Job Management | Complete |
+| JOB-05 | Phase 5 — Job Management | Complete |
+| JOB-06 | Phase 5 — Job Management | Complete |
+| JOB-07 | Phase 5 — Job Management | Complete |
+| JOB-08 | Phase 5 — Job Management | Complete |
+| JOB-09 | Phase 5 — Job Management | Complete |
+| JOB-10 | Phase 5 — Job Management | Complete |
+| JOB-11 | Phase 5 — Job Management | Complete |
 | APR-01 | Phase 6 — Approval Workflow | Pending |
 | APR-02 | Phase 6 — Approval Workflow | Pending |
 | APR-03 | Phase 6 — Approval Workflow | Pending |
