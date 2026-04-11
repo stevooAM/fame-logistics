@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 5 of 10 (Job Management)
-Plan: 3 of 6 in current phase (05-01, 05-02, 05-03 complete)
+Plan: 4 of 6 in current phase (05-01, 05-02, 05-03, 05-04 complete)
 Status: In progress
-Last activity: 2026-04-11 — Completed 05-03 (Job API Layer)
+Last activity: 2026-04-11 — Completed 05-04 (Job List Page)
 
-Progress: [█████░░░░░] ~56% (34/~57 plans estimated complete)
+Progress: [█████░░░░░] ~58% (35/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -113,6 +113,10 @@ Progress: [█████░░░░░] ~56% (34/~57 plans estimated complete
 - [05-03]: delete_document returns 204 No Content — no response body for document deletion
 - [05-03]: list_documents injects presigned_url per-document post-serialization; StorageError yields None (non-fatal)
 - [05-03]: Admin-only reversal check reads request.user.profile.role.name from DB — upholds RBAC-02, no JWT claim trust
+- [05-04]: customer_name typed as string | null in Job interface — matches actual 05-03 API serializer (linter-corrected)
+- [05-04]: AbortController used in JobTable fetch — cancels stale in-flight requests when filters change rapidly
+- [05-04]: View/Edit buttons (not kebab menu) for job row actions — plan preference for simpler UI confirmed
+- [05-04]: StatusBadge is reusable — import from jobs/components/StatusBadge for job detail and form pages
 
 ### Pending Todos
 
@@ -127,6 +131,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-11T03:58:14Z
-Stopped at: Completed 05-03-PLAN.md (Job API Layer)
+Last session: 2026-04-11T04:03:31Z
+Stopped at: Completed 05-04-PLAN.md (Job List Page)
 Resume file: None
