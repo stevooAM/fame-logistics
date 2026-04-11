@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 
 ## Current Position
 
-Phase: 5 of 10 (Job Management)
-Plan: 5 of 6 in current phase (05-01, 05-02, 05-03, 05-04, 05-05 complete)
-Status: In progress
-Last activity: 2026-04-11 — Completed 05-05 (Job Form Dialog)
+Phase: 5 of 10 (Job Management) — COMPLETE
+Plan: 6 of 6 in current phase (05-01 through 05-06 complete)
+Status: Phase complete — ready for Phase 6 (Invoicing)
+Last activity: 2026-04-11 — Completed 05-06 (Job Detail Page)
 
-Progress: [█████░░░░░] ~60% (36/~57 plans estimated complete)
+Progress: [██████░░░░] ~65% (37/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -121,6 +121,9 @@ Progress: [█████░░░░░] ~60% (36/~57 plans estimated complete
 - [05-05]: DRF field errors mapped via fieldMap + setError for per-field inline display; fallback to apiError banner if no field keys match
 - [05-05]: assigned_to uses simple select from /api/users/?page_size=100 — staff roster is small, no picker needed
 - [05-05]: weight_kg, volume_cbm, total_cost stored as strings in Zod schema with refine() for parseFloat validation; parseFloat() applied on submit
+- [05-06]: Multipart upload uses raw fetch with credentials:include (not apiFetch which would set Content-Type:json and corrupt FormData boundary)
+- [05-06]: Finance role sees status badge only — no dropdown trigger; backend still validates permissions independently
+- [05-06]: useAuth exported from @/providers/auth-provider (not @/context/AuthContext — path confirmed from sidebar-nav.tsx usage)
 
 ### Pending Todos
 
@@ -135,6 +138,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-11T04:05:23Z
-Stopped at: Completed 05-05-PLAN.md (Job Form Dialog)
+Last session: 2026-04-11T04:12:47Z
+Stopped at: Completed 05-06-PLAN.md (Job Detail Page) — Phase 5 complete
 Resume file: None
