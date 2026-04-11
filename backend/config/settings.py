@@ -163,3 +163,11 @@ CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "UTC"
+
+# Cloud Storage (R2 / S3)
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", "")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
+AWS_S3_ENDPOINT_URL = os.environ.get("AWS_S3_ENDPOINT_URL", "")
+AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME", "fms-documents")
+AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME", "auto")
+AWS_PRESIGNED_URL_EXPIRY = int(os.environ.get("AWS_PRESIGNED_URL_EXPIRY", "3600"))  # 1 hour default
