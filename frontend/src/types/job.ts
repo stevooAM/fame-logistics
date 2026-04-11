@@ -13,7 +13,8 @@ export interface Job {
   id: number;
   job_number: string;
   customer: number;
-  customer_name: string;
+  customer_name: string | null;
+  customer_detail: { id: number; company_name: string } | null;
   job_type: JobType;
   status: JobStatus;
   origin: string;
@@ -29,6 +30,7 @@ export interface Job {
   delivery_date: string | null;
   assigned_to: number | null;
   assigned_to_name: string | null;
+  assigned_to_detail: { id: number; username: string; full_name: string } | null;
   created_by: number | null;
   created_at: string;
   updated_at: string;
