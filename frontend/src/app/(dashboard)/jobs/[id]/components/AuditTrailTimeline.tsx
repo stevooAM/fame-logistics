@@ -38,7 +38,7 @@ function getActionLabel(entry: JobAuditEntry): React.ReactNode {
     case "CREATED":
       return <span className="text-gray-700">Job created</span>;
 
-    case "STATUS_CHANGE": {
+    case "STATUS_CHANGED": {
       const oldVal = entry.old_value;
       const newVal = entry.new_value;
       return (

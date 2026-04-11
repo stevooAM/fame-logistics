@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { JobTable } from "./components/JobTable";
 import { JobToolbar } from "./components/JobToolbar";
+import { JobFormDialog } from "./components/JobFormDialog";
 import type { JobFilters } from "@/types/job";
 
 export default function JobsPage() {
@@ -10,6 +11,7 @@ export default function JobsPage() {
     ordering: "-created_at",
   });
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [createOpen, setCreateOpen] = useState(false);
 
   function handleSearch(term: string) {
     setFilters((f) => ({ ...f, search: term || undefined, page: 1 }));
@@ -20,8 +22,12 @@ export default function JobsPage() {
   }
 
   function handleAddJob() {
-    // Navigation to /jobs/new — job form built in a later plan
-    window.location.href = "/jobs/new";
+    setCreateOpen(true);
+  }
+
+  function handleCreateSuccess() {
+    setCreateOpen(false);
+    setRefreshTrigger((n) => n + 1);
   }
 
   return (
@@ -42,6 +48,12 @@ export default function JobsPage() {
       <JobTable
         filters={filters}
         refreshTrigger={refreshTrigger}
+      />
+
+      <JobFormDialog
+        open={createOpen}
+        onClose={() => setCreateOpen(false)}
+        onSuccess={handleCreateSuccess}
       />
     </div>
   );

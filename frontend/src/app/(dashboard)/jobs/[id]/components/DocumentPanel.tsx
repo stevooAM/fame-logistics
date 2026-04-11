@@ -124,7 +124,7 @@ export function DocumentPanel({ jobId, userRole }: DocumentPanelProps) {
     formData.append("document_type", selectedDocType);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/jobs/${jobId}/documents/`, {
+      const response = await fetch(`${API_BASE_URL}/api/jobs/${jobId}/documents/upload/`, {
         method: "POST",
         credentials: "include",
         body: formData,
@@ -139,7 +139,7 @@ export function DocumentPanel({ jobId, userRole }: DocumentPanelProps) {
           headers: { "Content-Type": "application/json" },
         });
         if (refreshed.ok) {
-          const retry = await fetch(`${API_BASE_URL}/api/jobs/${jobId}/documents/`, {
+          const retry = await fetch(`${API_BASE_URL}/api/jobs/${jobId}/documents/upload/`, {
             method: "POST",
             credentials: "include",
             body: formData,
