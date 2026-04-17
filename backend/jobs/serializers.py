@@ -11,6 +11,7 @@ Five serializers are provided:
 
 from rest_framework import serializers
 
+from approvals.models import ApprovalQueue
 from .models import Job, JobAuditTrail, JobDocument, JobStatus
 
 
@@ -84,6 +85,7 @@ class JobSerializer(serializers.ModelSerializer):
 
     customer_name = serializers.SerializerMethodField(read_only=True)
     assigned_to_name = serializers.SerializerMethodField(read_only=True)
+    rejection_reason = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Job
@@ -110,8 +112,9 @@ class JobSerializer(serializers.ModelSerializer):
             "created_by",
             "created_at",
             "updated_at",
+            "rejection_reason",
         ]
-        read_only_fields = ["id", "job_number", "created_at", "updated_at", "created_by"]
+        read_only_fields = ["id", "job_number", "created_at", "updated_at", "created_by", "rejection_reason"]
         extra_kwargs = {
             "assigned_to": {"allow_null": True, "required": False},
         }
@@ -128,6 +131,17 @@ class JobSerializer(serializers.ModelSerializer):
             full_name = obj.assigned_to.get_full_name()
             return full_name if full_name else obj.assigned_to.username
         return None
+
+    def get_rejection_reason(self, obj) -> str | None:
+        """Return the rejection reason from the most recent rejected ApprovalQueue entry."""
+        latest = (
+            obj.approval_requests
+            .filter(status=ApprovalQueue.REJECTED)
+            .order_by("-created_at")
+            .values_list("rejection_reason", flat=True)
+            .first()
+        )
+        return latest if latest else None
 
     def validate_cargo_description(self, value):
         """Cargo description must not be blank."""
