@@ -207,15 +207,15 @@ Plans:
 4. Monthly and quarterly financial period summaries aggregate income and payment data correctly
 5. Financial data (invoices, payments, balances) can be exported to Excel with current filter/period applied
 
-**Plans**: TBD (4–6 plans)
+**Plans:** 6 plans
 
 Plans:
-- [ ] 07-01: Invoice and Payment Django models — Invoice FK to Job, Payment FK to Invoice, balance calculation, migration
-- [ ] 07-02: Accounts API endpoints — generate invoice, record payment, outstanding balances, period summaries, export
-- [ ] 07-03: Invoice management UI — invoice list, create invoice form, payment recording panel (use `/frontend-design` skill)
-- [ ] 07-04: Outstanding balances view — per-customer balance table with drill-down (use `/frontend-design` skill)
-- [ ] 07-05: Financial period summaries UI — monthly/quarterly aggregation view with date range picker (use `/frontend-design` skill)
-- [ ] 07-06: Excel export — financial data export endpoint and frontend trigger
+- [ ] 07-01-PLAN.md — Invoice/Payment model extensions: auto-gen invoice_number, balance helpers, outstanding_for_customer manager, migration 0002 indexes
+- [ ] 07-02-PLAN.md — Invoice/Payment API: serializers, InvoiceViewSet (generate action), PaymentViewSet (record + status recalc), URL wiring
+- [ ] 07-03-PLAN.md — Reporting endpoints: outstanding balances list/detail, period summary (month/quarter), Excel/CSV export for invoices and balances
+- [ ] 07-04-PLAN.md — Invoice management UI: list, detail drawer, Generate Invoice dialog (approved-job picker), Record Payment dialog (use `/frontend-design` skill)
+- [ ] 07-05-PLAN.md — Outstanding balances UI: per-customer AG Grid with sort/search, drill-down invoice list, export trigger (use `/frontend-design` skill)
+- [ ] 07-06-PLAN.md — Period summary UI: Month/Quarter toggle, date range picker, table + CSS bar chart, shared AccountsTabs nav, export trigger (use `/frontend-design` skill)
 
 ---
 
