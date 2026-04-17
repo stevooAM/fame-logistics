@@ -207,7 +207,7 @@ Plans:
 4. Monthly and quarterly financial period summaries aggregate income and payment data correctly
 5. Financial data (invoices, payments, balances) can be exported to Excel with current filter/period applied
 
-**Plans:** 6 plans
+**Plans:** 7 plans
 
 Plans:
 - [ ] 07-01-PLAN.md — Invoice/Payment model extensions: auto-gen invoice_number, balance helpers, outstanding_for_customer manager, migration 0002 indexes
@@ -216,6 +216,7 @@ Plans:
 - [ ] 07-04-PLAN.md — Invoice management UI: list, detail drawer, Generate Invoice dialog (approved-job picker), Record Payment dialog (use `/frontend-design` skill)
 - [ ] 07-05-PLAN.md — Outstanding balances UI: per-customer AG Grid with sort/search, drill-down invoice list, export trigger (use `/frontend-design` skill)
 - [ ] 07-06-PLAN.md — Period summary UI: Month/Quarter toggle, date range picker, table + CSS bar chart, shared AccountsTabs nav, export trigger (use `/frontend-design` skill)
+- [ ] 07-07-PLAN.md — Gap closure: invoice export to Excel/CSV (exportInvoicesBlob + Export dropdown in InvoiceToolbar)
 
 ---
 
@@ -305,12 +306,12 @@ Plans:
 | 4. Customer Management | 8/8 | ✓ Complete | 2026-04-10 |
 | 5. Job Management | 6/6 | ✓ Complete | 2026-04-11 |
 | 6. Approval Workflow | 6/6 | ✓ Complete | 2026-04-17 |
-| 7. Accounts & Finance | 0/6 | Not started | - |
+| 7. Accounts & Finance | 0/7 | In progress | - |
 | 8. Dashboard | 0/2 | Not started | - |
 | 9. Reports | 0/4 | Not started | - |
 | 10. Security Hardening & Launch | 0/7 | Not started | - |
 
-**Total plans (estimated):** 56 plans across 10 phases
+**Total plans (estimated):** 57 plans across 10 phases
 
 ---
 
