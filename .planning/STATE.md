@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 7 of 10 (Accounts & Finance) — In progress
-Plan: 2 of ~5 in current phase (07-02 complete)
+Plan: 3 of ~5 in current phase (07-03 complete)
 Status: In progress
-Last activity: 2026-04-17 — Completed 07-02 (Accounts API Serializers + ViewSets)
+Last activity: 2026-04-17 — Completed 07-03 (Accounts Reporting & Export Endpoints)
 
-Progress: [███████░░░] ~69% (39/~57 plans estimated complete)
+Progress: [███████░░░] ~70% (40/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -149,6 +149,11 @@ Progress: [███████░░░] ~69% (39/~57 plans estimated complete
     - [07-02]: generate action uses detail=False (url_path="generate") — resolves to /invoices/generate/, not /invoices/{id}/generate/
     - [07-02]: invoice.refresh_from_db() inside perform_create before status recalculation — ensures accurate balance after payment insert
     - [07-02]: IsAnyRole for list/retrieve on both ViewSets; IsAdminOrFinance for all writes — Operations can read invoices per permission matrix
+    - [07-03]: customer.phone (model field) exposed as phone_number in balance_detail API response — key rename to match locked contract
+    - [07-03]: currency_code defaults to "GHS" when customer.currency_preference is NULL — per checker-fix iteration 1 lock
+    - [07-03]: Period summaries use outstanding (not balance) as field name — canonical name to avoid confusion with invoice-level balance field
+    - [07-03]: _build_balance_rows() uses prefetch_related(invoices__payments) — avoids JOIN-multiplication bug on multi-payment invoices
+    - [07-03]: summary() returns wrapped {period, date_from, date_to, rows, totals} — frontend renders totals footer without client-side reduce
 
 ### Pending Todos
 
@@ -164,5 +169,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-04-17
-Stopped at: Completed 07-02-PLAN.md (Accounts API Serializers + ViewSets)
+Stopped at: Completed 07-03-PLAN.md (Accounts Reporting & Export Endpoints)
 Resume file: None
