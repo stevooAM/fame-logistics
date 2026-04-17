@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 
 ## Current Position
 
-Phase: 6 of 10 (Approval Workflow) — COMPLETE
-Plan: 6 of 6 in current phase (06-01 through 06-06 complete)
-Status: Phase complete — ready for Phase 7 (Accounts & Finance)
-Last activity: 2026-04-17 — Completed 06-06 (Rejection Reason Gap Closure)
+Phase: 7 of 10 (Accounts & Finance) — In progress
+Plan: 1 of ~5 in current phase (07-01 complete)
+Status: In progress
+Last activity: 2026-04-17 — Completed 07-01 (Accounts & Finance Model Extensions)
 
-Progress: [██████░░░░] ~67% (38/~57 plans estimated complete)
+Progress: [███████░░░] ~69% (39/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -141,6 +141,10 @@ Progress: [██████░░░░] ~67% (38/~57 plans estimated complete
 - [06-06]: rejection_reason only in JobSerializer (not JobListSerializer) — avoids N+1 on AG Grid list view
 - [06-06]: get_rejection_reason uses approval_requests.filter(status=REJECTED).order_by('-created_at').values_list('rejection_reason', flat=True).first()
 - [06-06]: RejectionCallout conditioned on status==='DRAFT' AND rejection_reason non-empty — no empty callout for non-rejected DRAFTs
+- [07-01]: generate_invoice_number() is module-level (not classmethod) — mirrors jobs pattern; uses select_for_update() for race-safe concurrent creation; format is INV-{YEAR}-{SEQ:05d}
+- [07-01]: Invoice.save() checks both not self.pk and not self.invoice_number — allows explicit invoice number override
+- [07-01]: outstanding_for_customer(id) uses Payment.objects.filter(invoice__customer_id=...) cross-model aggregation — single DB round-trip
+- [07-01]: Migration 0002 adds AlterField (db_index on payment_date) + two AddIndex operations; written manually per Docker-unavailable pattern
 
 ### Pending Todos
 
@@ -156,5 +160,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-04-17
-Stopped at: Completed 06-06-PLAN.md (Rejection Reason Gap Closure) — human-verified and approved; Phase 6 fully complete
+Stopped at: Completed 07-01-PLAN.md (Accounts & Finance Model Extensions)
 Resume file: None
