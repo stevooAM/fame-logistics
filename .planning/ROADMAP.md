@@ -180,14 +180,14 @@ Plans:
 4. Rejecting a job requires a mandatory rejection reason; the originating staff member can see the rejection reason on the job record
 5. An Admin can view the full approval history log — all approvals and rejections with approver, timestamp, and reason
 
-**Plans**: TBD (4–5 plans)
+**Plans:** 5 plans
 
 Plans:
-- [ ] 06-01: Approval Django model — ApprovalQueue and ApprovalHistory models, FKs to Job and User, migration
-- [ ] 06-02: Approval API endpoints — pending list, approve action, reject action (with reason), history list
-- [ ] 06-03: Sidebar badge counter — API endpoint returning live pending count; Next.js polling or server-sent update
-- [ ] 06-04: Approval queue UI — list view with job summary, approve/reject actions, rejection reason modal (use `/frontend-design` skill)
-- [ ] 06-05: Approval history UI — admin-only filterable history table (use `/frontend-design` skill)
+- [ ] 06-01-PLAN.md — Approval model audit and extension: verify scaffolded models, add UniqueConstraint, migration 0002, admin registration
+- [ ] 06-02-PLAN.md — Approval API: ApprovalViewSet with pending list, approve, reject, history, pending-count endpoints; RBAC enforcement
+- [ ] 06-03-PLAN.md — Sidebar badge: useApprovalBadge polling hook (30s interval); SidebarNav integration; fix Approvals nav roles to include Operations
+- [ ] 06-04-PLAN.md — Approval queue UI: pending list table, Approve/Reject buttons, RejectModal with mandatory reason validation
+- [ ] 06-05-PLAN.md — Approval history UI: Admin-only tabbed History view with action/date filters
 
 ---
 
