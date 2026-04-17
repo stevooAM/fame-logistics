@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 6 of 10 (Approval Workflow) — In progress
-Plan: 2 of 5 in current phase (06-02 complete)
+Plan: 3 of 5 in current phase (06-03 complete)
 Status: In progress
-Last activity: 2026-04-17 — Completed 06-02 (Approval API)
+Last activity: 2026-04-17 — Completed 06-03 (Sidebar Badge Counter)
 
 Progress: [██████░░░░] ~67% (38/~57 plans estimated complete)
 
@@ -130,6 +130,9 @@ Progress: [██████░░░░] ~67% (38/~57 plans estimated complete
 - [06-02]: pending_count inherits IsAdminOrOperations — Operations staff need badge count to know when to act
 - [06-02]: history action overrides to IsAdmin — full audit trail restricted to admins only per permission matrix
 - [06-02]: Approval action pattern: check is_pending → validate ApprovalActionSerializer → update approval → update job status → create ApprovalHistory + JobAuditTrail STATUS_CHANGE
+- [06-03]: useApprovalBadge enabled guard prevents Finance role from triggering a 403 on pending-count endpoint
+- [06-03]: badgeCount computed inline per map iteration — /approvals uses live count, others fall back to static item.badge
+- [06-03]: Operations role added to Approvals nav item — oversight visibility confirmed
 
 ### Pending Todos
 
@@ -144,6 +147,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-17T08:04:43Z
-Stopped at: Completed 06-02-PLAN.md (Approval API)
+Last session: 2026-04-17T08:05:27Z
+Stopped at: Completed 06-03-PLAN.md (Sidebar Badge Counter)
 Resume file: None
