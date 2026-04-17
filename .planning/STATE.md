@@ -135,6 +135,9 @@ Progress: [██████░░░░] ~67% (38/~57 plans estimated complete
 - [06-03]: Operations role added to Approvals nav item — oversight visibility confirmed
 - [06-04]: job.id not serialized in ApprovalQueueSerializer — job numbers rendered as teal text (not links) in approval queue table; add job.id to nested serializer if link navigation is needed
 - [06-04]: RejectModal blocks backdrop click — consistent with SessionWarningDialog pattern from 02-05; destructive actions require explicit user intent
+- [06-05]: Admin-only History tab uses UI-side isAdmin check (role.name.toLowerCase() === "admin") + API-side IsAdmin permission — dual enforcement
+- [06-05]: ApprovalHistory table renders job_number as text (no job FK id in history serializer — link enhancement deferred)
+- [06-05]: History filter Apply button is explicit (not debounced on-change) — consistent with reporting pattern
 
 ### Pending Todos
 
@@ -149,6 +152,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-17T08:09:00Z
-Stopped at: Completed 06-04-PLAN.md (Approval Queue UI) — human-verified and approved
+Last session: 2026-04-17
+Stopped at: Completed 06-05-PLAN.md (Approval History UI) — human-verified and approved; Phase 6 complete
 Resume file: None
