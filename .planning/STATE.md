@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 6 of 10 (Approval Workflow) — In progress
-Plan: 1 of 5 in current phase (06-01 complete)
+Plan: 2 of 5 in current phase (06-02 complete)
 Status: In progress
-Last activity: 2026-04-17 — Completed 06-01 (Approval Model Audit)
+Last activity: 2026-04-17 — Completed 06-02 (Approval API)
 
 Progress: [██████░░░░] ~67% (38/~57 plans estimated complete)
 
@@ -127,6 +127,9 @@ Progress: [██████░░░░] ~67% (38/~57 plans estimated complete
 - [06-01]: UniqueConstraint on job filtered by status=PENDING — allows multiple historical approvals per job, prevents duplicate pending
 - [06-01]: is_pending property on ApprovalQueue uses class constant (self.PENDING) not string literal
 - [06-01]: Migration 0002 written manually — Docker CLI not available in execution environment
+- [06-02]: pending_count inherits IsAdminOrOperations — Operations staff need badge count to know when to act
+- [06-02]: history action overrides to IsAdmin — full audit trail restricted to admins only per permission matrix
+- [06-02]: Approval action pattern: check is_pending → validate ApprovalActionSerializer → update approval → update job status → create ApprovalHistory + JobAuditTrail STATUS_CHANGE
 
 ### Pending Todos
 
@@ -141,6 +144,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-17T07:58:59Z
-Stopped at: Completed 06-01-PLAN.md (Approval Model Audit)
+Last session: 2026-04-17T08:04:43Z
+Stopped at: Completed 06-02-PLAN.md (Approval API)
 Resume file: None
