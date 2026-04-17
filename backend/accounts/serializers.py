@@ -258,3 +258,54 @@ class GenerateInvoiceSerializer(serializers.Serializer):
         if value is None or value <= Decimal("0"):
             raise serializers.ValidationError("Invoice amount must be greater than zero.")
         return value
+
+
+# ---------------------------------------------------------------------------
+# Reporting serializers (ACC-03 balances, ACC-04 summary)
+# ---------------------------------------------------------------------------
+
+
+class CustomerBalanceSerializer(serializers.Serializer):
+    """One row per customer for the outstanding-balances list endpoint."""
+
+    customer_id = serializers.IntegerField()
+    customer_name = serializers.CharField()
+    invoiced_total = serializers.DecimalField(max_digits=15, decimal_places=2)
+    paid_total = serializers.DecimalField(max_digits=15, decimal_places=2)
+    balance = serializers.DecimalField(max_digits=15, decimal_places=2)
+    invoice_count = serializers.IntegerField()
+    currency_code = serializers.CharField(allow_blank=True, allow_null=True, required=False)
+
+
+class PeriodSummaryRowSerializer(serializers.Serializer):
+    """One row per calendar period (month or quarter) in the summary response."""
+
+    period_label = serializers.CharField()
+    period_start = serializers.DateField()
+    period_end = serializers.DateField()
+    invoiced = serializers.DecimalField(max_digits=15, decimal_places=2)
+    paid = serializers.DecimalField(max_digits=15, decimal_places=2)
+    outstanding = serializers.DecimalField(max_digits=15, decimal_places=2)
+
+
+class PeriodSummaryTotalsSerializer(serializers.Serializer):
+    """Totals footer across all rows in the summary response."""
+
+    invoiced = serializers.DecimalField(max_digits=15, decimal_places=2)
+    paid = serializers.DecimalField(max_digits=15, decimal_places=2)
+    outstanding = serializers.DecimalField(max_digits=15, decimal_places=2)
+
+
+class PeriodSummaryResponseSerializer(serializers.Serializer):
+    """
+    Wrapped response for GET /api/accounts/summary/
+
+    Shape: {period, date_from, date_to, rows: [...], totals: {...}}
+    Field name is ``outstanding`` (NOT ``balance``) per locked API contract.
+    """
+
+    period = serializers.CharField()
+    date_from = serializers.CharField(allow_blank=True, allow_null=True, required=False)
+    date_to = serializers.CharField(allow_blank=True, allow_null=True, required=False)
+    rows = PeriodSummaryRowSerializer(many=True)
+    totals = PeriodSummaryTotalsSerializer()
