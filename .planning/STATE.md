@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 7 of 10 (Accounts & Finance) — In progress
-Plan: 1 of ~5 in current phase (07-01 complete)
+Plan: 2 of ~5 in current phase (07-02 complete)
 Status: In progress
-Last activity: 2026-04-17 — Completed 07-01 (Accounts & Finance Model Extensions)
+Last activity: 2026-04-17 — Completed 07-02 (Accounts API Serializers + ViewSets)
 
 Progress: [███████░░░] ~69% (39/~57 plans estimated complete)
 
@@ -145,6 +145,10 @@ Progress: [███████░░░] ~69% (39/~57 plans estimated complete
 - [07-01]: Invoice.save() checks both not self.pk and not self.invoice_number — allows explicit invoice number override
 - [07-01]: outstanding_for_customer(id) uses Payment.objects.filter(invoice__customer_id=...) cross-model aggregation — single DB round-trip
 - [07-01]: Migration 0002 adds AlterField (db_index on payment_date) + two AddIndex operations; written manually per Docker-unavailable pattern
+    - [07-02]: PaymentViewSet.http_method_names = ["get","post","head","options"] — payments are immutable once recorded
+    - [07-02]: generate action uses detail=False (url_path="generate") — resolves to /invoices/generate/, not /invoices/{id}/generate/
+    - [07-02]: invoice.refresh_from_db() inside perform_create before status recalculation — ensures accurate balance after payment insert
+    - [07-02]: IsAnyRole for list/retrieve on both ViewSets; IsAdminOrFinance for all writes — Operations can read invoices per permission matrix
 
 ### Pending Todos
 
@@ -160,5 +164,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-04-17
-Stopped at: Completed 07-01-PLAN.md (Accounts & Finance Model Extensions)
+Stopped at: Completed 07-02-PLAN.md (Accounts API Serializers + ViewSets)
 Resume file: None
