@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-04)
 
 **Core value:** Operations staff can create, track, and approve freight jobs end-to-end — from customer onboarding to invoice generation — with full audit trails and role-based access control.
-**Current focus:** Phase 5 — Job Management
+**Current focus:** Phase 6 — Approval Workflow
 
 ## Current Position
 
-Phase: 5 of 10 (Job Management) — COMPLETE
-Plan: 6 of 6 in current phase (05-01 through 05-06 complete)
-Status: Phase complete — ready for Phase 6 (Invoicing)
-Last activity: 2026-04-11 — Completed 05-06 (Job Detail Page)
+Phase: 6 of 10 (Approval Workflow) — In progress
+Plan: 1 of 5 in current phase (06-01 complete)
+Status: In progress
+Last activity: 2026-04-17 — Completed 06-01 (Approval Model Audit)
 
-Progress: [██████░░░░] ~65% (37/~57 plans estimated complete)
+Progress: [██████░░░░] ~67% (38/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -124,6 +124,9 @@ Progress: [██████░░░░] ~65% (37/~57 plans estimated complete
 - [05-06]: Multipart upload uses raw fetch with credentials:include (not apiFetch which would set Content-Type:json and corrupt FormData boundary)
 - [05-06]: Finance role sees status badge only — no dropdown trigger; backend still validates permissions independently
 - [05-06]: useAuth exported from @/providers/auth-provider (not @/context/AuthContext — path confirmed from sidebar-nav.tsx usage)
+- [06-01]: UniqueConstraint on job filtered by status=PENDING — allows multiple historical approvals per job, prevents duplicate pending
+- [06-01]: is_pending property on ApprovalQueue uses class constant (self.PENDING) not string literal
+- [06-01]: Migration 0002 written manually — Docker CLI not available in execution environment
 
 ### Pending Todos
 
@@ -138,6 +141,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-11T04:12:47Z
-Stopped at: Completed 05-06-PLAN.md (Job Detail Page) — Phase 5 complete
+Last session: 2026-04-17T07:58:59Z
+Stopped at: Completed 06-01-PLAN.md (Approval Model Audit)
 Resume file: None
