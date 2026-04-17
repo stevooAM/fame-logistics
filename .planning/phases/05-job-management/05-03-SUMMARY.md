@@ -94,7 +94,7 @@ Each task was committed atomically:
 1. **Task 1: Create Job serializers** - `19d75a5` (feat)
 2. **Task 2: Create Job ViewSet with all endpoints** - `4e88e62` (feat)
 
-**Plan metadata:** (docs commit follows)
+**Plan metadata:** `19f42c3` (docs: complete plan)
 
 ## Files Created/Modified
 
