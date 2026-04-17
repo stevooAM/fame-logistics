@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 7 of 10 (Accounts & Finance) — In progress
-Plan: 3 of ~5 in current phase (07-03 complete)
-Status: In progress
-Last activity: 2026-04-17 — Completed 07-03 (Accounts Reporting & Export Endpoints)
+Plan: 4 of ~6 in current phase (07-04 complete — awaiting human-verify checkpoint)
+Status: In progress — checkpoint paused
+Last activity: 2026-04-17 — Completed 07-04 (Invoice Management UI)
 
-Progress: [███████░░░] ~70% (40/~57 plans estimated complete)
+Progress: [███████░░░] ~72% (41/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -154,6 +154,10 @@ Progress: [███████░░░] ~70% (40/~57 plans estimated complete
     - [07-03]: Period summaries use outstanding (not balance) as field name — canonical name to avoid confusion with invoice-level balance field
     - [07-03]: _build_balance_rows() uses prefetch_related(invoices__payments) — avoids JOIN-multiplication bug on multi-payment invoices
     - [07-03]: summary() returns wrapped {period, date_from, date_to, rows, totals} — frontend renders totals footer without client-side reduce
+    - [07-04]: InvoiceDetailDrawer allows backdrop dismiss (viewer) while GenerateInvoiceDialog and RecordPaymentDialog block backdrop (create actions) — consistent with 02-05/06-04 pattern
+    - [07-04]: Generate Invoice button uses amber #F89C1C (CTA); Record Payment in drawer uses teal #1F7A8C
+    - [07-04]: fetchApprovedJobs filters client-side by eligible status set (IN_PROGRESS, CUSTOMS, DELIVERED, CLOSED) — no server-side approved filter endpoint; backend enforces at generate-time
+    - [07-04]: InvoiceTable uses fetchInvoices() from accounts-api.ts only (never raw apiFetch in components) — accounts-api is single source of truth
 
 ### Pending Todos
 
@@ -169,5 +173,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-04-17
-Stopped at: Completed 07-03-PLAN.md (Accounts Reporting & Export Endpoints)
+Stopped at: 07-04 checkpoint (human-verify) — all auto tasks complete, awaiting user verification
 Resume file: None
