@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-04-04)
 
 **Core value:** Operations staff can create, track, and approve freight jobs end-to-end — from customer onboarding to invoice generation — with full audit trails and role-based access control.
-**Current focus:** Phase 6 — Approval Workflow
+**Current focus:** Phase 7 — Accounts & Finance
 
 ## Current Position
 
-Phase: 6 of 10 (Approval Workflow) — In progress
-Plan: 3 of 5 in current phase (06-03 complete)
-Status: In progress
-Last activity: 2026-04-17 — Completed 06-03 (Sidebar Badge Counter)
+Phase: 6 of 10 (Approval Workflow) — COMPLETE
+Plan: 5 of 5 in current phase (06-01 through 06-05 complete)
+Status: Phase complete — ready for Phase 7 (Accounts & Finance)
+Last activity: 2026-04-17 — Completed 06-05 (Approval History UI)
 
 Progress: [██████░░░░] ~67% (38/~57 plans estimated complete)
 
@@ -133,6 +133,8 @@ Progress: [██████░░░░] ~67% (38/~57 plans estimated complete
 - [06-03]: useApprovalBadge enabled guard prevents Finance role from triggering a 403 on pending-count endpoint
 - [06-03]: badgeCount computed inline per map iteration — /approvals uses live count, others fall back to static item.badge
 - [06-03]: Operations role added to Approvals nav item — oversight visibility confirmed
+- [06-04]: job.id not serialized in ApprovalQueueSerializer — job numbers rendered as teal text (not links) in approval queue table; add job.id to nested serializer if link navigation is needed
+- [06-04]: RejectModal blocks backdrop click — consistent with SessionWarningDialog pattern from 02-05; destructive actions require explicit user intent
 
 ### Pending Todos
 
@@ -147,6 +149,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-17T08:05:27Z
-Stopped at: Completed 06-03-PLAN.md (Sidebar Badge Counter)
+Last session: 2026-04-17T08:09:00Z
+Stopped at: Completed 06-04-PLAN.md (Approval Queue UI) — human-verified and approved
 Resume file: None
