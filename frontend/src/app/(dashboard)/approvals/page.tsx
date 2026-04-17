@@ -1,8 +1,15 @@
+import { ApprovalQueue } from "./components/ApprovalQueue";
+
 export default function ApprovalsPage() {
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-2" style={{ color: "#2B3E50" }}>Approvals</h1>
-      <p className="text-gray-500">Approval workflow — Coming in Phase 6</p>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold" style={{ color: "#2B3E50" }}>
+          Approval Queue
+        </h1>
+        <p className="text-sm text-gray-500 mt-1">Jobs awaiting your approval</p>
+      </div>
+      <ApprovalQueue />
     </div>
   );
 }
