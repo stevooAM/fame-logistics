@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 6 of 10 (Approval Workflow) — COMPLETE
-Plan: 5 of 5 in current phase (06-01 through 06-05 complete)
+Plan: 6 of 6 in current phase (06-01 through 06-06 complete)
 Status: Phase complete — ready for Phase 7 (Accounts & Finance)
-Last activity: 2026-04-17 — Completed 06-05 (Approval History UI)
+Last activity: 2026-04-17 — Completed 06-06 (Rejection Reason Gap Closure)
 
 Progress: [██████░░░░] ~67% (38/~57 plans estimated complete)
 
@@ -138,6 +138,9 @@ Progress: [██████░░░░] ~67% (38/~57 plans estimated complete
 - [06-05]: Admin-only History tab uses UI-side isAdmin check (role.name.toLowerCase() === "admin") + API-side IsAdmin permission — dual enforcement
 - [06-05]: ApprovalHistory table renders job_number as text (no job FK id in history serializer — link enhancement deferred)
 - [06-05]: History filter Apply button is explicit (not debounced on-change) — consistent with reporting pattern
+- [06-06]: rejection_reason only in JobSerializer (not JobListSerializer) — avoids N+1 on AG Grid list view
+- [06-06]: get_rejection_reason uses approval_requests.filter(status=REJECTED).order_by('-created_at').values_list('rejection_reason', flat=True).first()
+- [06-06]: RejectionCallout conditioned on status==='DRAFT' AND rejection_reason non-empty — no empty callout for non-rejected DRAFTs
 
 ### Pending Todos
 
@@ -153,5 +156,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-04-17
-Stopped at: Completed 06-05-PLAN.md (Approval History UI) — human-verified and approved; Phase 6 complete
+Stopped at: Completed 06-06-PLAN.md (Rejection Reason Gap Closure) — human-verified and approved; Phase 6 fully complete
 Resume file: None
