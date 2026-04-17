@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 7 of 10 (Accounts & Finance) — In progress
-Plan: 4 of ~6 in current phase (07-04 complete — human-verify approved)
+Plan: 6 of 6 in current phase (07-06 complete — human-verify approved)
 Status: In progress
-Last activity: 2026-04-17 — Completed 07-04 (Invoice Management UI) — human verified and approved
+Last activity: 2026-04-17 — Completed 07-06 (Period Summary UI) — human verified and approved
 
 Progress: [███████░░░] ~74% (42/~57 plans estimated complete)
 
@@ -158,6 +158,14 @@ Progress: [███████░░░] ~74% (42/~57 plans estimated complete
     - [07-04]: Generate Invoice button uses amber #F89C1C (CTA); Record Payment in drawer uses teal #1F7A8C
     - [07-04]: fetchApprovedJobs filters client-side by eligible status set (IN_PROGRESS, CUSTOMS, DELIVERED, CLOSED) — no server-side approved filter endpoint; backend enforces at generate-time
     - [07-04]: InvoiceTable uses fetchInvoices() from accounts-api.ts only (never raw apiFetch in components) — accounts-api is single source of truth
+    - [07-05]: Invoice rows NON-interactive in v1 — click-through to /accounts?invoice={id} deferred to Phase 8
+    - [07-05]: Totals footer in BalancesTable computed client-side — /api/accounts/balances/ returns no totals wrapper
+    - [07-05]: getSortModel() → getColumnState() for AG Grid v31+ column sort API
+    - [07-06]: outstanding (not balance) is the field name for period summary rows — locked 07-03 contract
+    - [07-06]: date_from/date_to are the only summary endpoint params — start_date/end_date silently ignored by backend
+    - [07-06]: SummaryTable totals footer reads data.totals directly — backend-authoritative, no client-side reduce
+    - [07-06]: AccountsTabs (07-04 named export) verified correct — no changes needed in 07-06
+    - [07-06]: No chart library for v1 CSS bar chart — Phase 9 can introduce recharts if needed
 
 ### Pending Todos
 
@@ -173,5 +181,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-04-17
-Stopped at: 07-04 complete — human-verify approved; ready to continue with 07-05
+Stopped at: 07-06 complete — all Phase 7 plans complete; awaiting phase verification
 Resume file: None
