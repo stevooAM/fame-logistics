@@ -15,7 +15,7 @@ This roadmap rebuilds the Fame Logistics freight management system from a legacy
 - [x] **Phase 3: Administration & Lookup Setup** — User admin, audit log, lookup tables, company profile *(completed 2026-04-06)*
 - [x] **Phase 4: Customer Management** — Customer CRUD, AG Grid list, data seed, Excel export *(completed 2026-04-10)*
 - [x] **Phase 5: Job Management** — Job creation, workflow statuses, document attachments *(completed 2026-04-11)*
-- [ ] **Phase 6: Approval Workflow** — Approval queue, approve/reject actions, history
+- [x] **Phase 6: Approval Workflow** — Approval queue, approve/reject actions, history *(completed 2026-04-17)*
 - [ ] **Phase 7: Accounts & Finance** — Invoice generation, payment recording, financial summaries
 - [ ] **Phase 8: Dashboard** — KPI cards, activity feed, quick-action shortcuts
 - [ ] **Phase 9: Reports** — Customer, job status, and revenue reports with PDF/Excel export
@@ -304,7 +304,7 @@ Plans:
 | 3. Administration & Lookup Setup | 7/7 | ✓ Complete | 2026-04-06 |
 | 4. Customer Management | 8/8 | ✓ Complete | 2026-04-10 |
 | 5. Job Management | 6/6 | ✓ Complete | 2026-04-11 |
-| 6. Approval Workflow | 5/6 | In progress (gap closure) | - |
+| 6. Approval Workflow | 6/6 | ✓ Complete | 2026-04-17 |
 | 7. Accounts & Finance | 0/6 | Not started | - |
 | 8. Dashboard | 0/2 | Not started | - |
 | 9. Reports | 0/4 | Not started | - |
