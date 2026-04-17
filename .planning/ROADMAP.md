@@ -180,7 +180,7 @@ Plans:
 4. Rejecting a job requires a mandatory rejection reason; the originating staff member can see the rejection reason on the job record
 5. An Admin can view the full approval history log — all approvals and rejections with approver, timestamp, and reason
 
-**Plans:** 5 plans
+**Plans:** 6 plans
 
 Plans:
 - [ ] 06-01-PLAN.md — Approval model audit and extension: verify scaffolded models, add UniqueConstraint, migration 0002, admin registration
@@ -188,6 +188,7 @@ Plans:
 - [ ] 06-03-PLAN.md — Sidebar badge: useApprovalBadge polling hook (30s interval); SidebarNav integration; fix Approvals nav roles to include Operations
 - [ ] 06-04-PLAN.md — Approval queue UI: pending list table, Approve/Reject buttons, RejectModal with mandatory reason validation
 - [ ] 06-05-PLAN.md — Approval history UI: Admin-only tabbed History view with action/date filters
+- [ ] 06-06-PLAN.md — Gap closure: surface rejection_reason to originating staff via JobSerializer field + job detail callout
 
 ---
 
@@ -303,7 +304,7 @@ Plans:
 | 3. Administration & Lookup Setup | 7/7 | ✓ Complete | 2026-04-06 |
 | 4. Customer Management | 8/8 | ✓ Complete | 2026-04-10 |
 | 5. Job Management | 6/6 | ✓ Complete | 2026-04-11 |
-| 6. Approval Workflow | 0/5 | Not started | - |
+| 6. Approval Workflow | 5/6 | In progress (gap closure) | - |
 | 7. Accounts & Finance | 0/6 | Not started | - |
 | 8. Dashboard | 0/2 | Not started | - |
 | 9. Reports | 0/4 | Not started | - |
