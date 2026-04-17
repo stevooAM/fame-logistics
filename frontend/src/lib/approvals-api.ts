@@ -34,3 +34,40 @@ export async function rejectApproval(id: number, reason: string): Promise<void> 
     body: JSON.stringify({ reason }),
   });
 }
+
+// ---------------------------------------------------------------------------
+// Approval History (Admin-only) — 06-05
+// ---------------------------------------------------------------------------
+
+export interface ApprovalHistoryEntry {
+  id: number;
+  job_number: string;
+  action: "SUBMITTED" | "APPROVED" | "REJECTED";
+  actor: {
+    username: string;
+    full_name: string;
+  };
+  comment: string;
+  created_at: string;
+}
+
+export interface HistoryFilters {
+  action?: "APPROVED" | "REJECTED" | "SUBMITTED" | "";
+  date_from?: string;
+  date_to?: string;
+  job_number?: string;
+}
+
+export async function fetchApprovalHistory(
+  filters: HistoryFilters = {}
+): Promise<ApprovalHistoryEntry[]> {
+  const params = new URLSearchParams();
+  if (filters.action) params.set("action", filters.action);
+  if (filters.date_from) params.set("date_from", filters.date_from);
+  if (filters.date_to) params.set("date_to", filters.date_to);
+  if (filters.job_number) params.set("job_number", filters.job_number);
+  const query = params.toString();
+  return apiFetch<ApprovalHistoryEntry[]>(
+    `/api/approvals/history/${query ? `?${query}` : ""}`
+  );
+}
