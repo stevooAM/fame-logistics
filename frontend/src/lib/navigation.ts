@@ -15,7 +15,7 @@ export type NavItem = {
  *   Dashboard : admin, operations, finance
  *   Customers : admin, operations
  *   Jobs      : admin, operations
- *   Approvals : admin
+ *   Approvals : admin, operations
  *   Accounts  : admin, finance
  *   Reports   : admin, operations, finance
  *   Admin     : admin
@@ -43,7 +43,7 @@ export const navItems: NavItem[] = [
     label: "Approvals",
     href: "/approvals",
     icon: "CheckCircle",
-    roles: ["admin"],
+    roles: ["admin", "operations"],
   },
   {
     label: "Accounts",

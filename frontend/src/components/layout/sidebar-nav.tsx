@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { navItems, filterNavByRole } from "@/lib/navigation";
 import { useAuth } from "@/providers/auth-provider";
+import { useApprovalBadge } from "@/hooks/use-approval-badge";
 import { cn } from "@/lib/utils";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -37,11 +38,17 @@ export function SidebarNav({ collapsed }: SidebarNavProps) {
   const userRole = user?.role?.name?.toLowerCase();
   const items = filterNavByRole(navItems, userRole);
 
+  const shouldPoll = userRole === "admin" || userRole === "operations";
+  const pendingApprovalCount = useApprovalBadge(shouldPoll);
+
   return (
     <nav className="flex-1 px-2 py-4 space-y-1">
       {items.map((item) => {
         const Icon = iconMap[item.icon];
         const isActive = pathname === item.href;
+
+        const badgeCount =
+          item.href === "/approvals" ? pendingApprovalCount : (item.badge ?? 0);
 
         return (
           <Link
@@ -58,12 +65,12 @@ export function SidebarNav({ collapsed }: SidebarNavProps) {
           >
             {Icon && <Icon className="w-5 h-5 flex-shrink-0" />}
             {!collapsed && <span>{item.label}</span>}
-            {!collapsed && item.badge != null && item.badge > 0 && (
+            {!collapsed && badgeCount > 0 && (
               <span
                 className="ml-auto text-xs font-bold px-1.5 py-0.5 rounded-full"
                 style={{ backgroundColor: "#F89C1C", color: "#fff" }}
               >
-                {item.badge}
+                {badgeCount}
               </span>
             )}
           </Link>
