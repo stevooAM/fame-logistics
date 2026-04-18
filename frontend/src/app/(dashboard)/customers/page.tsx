@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { CustomerTable } from "./components/CustomerTable";
 import { CustomerToolbar } from "./components/CustomerToolbar";
 import { BatchActionBar } from "./components/BatchActionBar";
@@ -16,9 +17,18 @@ export default function CustomersPage() {
   const [saveAllTrigger, setSaveAllTrigger] = useState(0);
   const [cancelAllTrigger, setCancelAllTrigger] = useState(0);
 
+  const searchParams = useSearchParams();
+
   // Modal state
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
+
+  useEffect(() => {
+    if (searchParams.get("create") === "1") {
+      setEditingCustomer(null);
+      setIsFormOpen(true);
+    }
+  }, [searchParams]);
 
   function handleAddCustomer() {
     setEditingCustomer(null);

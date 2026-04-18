@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { JobTable } from "./components/JobTable";
 import { JobToolbar } from "./components/JobToolbar";
 import { JobFormDialog } from "./components/JobFormDialog";
@@ -12,6 +13,13 @@ export default function JobsPage() {
   });
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [createOpen, setCreateOpen] = useState(false);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get("create") === "1") {
+      setCreateOpen(true);
+    }
+  }, [searchParams]);
 
   function handleSearch(term: string) {
     setFilters((f) => ({ ...f, search: term || undefined, page: 1 }));

@@ -205,13 +205,13 @@ export function QuickActions({ role }: QuickActionsProps) {
   const operationsActions: ActionButton[] = [
     {
       label: "Create Job",
-      href: "/jobs/new",
+      href: "/jobs?create=1",
       variant: "teal",
       icon: <PlusIcon />,
     },
     {
       label: "Add Customer",
-      href: "/customers/new",
+      href: "/customers?create=1",
       variant: "teal",
       icon: <UserPlusIcon />,
     },
