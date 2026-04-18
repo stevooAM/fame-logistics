@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 10 of 10 (Security Hardening & Launch)
-Plan: 3 of 7 in current phase (10-01, 10-02, 10-03 complete)
+Plan: 4 of 7 in current phase (10-01, 10-02, 10-03, 10-04 complete)
 Status: In progress
-Last activity: 2026-04-18 — Completed 10-03-PLAN.md (read-only security audit: all 9 SEC requirements PASS, 3 deploy-time actions documented, 3 post-launch warnings noted)
+Last activity: 2026-04-18 — Completed 10-04-PLAN.md (read-only performance audit: 1 launch blocker identified — unbounded ApprovalHistory endpoint; 5 pre-launch recommendations; PERF-02 pagination confirmed across all main ViewSets)
 
-Progress: [█████████░] ~90% (51/~57 plans estimated complete)
+Progress: [█████████░] ~91% (52/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -199,6 +199,10 @@ Progress: [█████████░] ~90% (51/~57 plans estimated complete
     - [10-01]: CORS_ALLOWED_ORIGINS unset in prod raises RuntimeError — hard startup failure preferred over silent open-CORS
     - [10-01]: DJANGO_ADMIN_ENABLED defaults to False when DEBUG=False — explicit opt-in required for admin on prod
     - [10-01]: BrowsableAPIRenderer excluded from DRF DEFAULT_RENDERER_CLASSES in prod — reduces attack surface
+    - [10-04]: ApprovalHistory.history action is an unbounded queryset (BLOCKER) — must add pagination before launch
+    - [10-04]: All main ViewSets (Customer, Job, Invoice, Payment) use explicit pagination 20/max-100; PERF-02 confirmed
+    - [10-04]: WhiteNoise not installed — static delivery requires Nginx or whitenoise>=6 before production deploy
+    - [10-04]: Missing indexes to add: ApprovalHistory.action, ApprovalHistory.created_at, Customer.created_at (recommended before Lighthouse)
 
 ### Pending Todos
 
@@ -212,9 +216,11 @@ None.
 - [Note]: Vercel integration not yet connected — deferred by user
 
 - [10-03]: Deploy-time requirements: DJANGO_SECRET_KEY, DJANGO_ALLOWED_HOSTS, CORS_ALLOWED_ORIGINS must be set before production launch
+- [10-04]: LAUNCH BLOCKER — ApprovalHistory history endpoint is unbounded (no pagination); fix in next available plan before deploy
 
 ## Session Continuity
 
-Last session: 2026-04-18T14:08:00Z
-Stopped at: Completed 10-03-PLAN.md — read-only security audit, all SEC-01 through SEC-09 PASS
+Last session: 2026-04-18T15:18:00Z
+Stopped at: Completed 10-04-PLAN.md — read-only performance audit, 1 blocker (unbounded ApprovalHistory), PERF-02 confirmed
+Resume file: None
 Resume file: None
