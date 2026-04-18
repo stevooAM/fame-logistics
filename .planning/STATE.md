@@ -5,7 +5,7 @@
 See: .planning/PROJECT.md (updated 2026-04-04)
 
 **Core value:** Operations staff can create, track, and approve freight jobs end-to-end — from customer onboarding to invoice generation — with full audit trails and role-based access control.
-**Current focus:** Phase 9 — Reports
+**Current focus:** Phase 10 — Security Hardening & Launch
 
 ## Current Position
 

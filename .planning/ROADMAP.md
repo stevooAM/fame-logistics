@@ -18,7 +18,7 @@ This roadmap rebuilds the Fame Logistics freight management system from a legacy
 - [x] **Phase 6: Approval Workflow** — Approval queue, approve/reject actions, history *(completed 2026-04-17)*
 - [x] **Phase 7: Accounts & Finance** — Invoice generation, payment recording, financial summaries *(completed 2026-04-18)*
 - [x] **Phase 8: Dashboard** — KPI cards, activity feed, quick-action shortcuts *(completed 2026-04-18)*
-- [ ] **Phase 9: Reports** — Customer, job status, and revenue reports with PDF/Excel export
+- [x] **Phase 9: Reports** — Customer, job status, and revenue reports with PDF/Excel export *(completed 2026-04-18)*
 - [ ] **Phase 10: Security Hardening & Launch** — Security hardening, performance validation, production deploy
 
 ---
@@ -308,7 +308,7 @@ Plans:
 | 6. Approval Workflow | 6/6 | ✓ Complete | 2026-04-17 |
 | 7. Accounts & Finance | 7/7 | ✓ Complete | 2026-04-18 |
 | 8. Dashboard | 2/2 | ✓ Complete | 2026-04-18 |
-| 9. Reports | 0/4 | Not started | - |
+| 9. Reports | 4/4 | ✓ Complete | 2026-04-18 |
 | 10. Security Hardening & Launch | 0/7 | Not started | - |
 
 **Total plans (estimated):** 57 plans across 10 phases

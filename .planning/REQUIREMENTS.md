@@ -199,11 +199,11 @@
 | ACC-03 | Phase 7 — Accounts & Finance | Complete |
 | ACC-04 | Phase 7 — Accounts & Finance | Complete |
 | ACC-05 | Phase 7 — Accounts & Finance | Complete |
-| RPT-01 | Phase 9 — Reports | Pending |
-| RPT-02 | Phase 9 — Reports | Pending |
-| RPT-03 | Phase 9 — Reports | Pending |
-| RPT-04 | Phase 9 — Reports | Pending |
-| RPT-05 | Phase 9 — Reports | Pending |
+| RPT-01 | Phase 9 — Reports | Complete |
+| RPT-02 | Phase 9 — Reports | Complete |
+| RPT-03 | Phase 9 — Reports | Complete |
+| RPT-04 | Phase 9 — Reports | Complete |
+| RPT-05 | Phase 9 — Reports | Complete |
 | DASH-01 | Phase 8 — Dashboard | Complete |
 | DASH-02 | Phase 8 — Dashboard | Complete |
 | DASH-03 | Phase 8 — Dashboard | Complete |
