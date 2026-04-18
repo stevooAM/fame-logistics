@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 
 ## Current Position
 
-Phase: 7 of 10 (Accounts & Finance) — In progress
-Plan: 6 of 6 in current phase (07-06 complete — human-verify approved)
-Status: In progress
-Last activity: 2026-04-17 — Completed 07-06 (Period Summary UI) — human verified and approved
+Phase: 7 of 10 (Accounts & Finance) — Phase complete
+Plan: 7 of 7 in current phase (07-07 complete — gap closure done)
+Status: Phase complete
+Last activity: 2026-04-18 — Completed 07-06 (Period Summary UI) — human verified and approved
 
-Progress: [███████░░░] ~74% (42/~57 plans estimated complete)
+Progress: [████████░░] ~76% (43/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -166,6 +166,9 @@ Progress: [███████░░░] ~74% (42/~57 plans estimated complete
     - [07-06]: SummaryTable totals footer reads data.totals directly — backend-authoritative, no client-side reduce
     - [07-06]: AccountsTabs (07-04 named export) verified correct — no changes needed in 07-06
     - [07-06]: No chart library for v1 CSS bar chart — Phase 9 can introduce recharts if needed
+    - [07-07]: exportInvoicesBlob strips page/page_size before calling export endpoint — export downloads all matching records
+    - [07-07]: Export dropdown positioned right-0 to prevent viewport overflow (right-edge toolbar)
+    - [07-07]: InvoiceToolbar error toast uses ApiError isinstance check for typed status code in message
 
 ### Pending Todos
 
@@ -180,6 +183,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-17
-Stopped at: 07-06 complete — all Phase 7 plans complete; awaiting phase verification
+Last session: 2026-04-18
+Stopped at: 07-07 complete — Phase 7 (Accounts & Finance) fully complete including gap closure
 Resume file: None
