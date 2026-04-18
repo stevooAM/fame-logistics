@@ -64,11 +64,11 @@
 
 ### Accounts & Finance
 
-- [ ] **ACC-01**: Generate invoice for a completed/approved job
-- [ ] **ACC-02**: Record payments against invoices
-- [ ] **ACC-03**: View outstanding balances per customer
-- [ ] **ACC-04**: Monthly and quarterly financial period summaries
-- [ ] **ACC-05**: Export financial data to Excel
+- [x] **ACC-01**: Generate invoice for a completed/approved job
+- [x] **ACC-02**: Record payments against invoices
+- [x] **ACC-03**: View outstanding balances per customer
+- [x] **ACC-04**: Monthly and quarterly financial period summaries
+- [x] **ACC-05**: Export financial data to Excel
 
 ### Reports
 
@@ -194,11 +194,11 @@
 | APR-03 | Phase 6 — Approval Workflow | Complete |
 | APR-04 | Phase 6 — Approval Workflow | Complete |
 | APR-05 | Phase 6 — Approval Workflow | Complete |
-| ACC-01 | Phase 7 — Accounts & Finance | Pending |
-| ACC-02 | Phase 7 — Accounts & Finance | Pending |
-| ACC-03 | Phase 7 — Accounts & Finance | Pending |
-| ACC-04 | Phase 7 — Accounts & Finance | Pending |
-| ACC-05 | Phase 7 — Accounts & Finance | Pending |
+| ACC-01 | Phase 7 — Accounts & Finance | Complete |
+| ACC-02 | Phase 7 — Accounts & Finance | Complete |
+| ACC-03 | Phase 7 — Accounts & Finance | Complete |
+| ACC-04 | Phase 7 — Accounts & Finance | Complete |
+| ACC-05 | Phase 7 — Accounts & Finance | Complete |
 | RPT-01 | Phase 9 — Reports | Pending |
 | RPT-02 | Phase 9 — Reports | Pending |
 | RPT-03 | Phase 9 — Reports | Pending |

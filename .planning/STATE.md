@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-04)
 
 **Core value:** Operations staff can create, track, and approve freight jobs end-to-end — from customer onboarding to invoice generation — with full audit trails and role-based access control.
-**Current focus:** Phase 7 — Accounts & Finance
+**Current focus:** Phase 8 — Dashboard
 
 ## Current Position
 
-Phase: 7 of 10 (Accounts & Finance) — Phase complete
-Plan: 7 of 7 in current phase (07-07 complete — gap closure done)
-Status: Phase complete
-Last activity: 2026-04-18 — Completed 07-06 (Period Summary UI) — human verified and approved
+Phase: 7 of 10 (Accounts & Finance) — Complete ✓
+Plan: 7/7 complete (07-07 gap closure verified 5/5)
+Status: Phase 7 complete — ready for Phase 8
+Last activity: 2026-04-18 — Phase 7 verified passed (5/5 must-haves)
 
-Progress: [████████░░] ~76% (43/~57 plans estimated complete)
+Progress: [████████░░] ~78% (43/~57 plans estimated complete)
 
 ## Performance Metrics
 
