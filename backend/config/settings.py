@@ -77,16 +77,38 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 # Database
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("POSTGRES_DB", "fame_fms"),
-        "USER": os.environ.get("POSTGRES_USER", "fame_user"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "fame_dev_password"),
-        "HOST": os.environ.get("POSTGRES_HOST", "db"),
-        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
+# Prefer DATABASE_URL (set by Railway/Render/Heroku) if present; fall back to discrete POSTGRES_* vars for local Docker.
+import urllib.parse as _urlparse
+
+_db_url = os.environ.get("DATABASE_URL", "").strip()
+if _db_url:
+    _p = _urlparse.urlparse(_db_url)
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": (_p.path or "/").lstrip("/"),
+            "USER": _urlparse.unquote(_p.username or ""),
+            "PASSWORD": _urlparse.unquote(_p.password or ""),
+            "HOST": _p.hostname or "",
+            "PORT": str(_p.port or 5432),
+            "CONN_MAX_AGE": 60,
+            "OPTIONS": {"sslmode": os.environ.get("DATABASE_SSLMODE", "require")},
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.environ.get("POSTGRES_DB", "fame_fms"),
+            "USER": os.environ.get("POSTGRES_USER", "fame_user"),
+            "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "fame_dev_password"),
+            "HOST": os.environ.get("POSTGRES_HOST", "db"),
+            "PORT": os.environ.get("POSTGRES_PORT", "5432"),
+        }
+    }
+
+DJANGO_RUN_MIGRATIONS_ON_START = os.environ.get("DJANGO_RUN_MIGRATIONS_ON_START", "False") == "True"
+DJANGO_RUN_COLLECTSTATIC_ON_START = os.environ.get("DJANGO_RUN_COLLECTSTATIC_ON_START", "False") == "True"
 
 # Cache — Redis backend (used for rate limiting and session data)
 CACHES = {
