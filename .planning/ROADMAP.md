@@ -281,16 +281,16 @@ Plans:
 4. Server-side pagination is confirmed on all AG Grid tables — no endpoint returns an unbounded result set
 5. The application is deployed and accessible at the production domain with all 197 customer records present and all modules functional
 
-**Plans**: TBD (5–7 plans)
+**Plans:** 7 plans
 
 Plans:
-- [ ] 10-01: Production infrastructure — Vercel (Next.js), Railway/Render (Django + Celery + Redis), PostgreSQL managed instance, Nginx reverse proxy config
-- [ ] 10-02: SSL / HTTPS setup — Let's Encrypt cert, Nginx HTTP→HTTPS redirect, HSTS header, CSP header configuration
-- [ ] 10-03: Security audit — review bcrypt config, CSRF middleware, parameterized queries, XSS output encoding, cookie flags, rate limiting
-- [ ] 10-04: Performance audit — Lighthouse / DevTools 3G throttle test on dashboard and customer list; query profiling on slow endpoints; index review on PostgreSQL
-- [ ] 10-05: Environment hardening — production `.env` secrets management, DEBUG=False, ALLOWED_HOSTS, CORS config, disable Django admin on prod
-- [ ] 10-06: End-to-end smoke test — run full workflow (login → create customer → create job → approve → generate invoice → run report) in production
-- [ ] 10-07: Launch — seed production database with 197 customers, final Go/No-Go check, DNS cutover
+- [ ] 10-01-PLAN.md — Django settings production hardening (DEBUG, HSTS, SSL redirect, secure cookies, admin toggle, CSRF/CORS origins)
+- [ ] 10-02-PLAN.md — Next.js security headers (CSP, HSTS, X-Frame-Options, Permissions-Policy, remove X-Powered-By)
+- [ ] 10-03-PLAN.md — Security audit pass — SEC-01..SEC-09 evidence-backed AUDIT.md
+- [ ] 10-04-PLAN.md — Performance audit pass — N+1, index coverage, PERF-02 pagination PERF-AUDIT.md
+- [ ] 10-05-PLAN.md — Production infrastructure configs (Railway, Render, Procfile, Nginx sample, vercel.json, DATABASE_URL support, deploy/README.md)
+- [ ] 10-06-PLAN.md — Provision & deploy (decision + automation checkpoint; Railway/Render/VPS + Vercel)
+- [ ] 10-07-PLAN.md — DNS cutover, SSL Labs + securityheaders + Lighthouse, E2E smoke test, Go/No-Go launch checklist
 
 ---
 
