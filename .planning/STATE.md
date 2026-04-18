@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 10 of 10 (Security Hardening & Launch)
-Plan: 4 of 7 in current phase (10-01, 10-02, 10-03, 10-04 complete)
+Plan: 5 of 7 in current phase (10-01, 10-02, 10-03, 10-04, 10-05 complete)
 Status: In progress
-Last activity: 2026-04-18 — Completed 10-04-PLAN.md (read-only performance audit: 1 launch blocker identified — unbounded ApprovalHistory endpoint; 5 pre-launch recommendations; PERF-02 pagination confirmed across all main ViewSets)
+Last activity: 2026-04-18 — Completed 10-05-PLAN.md (production infrastructure: DATABASE_URL support, Railway/Render/Nginx/Vercel deploy configs, deploy README)
 
-Progress: [█████████░] ~91% (52/~57 plans estimated complete)
+Progress: [█████████░] ~92% (53/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -203,6 +203,9 @@ Progress: [█████████░] ~91% (52/~57 plans estimated complete
     - [10-04]: All main ViewSets (Customer, Job, Invoice, Payment) use explicit pagination 20/max-100; PERF-02 confirmed
     - [10-04]: WhiteNoise not installed — static delivery requires Nginx or whitenoise>=6 before production deploy
     - [10-04]: Missing indexes to add: ApprovalHistory.action, ApprovalHistory.created_at, Customer.created_at (recommended before Lighthouse)
+    - [10-05]: DATABASE_URL parsed with urllib.parse (stdlib) — no new dependency; CONN_MAX_AGE=60 and sslmode=require for PaaS connections
+    - [10-05]: Railway recommended as default hosting (lowest complexity); Render and VPS also fully configured
+    - [10-05]: vercel.json security headers applied to all routes via source: /(.*) pattern
 
 ### Pending Todos
 
@@ -220,7 +223,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-18T15:18:00Z
-Stopped at: Completed 10-04-PLAN.md — read-only performance audit, 1 blocker (unbounded ApprovalHistory), PERF-02 confirmed
-Resume file: None
+Last session: 2026-04-18T15:17:50Z
+Stopped at: Completed 10-05-PLAN.md — production infrastructure configs (DATABASE_URL support, Railway/Render/Nginx/Vercel)
 Resume file: None
