@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   fetchCustomerActivity,
+  exportCustomerActivity,
   type CustomerActivityResponse,
   type CustomerActivityRow,
 } from "@/lib/reports-api";
@@ -76,6 +77,8 @@ export function CustomerActivitySection({
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<CustomerActivityResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [exportingPdf, setExportingPdf] = useState(false);
+  const [exportingXlsx, setExportingXlsx] = useState(false);
   const [expandedCustomerId, setExpandedCustomerId] = useState<number | null>(null);
   const [drilldownCache, setDrilldownCache] = useState<Record<number, DrilldownJob[]>>({});
   const [drilldownCounts, setDrilldownCounts] = useState<Record<number, number>>({});
@@ -150,6 +153,38 @@ export function CustomerActivitySection({
         next.delete(row.customer_id);
         return next;
       });
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Export handler
+  // ---------------------------------------------------------------------------
+
+  async function handleExport(format: "pdf" | "xlsx") {
+    if (!data) return;
+    const setExporting = format === "pdf" ? setExportingPdf : setExportingXlsx;
+    setExporting(true);
+    try {
+      const params: { date_from: string; date_to: string; customer_id?: number } = {
+        date_from: dateFrom,
+        date_to: dateTo,
+      };
+      if (customerId && customerId.trim() !== "") {
+        const parsed = parseInt(customerId, 10);
+        if (!isNaN(parsed)) params.customer_id = parsed;
+      }
+      const blob = await exportCustomerActivity(params, format);
+      const ext = format === "pdf" ? "pdf" : "xlsx";
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `customer-activity-${dateFrom}-${dateTo}.${ext}`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      // silently fail — user can retry
+    } finally {
+      setExporting(false);
     }
   }
 
@@ -229,7 +264,28 @@ export function CustomerActivitySection({
   const tfClass = "px-3 py-2 text-sm font-semibold text-gray-900 whitespace-nowrap";
 
   return (
-    <div className="mt-4 overflow-x-auto rounded border border-gray-200">
+    <div className="flex flex-col gap-3">
+      {/* Export buttons — visible once data is loaded */}
+      <div className="flex items-center gap-2 justify-end">
+        <button
+          type="button"
+          onClick={() => handleExport("pdf")}
+          disabled={exportingPdf}
+          className="px-3 py-1.5 text-xs font-medium rounded border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          {exportingPdf ? "Exporting…" : "Export PDF"}
+        </button>
+        <button
+          type="button"
+          onClick={() => handleExport("xlsx")}
+          disabled={exportingXlsx}
+          className="px-3 py-1.5 text-xs font-medium rounded border border-[#1F7A8C] bg-[#1F7A8C] text-white hover:bg-[#176879] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          {exportingXlsx ? "Exporting…" : "Export Excel"}
+        </button>
+      </div>
+
+      <div className="overflow-x-auto rounded border border-gray-200">
       <table className="w-full text-left border-collapse">
         <thead className="bg-gray-50 border-b border-gray-200">
           <tr>
@@ -359,6 +415,7 @@ export function CustomerActivitySection({
           </tfoot>
         )}
       </table>
+      </div>
     </div>
   );
 }

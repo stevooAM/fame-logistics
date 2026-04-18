@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { fetchRevenue, type RevenueResponse, type RevenueTotals } from "@/lib/reports-api";
+import { fetchRevenue, exportRevenue, type RevenueResponse, type RevenueTotals } from "@/lib/reports-api";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -51,6 +51,8 @@ export function RevenueSection({ runTrigger, dateFrom, dateTo, currencyCode }: R
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<RevenueResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [exportingPdf, setExportingPdf] = useState(false);
+  const [exportingXlsx, setExportingXlsx] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
@@ -77,6 +79,33 @@ export function RevenueSection({ runTrigger, dateFrom, dateTo, currencyCode }: R
 
     return () => controller.abort();
   }, [runTrigger]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ---------------------------------------------------------------------------
+  // Export handler
+  // ---------------------------------------------------------------------------
+
+  async function handleExport(format: "pdf" | "xlsx") {
+    if (!data) return;
+    const setExporting = format === "pdf" ? setExportingPdf : setExportingXlsx;
+    setExporting(true);
+    try {
+      const blob = await exportRevenue(
+        { date_from: dateFrom, date_to: dateTo, currency_code: currencyCode || undefined },
+        format
+      );
+      const ext = format === "pdf" ? "pdf" : "xlsx";
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `revenue-${dateFrom}-${dateTo}.${ext}`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      // silently fail — user can retry
+    } finally {
+      setExporting(false);
+    }
+  }
 
   // ---------------------------------------------------------------------------
   // Render states
@@ -124,7 +153,28 @@ export function RevenueSection({ runTrigger, dateFrom, dateTo, currencyCode }: R
   const tdClass = "px-3 py-2 text-sm text-gray-800 whitespace-nowrap";
 
   return (
-    <div className="mt-4 flex flex-col gap-6">
+    <div className="flex flex-col gap-3">
+      {/* Export buttons — visible once data is loaded */}
+      <div className="flex items-center gap-2 justify-end">
+        <button
+          type="button"
+          onClick={() => handleExport("pdf")}
+          disabled={exportingPdf}
+          className="px-3 py-1.5 text-xs font-medium rounded border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          {exportingPdf ? "Exporting…" : "Export PDF"}
+        </button>
+        <button
+          type="button"
+          onClick={() => handleExport("xlsx")}
+          disabled={exportingXlsx}
+          className="px-3 py-1.5 text-xs font-medium rounded border border-[#1F7A8C] bg-[#1F7A8C] text-white hover:bg-[#176879] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          {exportingXlsx ? "Exporting…" : "Export Excel"}
+        </button>
+      </div>
+
+      <div className="flex flex-col gap-6">
       {/* Currency note */}
       {!effectiveCurrency && (
         <p className="text-xs text-gray-500">
@@ -199,6 +249,7 @@ export function RevenueSection({ runTrigger, dateFrom, dateTo, currencyCode }: R
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }
