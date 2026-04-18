@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 9 of 10 (Reports) — In progress
-Plan: 1/4 complete (09-01 reports query layer complete)
+Plan: 2/4 complete (09-02 report API views wired)
 Status: In progress
-Last activity: 2026-04-18 — Completed 09-01-PLAN.md
+Last activity: 2026-04-18 — Completed 09-02-PLAN.md
 
-Progress: [████████░░] ~81% (45/~57 plans estimated complete)
+Progress: [████████░░] ~83% (46/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -182,6 +182,9 @@ Progress: [████████░░] ~81% (45/~57 plans estimated complete
     - [09-01]: Job value field in queries is total_cost (not cost) — confirmed from Job model; plan template had wrong field name
     - [09-01]: customer_activity_query filters Job.created_at__date; revenue_query filters Invoice.issue_date — different date field per model
     - [09-01]: revenue_query returns nested dict {period_rows, period_totals, customer_rows, customer_totals} — 09-02 view passes through directly
+    - [09-02]: _parse_dates() returns 3-tuple (None, None, Response) on error — callers check len(result)==3, keeping view methods linear
+    - [09-02]: currency_code uses `or None` guard — empty string query param must not bypass the currency filter in revenue_query
+    - [09-02]: customer_id integer validation done in view layer (400 before DB hit) — not in query function
 
 ### Pending Todos
 
@@ -197,5 +200,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-04-18
-Stopped at: Completed 09-01-PLAN.md — reports query layer done, ready for 09-02 API views
+Stopped at: Completed 09-02-PLAN.md — report API views wired, ready for 09-03 frontend pages
 Resume file: None
