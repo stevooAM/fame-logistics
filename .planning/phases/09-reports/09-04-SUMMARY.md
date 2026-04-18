@@ -41,7 +41,7 @@ key-decisions:
   - "format=pdf|xlsx query param on export endpoints — single URL per report, format-dispatched in view"
   - "Revenue Excel uses two sheets (Period Summary + Customer Breakdown) for structured multi-table data"
   - "WeasyPrint A4 landscape with CSS @page counters — page numbering and generated date in footer"
-  - "Section component export buttons deferred pending 09-03 component files (parallel execution) — export API functions in reports-api.ts are the complete deliverable for this plan"
+  - "Export buttons added to all three section components in 09-03 commit c30cd21 — wired to exportCustomerActivity, exportJobStatus, exportRevenue from reports-api.ts"
 
 patterns-established:
   - "pdf_utils.generate_report_pdf: report_type string dispatch to per-report HTML builder functions"
@@ -61,7 +61,7 @@ completed: 2026-04-18
 - **Duration:** ~4 min
 - **Started:** 2026-04-18T12:35:52Z
 - **Completed:** 2026-04-18T12:39:39Z
-- **Tasks:** 2 auto tasks complete (checkpoint pending user verification)
+- **Tasks:** 2 auto tasks complete + checkpoint approved by user
 - **Files modified:** 6
 
 ## Accomplishments
@@ -78,6 +78,7 @@ Each task was committed atomically:
 
 1. **Task 1: Backend export endpoints (PDF + Excel) for all three reports** - `c1126b0` (feat)
 2. **Task 2: Frontend export functions using apiFetchBlob** - `8c91046` (feat)
+3. **Task 3: Export buttons in section components** - `c30cd21` (feat, via 09-03 parallel execution)
 
 ## Files Created/Modified
 
@@ -97,7 +98,7 @@ Each task was committed atomically:
 
 ## Deviations from Plan
 
-None - plan executed exactly as written. Section component buttons are documented as pending 09-03 completion (as the plan explicitly acknowledged parallel execution and stated this was acceptable).
+None - plan executed exactly as written. Export buttons in section components were delivered via 09-03 parallel execution (commit `c30cd21`) as planned, and were confirmed present in CustomerActivitySection, JobStatusSection, and RevenueSection. TypeScript check passes clean (0 errors).
 
 ## Issues Encountered
 
@@ -125,13 +126,23 @@ pip install weasyprint
 ## Next Phase Readiness
 
 - All three export endpoints live at `/api/reports/{type}/export/?format=pdf|xlsx`
-- Frontend export functions ready in `reports-api.ts` for 09-03 to wire into section components
+- Export buttons present and functional in all three section components (CustomerActivity, JobStatus, Revenue)
 - Revenue Excel has two worksheets (Period Summary + Customer Breakdown) as specified
-- PDF has company branding, date range, page numbers — ready for verification once Docker is running
-- Checkpoint awaits user verification of download behavior
+- PDF has company branding, date range, page numbers — verified by user
+- TypeScript passes clean (0 errors)
+- Phase 9 plans 01-04 all complete — ready for Phase 10 (NFR / performance / security)
 
 ---
 *Phase: 09-reports*
 *Completed: 2026-04-18*
 
 ## Self-Check: PASSED
+
+Verified:
+- `backend/reports/pdf_utils.py` exists
+- `backend/reports/views.py` updated with export view classes
+- `backend/reports/urls.py` updated with export URL patterns
+- `frontend/src/lib/reports-api.ts` has exportCustomerActivity, exportJobStatus, exportRevenue
+- Export buttons present in all 3 section components (confirmed via code read)
+- TypeScript: 0 errors (`npx tsc --noEmit` clean)
+- All commits present: c1126b0, 8c91046, c30cd21
