@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 
 ## Current Position
 
-Phase: 8 of 10 (Dashboard) — In progress
-Plan: 1/? complete (08-01 backend API complete)
-Status: In progress — 08-01 done, 08-02 dashboard UI next
-Last activity: 2026-04-18 — Completed 08-01-PLAN.md
+Phase: 8 of 10 (Dashboard) — Complete
+Plan: 2/2 complete (08-01 backend API + 08-02 dashboard UI complete)
+Status: Phase 8 complete — both plans done and human-verified
+Last activity: 2026-04-18 — Completed 08-02-PLAN.md
 
-Progress: [████████░░] ~79% (44/~57 plans estimated complete)
+Progress: [████████░░] ~81% (45/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -174,6 +174,10 @@ Progress: [████████░░] ~79% (44/~57 plans estimated complete
     - [08-01]: _build_feed is a module-level function shared by both DashboardView and DashboardActivityView — single source of truth for role-filtering and serialisation
     - [08-01]: DashboardActivityView clamps limit to 1..100 to prevent runaway aggregation queries
     - [08-01]: Feed link values use dict mapping keyed on model_name; unknown model names return None — forward-compatible pattern
+    - [08-02]: page.tsx is a Server Component shell rendering <DashboardClient> — keeps metadata export valid while allowing hooks in the client child
+    - [08-02]: Finance role omits Pending Approvals KPI card entirely (3-card layout) — mirrors backend returning null for pending_approvals
+    - [08-02]: Activity feed extra entries accumulated in extraEntries state — reset on each 30s poll to show freshest 10, Load More appends older pages
+    - [08-02]: Intl.RelativeTimeFormat used for timestamps — date-fns not installed in project
 
 ### Pending Todos
 
@@ -189,5 +193,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-04-18
-Stopped at: 08-01 complete — Dashboard backend API (DashboardView + DashboardActivityView) complete
+Stopped at: 08-02 complete — Dashboard UI (KPI cards, quick actions, activity feed) complete; Phase 8 done
 Resume file: None
