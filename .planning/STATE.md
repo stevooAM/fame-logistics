@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 
 ## Current Position
 
-Phase: 7 of 10 (Accounts & Finance) — Complete ✓
-Plan: 7/7 complete (07-07 gap closure verified 5/5)
-Status: Phase 7 complete — ready for Phase 8
-Last activity: 2026-04-18 — Phase 7 verified passed (5/5 must-haves)
+Phase: 8 of 10 (Dashboard) — In progress
+Plan: 1/? complete (08-01 backend API complete)
+Status: In progress — 08-01 done, 08-02 dashboard UI next
+Last activity: 2026-04-18 — Completed 08-01-PLAN.md
 
-Progress: [████████░░] ~78% (43/~57 plans estimated complete)
+Progress: [████████░░] ~79% (44/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -169,6 +169,11 @@ Progress: [████████░░] ~78% (43/~57 plans estimated complete
     - [07-07]: exportInvoicesBlob strips page/page_size before calling export endpoint — export downloads all matching records
     - [07-07]: Export dropdown positioned right-0 to prevent viewport overflow (right-edge toolbar)
     - [07-07]: InvoiceToolbar error toast uses ApiError isinstance check for typed status code in message
+    - [08-01]: outstanding_invoice_total is net balance (invoiced minus paid) across non-PAID, non-CANCELLED invoices — returned as string (e.g. "12450.00") for JSON serialisation
+    - [08-01]: pending_approvals returns null (not 0) for Finance role — Finance cannot act on approvals so the count must not be surfaced
+    - [08-01]: _build_feed is a module-level function shared by both DashboardView and DashboardActivityView — single source of truth for role-filtering and serialisation
+    - [08-01]: DashboardActivityView clamps limit to 1..100 to prevent runaway aggregation queries
+    - [08-01]: Feed link values use dict mapping keyed on model_name; unknown model names return None — forward-compatible pattern
 
 ### Pending Todos
 
@@ -184,5 +189,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-04-18
-Stopped at: 07-07 complete — Phase 7 (Accounts & Finance) fully complete including gap closure
+Stopped at: 08-01 complete — Dashboard backend API (DashboardView + DashboardActivityView) complete
 Resume file: None
