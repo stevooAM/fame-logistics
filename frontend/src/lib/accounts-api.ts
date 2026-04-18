@@ -1,4 +1,4 @@
-import { apiFetch } from "@/lib/api";
+import { apiFetch, apiFetchBlob } from "@/lib/api";
 import type {
   Invoice,
   InvoiceListResponse,
@@ -71,4 +71,12 @@ export async function fetchApprovedJobs(
   return res.results
     .filter((j) => eligible.has(j.status))
     .map(({ id, job_number, customer_name }) => ({ id, job_number, customer_name }));
+}
+
+export function exportInvoicesBlob(
+  filters: InvoiceFilters = {},
+  format: "xlsx" | "csv"
+): Promise<Blob> {
+  const exportFilters = { ...filters, format };
+  return apiFetchBlob(`/api/accounts/invoices/export/${buildQuery(exportFilters)}`);
 }
