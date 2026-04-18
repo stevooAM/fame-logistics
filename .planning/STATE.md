@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 
 ## Current Position
 
-Phase: 9 of 10 (Reports) — In progress
-Plan: 2/4 auto tasks complete (09-03); checkpoint awaiting user verification
-Status: In progress — checkpoint reached at 09-03
-Last activity: 2026-04-18 — Completed 09-03-PLAN.md Tasks 1+2; checkpoint pending visual verification at /reports
+Phase: 9 of 10 (Reports) — Phase complete
+Plan: 4/4 complete (09-01, 09-02, 09-03, 09-04 all done)
+Status: Phase 9 complete — all reports plans done; ready for Phase 10
+Last activity: 2026-04-18 — Completed 09-03-PLAN.md (all tasks including export buttons)
 
-Progress: [████████░░] ~84% (47/~57 plans estimated complete)
+Progress: [█████████░] ~88% (49/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -190,6 +190,9 @@ Progress: [████████░░] ~84% (47/~57 plans estimated complete
     - [09-04]: WeasyPrint import is lazy (inside generate_report_pdf body) — avoids import-time crash if system libs absent in dev
     - [09-04]: WeasyPrint system deps added to Dockerfile (Pango, Cairo, GDK-PixBuf, libffi) — required for PDF generation in container
     - [09-04]: Export buttons in section components deferred pending 09-03 (parallel execution) — export API functions complete in reports-api.ts
+    - [09-03]: Export buttons visible only after data loads (gated on data !== null) — no empty button state before Run
+    - [09-03]: Per-format export loading state (exportingPdf / exportingXlsx) — each button independently disabled during in-flight request
+    - [09-03]: apiFetchBlob download trigger: createObjectURL → anchor.download → click → revokeObjectURL — established pattern for all blob downloads in section components
 
 ### Pending Todos
 
@@ -204,6 +207,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-18T12:52:00Z
-Stopped at: 09-03-PLAN.md checkpoint:human-verify — Reports UI (tabs, toolbar, 3 sections) built and compiled; awaiting visual verification at /reports
+Last session: 2026-04-18T13:10:00Z
+Stopped at: 09-03-PLAN.md fully complete — export buttons added to all 3 sections, TypeScript clean, SUMMARY updated
 Resume file: None
