@@ -1,4 +1,4 @@
-import { apiFetch } from "@/lib/api";
+import { apiFetch, apiFetchBlob } from "@/lib/api";
 
 // ---------------------------------------------------------------------------
 // Customer Activity
@@ -123,4 +123,50 @@ export async function fetchRevenue(
     `/api/reports/revenue/?${qs.toString()}`,
     { signal }
   );
+}
+
+// ---------------------------------------------------------------------------
+// Export functions (RPT-04) — PDF and Excel via apiFetchBlob
+// ---------------------------------------------------------------------------
+
+export async function exportCustomerActivity(
+  params: { date_from: string; date_to: string; customer_id?: number },
+  format: "pdf" | "xlsx"
+): Promise<Blob> {
+  const p = new URLSearchParams({
+    date_from: params.date_from,
+    date_to: params.date_to,
+    format,
+  });
+  if (params.customer_id !== undefined && params.customer_id !== null) {
+    p.set("customer_id", String(params.customer_id));
+  }
+  return apiFetchBlob(`/api/reports/customer-activity/export/?${p.toString()}`);
+}
+
+export async function exportJobStatus(
+  params: { date_from: string; date_to: string },
+  format: "pdf" | "xlsx"
+): Promise<Blob> {
+  const p = new URLSearchParams({
+    date_from: params.date_from,
+    date_to: params.date_to,
+    format,
+  });
+  return apiFetchBlob(`/api/reports/job-status/export/?${p.toString()}`);
+}
+
+export async function exportRevenue(
+  params: { date_from: string; date_to: string; currency_code?: string },
+  format: "pdf" | "xlsx"
+): Promise<Blob> {
+  const p = new URLSearchParams({
+    date_from: params.date_from,
+    date_to: params.date_to,
+    format,
+  });
+  if (params.currency_code) {
+    p.set("currency_code", params.currency_code);
+  }
+  return apiFetchBlob(`/api/reports/revenue/export/?${p.toString()}`);
 }
