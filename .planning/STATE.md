@@ -9,10 +9,10 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 
 ## Current Position
 
-Phase: 8 of 10 (Dashboard) — Complete
-Plan: 2/2 complete (08-01 backend API + 08-02 dashboard UI complete)
-Status: Phase 8 complete — both plans done and human-verified
-Last activity: 2026-04-18 — Completed 08-02-PLAN.md
+Phase: 9 of 10 (Reports) — In progress
+Plan: 1/4 complete (09-01 reports query layer complete)
+Status: In progress
+Last activity: 2026-04-18 — Completed 09-01-PLAN.md
 
 Progress: [████████░░] ~81% (45/~57 plans estimated complete)
 
@@ -179,6 +179,9 @@ Progress: [████████░░] ~81% (45/~57 plans estimated complete
     - [08-02]: Activity feed extra entries accumulated in extraEntries state — reset on each 30s poll to show freshest 10, Load More appends older pages
     - [08-02]: Intl.RelativeTimeFormat used for timestamps — date-fns not installed in project
     - [08-02]: Quick-action shortcuts use ?create=1 URL param (not /jobs/new route) — creation is modal-driven on list pages; useSearchParams reads the param on mount to auto-open the dialog
+    - [09-01]: Job value field in queries is total_cost (not cost) — confirmed from Job model; plan template had wrong field name
+    - [09-01]: customer_activity_query filters Job.created_at__date; revenue_query filters Invoice.issue_date — different date field per model
+    - [09-01]: revenue_query returns nested dict {period_rows, period_totals, customer_rows, customer_totals} — 09-02 view passes through directly
 
 ### Pending Todos
 
@@ -194,5 +197,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-04-18
-Stopped at: Phase 8 verified passed (3/3) — ready for Phase 9 (Reports)
+Stopped at: Completed 09-01-PLAN.md — reports query layer done, ready for 09-02 API views
 Resume file: None
