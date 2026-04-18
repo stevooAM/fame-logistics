@@ -233,11 +233,11 @@ Plans:
 2. The recent activity feed lists the last 10 job and approval events with actor name, action, and timestamp — and reflects the most recent state on page load
 3. Clicking "Create Job" or "Add Customer" from the dashboard shortcut navigates to the correct creation form
 
-**Plans**: TBD (2–3 plans)
+**Plans:** 2 plans
 
 Plans:
-- [ ] 08-01: Dashboard API endpoint — aggregate KPI query (active jobs, pending approvals, outstanding invoices, new customers); recent activity feed query
-- [ ] 08-02: Dashboard UI — KPI card grid, activity feed list, quick-action buttons (use `/frontend-design` skill)
+- [ ] 08-01-PLAN.md — Dashboard API endpoint: KPI aggregation (active_jobs, pending_approvals, outstanding_invoice_total, new_customers_this_month), role-filtered activity feed
+- [ ] 08-02-PLAN.md — Dashboard UI: KPI card grid, quick-action shortcuts, activity feed with Load More (uses `/frontend-design` skill)
 
 ---
 
