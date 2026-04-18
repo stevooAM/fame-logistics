@@ -145,7 +145,7 @@ export function LookupTab({ config }: LookupTabProps) {
                   {extraFields.map((f) => (
                     <TableCell key={f.name} className="text-gray-500">
                       {f.type === "checkbox" ? (
-                        (entry as Record<string, unknown>)[f.name] ? (
+                        (entry as unknown as Record<string, unknown>)[f.name] ? (
                           <Badge className="bg-teal-100 text-teal-800 border-teal-200">
                             Yes
                           </Badge>
@@ -153,7 +153,7 @@ export function LookupTab({ config }: LookupTabProps) {
                           <span className="text-gray-300">No</span>
                         )
                       ) : (
-                        String((entry as Record<string, unknown>)[f.name] ?? "—")
+                        String((entry as unknown as Record<string, unknown>)[f.name] ?? "—")
                       )}
                     </TableCell>
                   ))}
