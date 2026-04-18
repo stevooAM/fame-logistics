@@ -5,7 +5,7 @@
 See: .planning/PROJECT.md (updated 2026-04-04)
 
 **Core value:** Operations staff can create, track, and approve freight jobs end-to-end — from customer onboarding to invoice generation — with full audit trails and role-based access control.
-**Current focus:** Phase 8 — Dashboard
+**Current focus:** Phase 9 — Reports
 
 ## Current Position
 
@@ -178,6 +178,7 @@ Progress: [████████░░] ~81% (45/~57 plans estimated complete
     - [08-02]: Finance role omits Pending Approvals KPI card entirely (3-card layout) — mirrors backend returning null for pending_approvals
     - [08-02]: Activity feed extra entries accumulated in extraEntries state — reset on each 30s poll to show freshest 10, Load More appends older pages
     - [08-02]: Intl.RelativeTimeFormat used for timestamps — date-fns not installed in project
+    - [08-02]: Quick-action shortcuts use ?create=1 URL param (not /jobs/new route) — creation is modal-driven on list pages; useSearchParams reads the param on mount to auto-open the dialog
 
 ### Pending Todos
 
@@ -193,5 +194,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-04-18
-Stopped at: 08-02 complete — Dashboard UI (KPI cards, quick actions, activity feed) complete; Phase 8 done
+Stopped at: Phase 8 verified passed (3/3) — ready for Phase 9 (Reports)
 Resume file: None

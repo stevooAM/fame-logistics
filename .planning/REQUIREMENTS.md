@@ -80,9 +80,9 @@
 
 ### Dashboard
 
-- [ ] **DASH-01**: KPI cards: active jobs count, pending approvals count, outstanding invoices total, new customers this month
-- [ ] **DASH-02**: Recent activity feed (last 10 jobs/approvals created)
-- [ ] **DASH-03**: Quick-action shortcuts to create job, add customer
+- [x] **DASH-01**: KPI cards: active jobs count, pending approvals count, outstanding invoices total, new customers this month
+- [x] **DASH-02**: Recent activity feed (last 10 jobs/approvals created)
+- [x] **DASH-03**: Quick-action shortcuts to create job, add customer
 
 ### Administration & Setup
 
@@ -204,9 +204,9 @@
 | RPT-03 | Phase 9 — Reports | Pending |
 | RPT-04 | Phase 9 — Reports | Pending |
 | RPT-05 | Phase 9 — Reports | Pending |
-| DASH-01 | Phase 8 — Dashboard | Pending |
-| DASH-02 | Phase 8 — Dashboard | Pending |
-| DASH-03 | Phase 8 — Dashboard | Pending |
+| DASH-01 | Phase 8 — Dashboard | Complete |
+| DASH-02 | Phase 8 — Dashboard | Complete |
+| DASH-03 | Phase 8 — Dashboard | Complete |
 | ADMIN-01 | Phase 3 — Administration & Lookup Setup | Complete |
 | ADMIN-02 | Phase 3 — Administration & Lookup Setup | Complete |
 | ADMIN-03 | Phase 3 — Administration & Lookup Setup | Complete |
