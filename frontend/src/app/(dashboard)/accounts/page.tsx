@@ -50,6 +50,7 @@ export default function AccountsPage() {
       <AccountsTabs />
 
       <InvoiceToolbar
+        filters={filters}
         onSearch={(s: string) => setFilters((f) => ({ ...f, search: s || undefined, page: 1 }))}
         onFilterChange={(p: Partial<InvoiceFilters>) => setFilters((f) => ({ ...f, ...p, page: 1 }))}
         onGenerate={() => setGenerateOpen(true)}
