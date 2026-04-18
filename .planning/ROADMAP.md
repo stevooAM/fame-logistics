@@ -256,13 +256,13 @@ Plans:
 4. Any report can be exported to PDF (formatted, print-ready) and Excel from the same page
 5. All reports default to the current month but accept any custom date range via a date range picker
 
-**Plans**: TBD (3–5 plans)
+**Plans:** 4 plans
 
 Plans:
-- [ ] 09-01: Report query layer — optimised Django ORM queries for customer activity, job status, revenue aggregations
-- [ ] 09-02: Report API endpoints — customer activity, job status, revenue; all accept date range + filter params
-- [ ] 09-03: Report UI — date range picker, report tables, run/refresh button (use `/frontend-design` skill)
-- [ ] 09-04: PDF and Excel export — server-side PDF generation (WeasyPrint or ReportLab), Excel export (openpyxl); download triggers from frontend
+- [ ] 09-01-PLAN.md — Report query layer: Django app scaffold + ORM query functions for customer activity, job status, and revenue aggregations
+- [ ] 09-02-PLAN.md — Report API endpoints: CustomerActivityView, JobStatusView, RevenueView under /api/reports/
+- [ ] 09-03-PLAN.md — Report UI: tabbed page with date toolbar, Run Report button, three report tables with totals footer
+- [ ] 09-04-PLAN.md — PDF and Excel export: WeasyPrint PDF + openpyxl Excel for all three reports, frontend apiFetchBlob download
 
 ---
 
