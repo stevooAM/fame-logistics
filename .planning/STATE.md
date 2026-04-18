@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 9 of 10 (Reports) — In progress
-Plan: 2/4 complete (09-02 report API views wired)
-Status: In progress
-Last activity: 2026-04-18 — Completed 09-02-PLAN.md
+Plan: 4/4 auto tasks complete; checkpoint awaiting user verification (09-04)
+Status: In progress — checkpoint reached
+Last activity: 2026-04-18 — Completed 09-04-PLAN.md auto tasks; checkpoint pending
 
-Progress: [████████░░] ~83% (46/~57 plans estimated complete)
+Progress: [████████░░] ~85% (48/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -185,6 +185,11 @@ Progress: [████████░░] ~83% (46/~57 plans estimated complete
     - [09-02]: _parse_dates() returns 3-tuple (None, None, Response) on error — callers check len(result)==3, keeping view methods linear
     - [09-02]: currency_code uses `or None` guard — empty string query param must not bypass the currency filter in revenue_query
     - [09-02]: customer_id integer validation done in view layer (400 before DB hit) — not in query function
+    - [09-04]: format=pdf|xlsx query param on export endpoints — single URL per report, format-dispatched in view body
+    - [09-04]: Revenue Excel uses two sheets (Period Summary + Customer Breakdown) — structured separation matches revenue_query data model
+    - [09-04]: WeasyPrint import is lazy (inside generate_report_pdf body) — avoids import-time crash if system libs absent in dev
+    - [09-04]: WeasyPrint system deps added to Dockerfile (Pango, Cairo, GDK-PixBuf, libffi) — required for PDF generation in container
+    - [09-04]: Export buttons in section components deferred pending 09-03 (parallel execution) — export API functions complete in reports-api.ts
 
 ### Pending Todos
 
@@ -199,6 +204,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-18
-Stopped at: Completed 09-02-PLAN.md — report API views wired, ready for 09-03 frontend pages
+Last session: 2026-04-18T12:39:39Z
+Stopped at: 09-04-PLAN.md checkpoint:human-verify — PDF and Excel export endpoints complete, awaiting user verification of downloads
 Resume file: None
