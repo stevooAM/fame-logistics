@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 10 of 10 (Security Hardening & Launch)
-Plan: 1 of 7 in current phase (10-02 complete; 10-01 through 10-02 done)
+Plan: 2 of 7 in current phase (10-01 and 10-02 complete)
 Status: In progress
-Last activity: 2026-04-18 — Completed 10-02-PLAN.md (Next.js security headers: CSP, HSTS, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy)
+Last activity: 2026-04-18 — Completed 10-01-PLAN.md (Django production hardening: DEBUG=False default, HTTPS/HSTS, secure cookies, CORS/CSRF guards, conditional admin) + 10-02-PLAN.md (Next.js security headers: CSP, HSTS, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy)
 
 Progress: [█████████░] ~89% (50/~57 plans estimated complete)
 
@@ -193,6 +193,12 @@ Progress: [█████████░] ~89% (50/~57 plans estimated complete
     - [09-03]: Export buttons visible only after data loads (gated on data !== null) — no empty button state before Run
     - [09-03]: Per-format export loading state (exportingPdf / exportingXlsx) — each button independently disabled during in-flight request
     - [09-03]: apiFetchBlob download trigger: createObjectURL → anchor.download → click → revokeObjectURL — established pattern for all blob downloads in section components
+    - [10-01]: DEBUG defaults to False — DJANGO_DEBUG=True must be explicit for dev; prevents accidental prod debug
+    - [10-01]: ALLOWED_HOSTS empty-string default in prod; auto-filled for dev when DEBUG=True and env var not set
+    - [10-01]: CSRF_COOKIE_HTTPONLY=False intentional — frontend JS must read CSRF token for DRF SessionAuth
+    - [10-01]: CORS_ALLOWED_ORIGINS unset in prod raises RuntimeError — hard startup failure preferred over silent open-CORS
+    - [10-01]: DJANGO_ADMIN_ENABLED defaults to False when DEBUG=False — explicit opt-in required for admin on prod
+    - [10-01]: BrowsableAPIRenderer excluded from DRF DEFAULT_RENDERER_CLASSES in prod — reduces attack surface
 
 ### Pending Todos
 
@@ -207,6 +213,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-18T15:06:41Z
-Stopped at: Completed 10-02-PLAN.md — Next.js security headers (CSP/HSTS/X-Frame-Options/nosniff/Referrer-Policy/Permissions-Policy) added and verified
+Last session: 2026-04-18T15:13:00Z
+Stopped at: Completed 10-01-PLAN.md — Django production hardening (DEBUG=False, HTTPS/HSTS, secure cookies, CORS/CSRF guards, conditional admin, .env.example)
 Resume file: None
