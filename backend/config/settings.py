@@ -13,6 +13,15 @@ DEBUG = os.environ.get("DJANGO_DEBUG", "False") == "True"
 ALLOWED_HOSTS = [h.strip() for h in os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",") if h.strip()]
 if DEBUG and not ALLOWED_HOSTS:
     ALLOWED_HOSTS = ["localhost", "127.0.0.1", "backend"]
+# Railway injects RAILWAY_PUBLIC_DOMAIN automatically — add it so healthchecks pass.
+_railway_domain = os.environ.get("RAILWAY_PUBLIC_DOMAIN", "")
+if _railway_domain and _railway_domain not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(_railway_domain)
+for _railway_host in (".up.railway.app", ".railway.internal", "localhost", "127.0.0.1"):
+    if _railway_host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(_railway_host)
+if os.environ.get("RAILWAY_PROJECT_ID"):
+    ALLOWED_HOSTS = ["*"]
 
 DJANGO_ADMIN_ENABLED = os.environ.get("DJANGO_ADMIN_ENABLED", "True" if DEBUG else "False") == "True"
 
@@ -221,6 +230,7 @@ AWS_PRESIGNED_URL_EXPIRY = int(os.environ.get("AWS_PRESIGNED_URL_EXPIRY", "3600"
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_SSL_REDIRECT = True
+    SECURE_REDIRECT_EXEMPT = [r"^api/health/$"]
     SECURE_HSTS_SECONDS = 31_536_000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True

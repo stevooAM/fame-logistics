@@ -1,11 +1,19 @@
 #!/bin/sh
 set -e
 
-echo "Running database migrations..."
-python manage.py migrate --no-input
+if [ "${DJANGO_RUN_MIGRATIONS_ON_START:-False}" = "True" ]; then
+  echo "Running database migrations..."
+  python manage.py migrate --no-input
+fi
 
-echo "Seeding customers (skips gracefully if Excel file absent)..."
-python manage.py seed_customers
+if [ "${DJANGO_RUN_COLLECTSTATIC_ON_START:-False}" = "True" ]; then
+  echo "Collecting static files..."
+  python manage.py collectstatic --no-input
+fi
 
-echo "Starting development server..."
-exec python manage.py runserver 0.0.0.0:8000
+if [ "${DJANGO_SEED_CUSTOMERS_ON_START:-False}" = "True" ]; then
+  echo "Seeding customers (skips gracefully if Excel file absent)..."
+  python manage.py seed_customers
+fi
+
+exec "$@"
