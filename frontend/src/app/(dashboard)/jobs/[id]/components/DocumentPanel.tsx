@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { apiFetch, API_BASE_URL } from "@/lib/api";
+import { apiFetch, buildApiUrl } from "@/lib/api";
 import type { JobDocument } from "@/types/job";
 
 // ---------------------------------------------------------------------------
@@ -124,7 +124,7 @@ export function DocumentPanel({ jobId, userRole }: DocumentPanelProps) {
     formData.append("document_type", selectedDocType);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/jobs/${jobId}/documents/upload/`, {
+      const response = await fetch(buildApiUrl(`/api/jobs/${jobId}/documents/upload/`), {
         method: "POST",
         credentials: "include",
         body: formData,
@@ -133,13 +133,13 @@ export function DocumentPanel({ jobId, userRole }: DocumentPanelProps) {
 
       if (response.status === 401) {
         // Try silent refresh
-        const refreshed = await fetch(`${API_BASE_URL}/api/auth/refresh/`, {
+        const refreshed = await fetch(buildApiUrl("/api/auth/refresh/"), {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
         });
         if (refreshed.ok) {
-          const retry = await fetch(`${API_BASE_URL}/api/jobs/${jobId}/documents/upload/`, {
+          const retry = await fetch(buildApiUrl(`/api/jobs/${jobId}/documents/upload/`), {
             method: "POST",
             credentials: "include",
             body: formData,

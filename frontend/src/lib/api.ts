@@ -1,5 +1,27 @@
+function normalizeApiBaseUrl(rawUrl?: string): string {
+  const baseUrl = (rawUrl || "http://localhost:8000").trim().replace(/\/+$/, "");
+  return baseUrl.endsWith("/api") ? baseUrl.slice(0, -4) : baseUrl;
+}
+
+// In the browser, route API traffic through the Next.js app origin so auth
+// cookies are first-party to the frontend domain and readable by middleware.
 export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+  typeof window === "undefined"
+    ? normalizeApiBaseUrl(process.env.NEXT_PUBLIC_API_URL)
+    : "";
+
+function normalizeRequestPath(path: string): string {
+  if (path.startsWith("http")) return path;
+  if (!API_BASE_URL) return path.replace(/\/+$/, "");
+  return path;
+}
+
+export function buildApiUrl(path: string): string {
+  const normalizedPath = normalizeRequestPath(path);
+  return normalizedPath.startsWith("http")
+    ? normalizedPath
+    : `${API_BASE_URL}${normalizedPath}`;
+}
 
 type FetchOptions = RequestInit & {
   skipRefresh?: boolean;
@@ -19,7 +41,7 @@ export async function apiFetch<T>(
 ): Promise<T> {
   const { skipRefresh = false, ...fetchOptions } = options;
 
-  const url = path.startsWith("http") ? path : `${API_BASE_URL}${path}`;
+  const url = buildApiUrl(path);
 
   const headers: HeadersInit = {
     ...(fetchOptions.method && fetchOptions.method !== "GET"
@@ -71,7 +93,7 @@ export async function apiFetch<T>(
 
 async function silentRefresh(): Promise<boolean> {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/auth/refresh/`, {
+    const response = await fetch(buildApiUrl("/api/auth/refresh/"), {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
@@ -115,7 +137,7 @@ export async function apiFetchBlob(
 ): Promise<Blob> {
   const { skipRefresh = false, ...fetchOptions } = options;
 
-  const url = path.startsWith("http") ? path : `${API_BASE_URL}${path}`;
+  const url = buildApiUrl(path);
 
   const headers: HeadersInit = {
     ...(fetchOptions.method && fetchOptions.method !== "GET"
@@ -175,7 +197,7 @@ export function setupTokenRefresh(): () => void {
 
   const intervalId = setInterval(async () => {
     try {
-      await fetch(`${API_BASE_URL}/api/auth/refresh/`, {
+      await fetch(buildApiUrl("/api/auth/refresh/"), {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

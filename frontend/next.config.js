@@ -3,7 +3,9 @@
 const isProd = process.env.NODE_ENV === "production";
 
 // Derive the backend API origin for CSP connect-src from NEXT_PUBLIC_API_URL.
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+// Accept either the backend origin or an origin mistakenly suffixed with /api.
+const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const apiUrl = rawApiUrl.replace(/\/+$/, "").replace(/\/api$/, "");
 let apiOrigin = "http://localhost:8000";
 try {
   apiOrigin = new URL(apiUrl).origin;
@@ -59,6 +61,15 @@ if (isProd) {
 const nextConfig = {
   output: "standalone",
   poweredByHeader: false,
+  skipTrailingSlashRedirect: true,
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: `${apiOrigin}/api/:path*/`,
+      },
+    ];
+  },
   async headers() {
     return [
       {

@@ -6,8 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { apiFetch } from "@/lib/api";
-import { API_BASE_URL } from "@/lib/api";
+import { apiFetch, buildApiUrl } from "@/lib/api";
 
 const COMPANY_PROFILE_PATH = "/api/setup/company-profile/";
 
@@ -134,15 +133,12 @@ export function CompanyProfileForm() {
         formData.append("tin", values.tin);
         formData.append("registration_number", values.registration_number);
 
-        const response = await fetch(
-          `${API_BASE_URL}${COMPANY_PROFILE_PATH}`,
-          {
-            method: "PATCH",
-            credentials: "include",
-            body: formData,
-            // No Content-Type header — browser sets multipart boundary automatically
-          }
-        );
+        const response = await fetch(buildApiUrl(COMPANY_PROFILE_PATH), {
+          method: "PATCH",
+          credentials: "include",
+          body: formData,
+          // No Content-Type header — browser sets multipart boundary automatically
+        });
 
         if (!response.ok) {
           const data = await response.json().catch(() => ({}));

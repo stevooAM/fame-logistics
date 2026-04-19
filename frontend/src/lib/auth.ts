@@ -1,4 +1,4 @@
-import { apiFetch, API_BASE_URL, ApiError } from "./api";
+import { apiFetch, ApiError, buildApiUrl } from "./api";
 
 // ---------------------------------------------------------------------------
 // Type definitions
@@ -36,7 +36,7 @@ export async function login(
   password: string,
   rememberMe: boolean
 ): Promise<LoginResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/auth/login/`, {
+  const response = await fetch(buildApiUrl("/api/auth/login/"), {
     method: "POST",
     credentials: "include",
     headers: {
@@ -78,7 +78,7 @@ export async function logout(): Promise<void> {
  */
 export async function refreshToken(): Promise<boolean> {
   try {
-    await fetch(`${API_BASE_URL}/api/auth/refresh/`, {
+    await fetch(buildApiUrl("/api/auth/refresh/"), {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },

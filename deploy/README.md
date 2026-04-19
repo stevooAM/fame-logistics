@@ -25,7 +25,7 @@ Pick ONE for the backend; the frontend always goes on Vercel.
 | `REDIS_URL` | injected by platform | Railway/Render set this automatically |
 
 **Frontend (Vercel) env vars:**
-- `NEXT_PUBLIC_API_URL` = `https://api.famelogistics.com/api`
+- `NEXT_PUBLIC_API_URL` = `https://api.famelogistics.com`
 
 ---
 
