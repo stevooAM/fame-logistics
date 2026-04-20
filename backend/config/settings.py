@@ -8,9 +8,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-change-me-in-production")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
+DEBUG = os.environ.get("DJANGO_DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,backend").split(",")
+ALLOWED_HOSTS = [h.strip() for h in os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",") if h.strip()]
+if DEBUG and not ALLOWED_HOSTS:
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1", "backend"]
+# Railway injects RAILWAY_PUBLIC_DOMAIN automatically — add it so healthchecks pass.
+_railway_domain = os.environ.get("RAILWAY_PUBLIC_DOMAIN", "")
+if _railway_domain and _railway_domain not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(_railway_domain)
+for _railway_host in (".up.railway.app", ".railway.internal", "localhost", "127.0.0.1"):
+    if _railway_host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(_railway_host)
+if os.environ.get("RAILWAY_PROJECT_ID"):
+    ALLOWED_HOSTS = ["*"]
+
+DJANGO_ADMIN_ENABLED = os.environ.get("DJANGO_ADMIN_ENABLED", "True" if DEBUG else "False") == "True"
+
+CSRF_TRUSTED_ORIGINS = [
+    o.strip() for o in os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",") if o.strip()
+]
 
 # Application definition
 INSTALLED_APPS = [
@@ -32,6 +49,7 @@ INSTALLED_APPS = [
     "setup",
     "approvals",
     "accounts",
+    "reports",
 ]
 
 MIDDLEWARE = [
@@ -68,16 +86,38 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 # Database
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("POSTGRES_DB", "fame_fms"),
-        "USER": os.environ.get("POSTGRES_USER", "fame_user"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "fame_dev_password"),
-        "HOST": os.environ.get("POSTGRES_HOST", "db"),
-        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
+# Prefer DATABASE_URL (set by Railway/Render/Heroku) if present; fall back to discrete POSTGRES_* vars for local Docker.
+import urllib.parse as _urlparse
+
+_db_url = os.environ.get("DATABASE_URL", "").strip()
+if _db_url:
+    _p = _urlparse.urlparse(_db_url)
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": (_p.path or "/").lstrip("/"),
+            "USER": _urlparse.unquote(_p.username or ""),
+            "PASSWORD": _urlparse.unquote(_p.password or ""),
+            "HOST": _p.hostname or "",
+            "PORT": str(_p.port or 5432),
+            "CONN_MAX_AGE": 60,
+            "OPTIONS": {"sslmode": os.environ.get("DATABASE_SSLMODE", "require")},
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.environ.get("POSTGRES_DB", "fame_fms"),
+            "USER": os.environ.get("POSTGRES_USER", "fame_user"),
+            "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "fame_dev_password"),
+            "HOST": os.environ.get("POSTGRES_HOST", "db"),
+            "PORT": os.environ.get("POSTGRES_PORT", "5432"),
+        }
+    }
+
+DJANGO_RUN_MIGRATIONS_ON_START = os.environ.get("DJANGO_RUN_MIGRATIONS_ON_START", "False") == "True"
+DJANGO_RUN_COLLECTSTATIC_ON_START = os.environ.get("DJANGO_RUN_COLLECTSTATIC_ON_START", "False") == "True"
 
 # Cache — Redis backend (used for rate limiting and session data)
 CACHES = {
@@ -130,6 +170,14 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 20,
+    "DEFAULT_RENDERER_CLASSES": (
+        ("rest_framework.renderers.JSONRenderer",)
+        if not DEBUG
+        else (
+            "rest_framework.renderers.JSONRenderer",
+            "rest_framework.renderers.BrowsableAPIRenderer",
+        )
+    ),
 }
 
 # Simple JWT
@@ -146,10 +194,19 @@ SIMPLE_JWT = {
 }
 
 # CORS
-CORS_ALLOWED_ORIGINS = os.environ.get(
-    "CORS_ALLOWED_ORIGINS", "http://localhost:3000"
-).split(",")
+# In local dev (DEBUG=True) allow any localhost port (port changes with autoPort).
+# CORS_ALLOW_ALL_ORIGINS cannot be used with credentials — use regex instead.
+if DEBUG:
+    CORS_ALLOWED_ORIGIN_REGEXES = [r"^http://localhost:\d+$"]
+else:
+    CORS_ALLOWED_ORIGINS = os.environ.get(
+        "CORS_ALLOWED_ORIGINS", ""
+    ).split(",")
+    CORS_ALLOWED_ORIGINS = [o.strip() for o in CORS_ALLOWED_ORIGINS if o.strip()]
 CORS_ALLOW_CREDENTIALS = True
+
+if not DEBUG and not CORS_ALLOWED_ORIGINS:
+    raise RuntimeError("CORS_ALLOWED_ORIGINS must be set in production.")
 
 # Celery
 CELERY_BROKER_URL = os.environ.get("REDIS_URL", "redis://redis:6379/0")
@@ -158,3 +215,35 @@ CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "UTC"
+
+# Cloud Storage (R2 / S3)
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", "")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
+AWS_S3_ENDPOINT_URL = os.environ.get("AWS_S3_ENDPOINT_URL", "")
+AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME", "fms-documents")
+AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME", "auto")
+AWS_PRESIGNED_URL_EXPIRY = int(os.environ.get("AWS_PRESIGNED_URL_EXPIRY", "3600"))  # 1 hour default
+
+# ------------------------------------------------------------------
+# Production security hardening (only active when DEBUG=False)
+# ------------------------------------------------------------------
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_SSL_REDIRECT = True
+    SECURE_REDIRECT_EXEMPT = [r"^api/health/$"]
+    SECURE_HSTS_SECONDS = 31_536_000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_REFERRER_POLICY = "same-origin"
+    X_FRAME_OPTIONS = "DENY"
+    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = "Lax"
+    CSRF_COOKIE_SECURE = True
+    CSRF_COOKIE_HTTPONLY = False  # must be readable by frontend for DRF SessionAuth
+    CSRF_COOKIE_SAMESITE = "Lax"
+    if SECRET_KEY.startswith("django-insecure-"):
+        raise RuntimeError(
+            "DJANGO_SECRET_KEY is not set in production. Refusing to start."
+        )

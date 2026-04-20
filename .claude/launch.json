@@ -11,7 +11,7 @@
     {
       "name": "Django Backend",
       "runtimeExecutable": "bash",
-      "runtimeArgs": ["-c", "cd '/Users/steveadjei-mensah/Desktop/PROJECTS/fame logistics/backend' && .venv/bin/python3 manage.py runserver 0.0.0.0:${PORT:-8000}"],
+      "runtimeArgs": ["-c", "cd '/Users/steveadjei-mensah/Desktop/PROJECTS/fame logistics/backend' && POSTGRES_HOST=localhost REDIS_URL=redis://localhost:6379/0 .venv/bin/python3 manage.py runserver 0.0.0.0:${PORT:-8000}"],
       "autoPort": true,
       "port": 8000
     }

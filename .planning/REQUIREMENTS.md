@@ -42,17 +42,17 @@
 
 ### Job Management
 
-- [ ] **JOB-01**: Create freight job linked to a customer
-- [ ] **JOB-02**: Auto-generate unique job number on creation (e.g., FMS-2026-00001)
-- [ ] **JOB-03**: Job type: Import / Export / Transit / Local
-- [ ] **JOB-04**: Job fields: Origin, Destination, Cargo Description, Bill of Lading, Container Number, Weight (kg), Volume (CBM), Total Cost, Notes
-- [ ] **JOB-05**: List all jobs in filterable, paginated AG Grid table
-- [ ] **JOB-06**: Full job detail single-record view
-- [ ] **JOB-07**: Job status workflow: Draft → Pending → In Progress → Customs → Delivered → Closed / Cancelled
-- [ ] **JOB-08**: Submit job for approval — triggers Approval queue entry
-- [ ] **JOB-09**: Search jobs by job number, customer, status, date range
-- [ ] **JOB-10**: Job audit trail — all state changes recorded with user and timestamp
-- [ ] **JOB-11**: Attach documents to job (Bill of Lading, manifests, invoices) via cloud storage
+- [x] **JOB-01**: Create freight job linked to a customer
+- [x] **JOB-02**: Auto-generate unique job number on creation (e.g., FMS-2026-00001)
+- [x] **JOB-03**: Job type: Import / Export / Transit / Local
+- [x] **JOB-04**: Job fields: Origin, Destination, Cargo Description, Bill of Lading, Container Number, Weight (kg), Volume (CBM), Total Cost, Notes
+- [x] **JOB-05**: List all jobs in filterable, paginated AG Grid table
+- [x] **JOB-06**: Full job detail single-record view
+- [x] **JOB-07**: Job status workflow: Draft → Pending → In Progress → Customs → Delivered → Closed / Cancelled
+- [x] **JOB-08**: Submit job for approval — triggers Approval queue entry
+- [x] **JOB-09**: Search jobs by job number, customer, status, date range
+- [x] **JOB-10**: Job audit trail — all state changes recorded with user and timestamp
+- [x] **JOB-11**: Attach documents to job (Bill of Lading, manifests, invoices) via cloud storage
 
 ### Approval Workflow
 
@@ -64,11 +64,11 @@
 
 ### Accounts & Finance
 
-- [ ] **ACC-01**: Generate invoice for a completed/approved job
-- [ ] **ACC-02**: Record payments against invoices
-- [ ] **ACC-03**: View outstanding balances per customer
-- [ ] **ACC-04**: Monthly and quarterly financial period summaries
-- [ ] **ACC-05**: Export financial data to Excel
+- [x] **ACC-01**: Generate invoice for a completed/approved job
+- [x] **ACC-02**: Record payments against invoices
+- [x] **ACC-03**: View outstanding balances per customer
+- [x] **ACC-04**: Monthly and quarterly financial period summaries
+- [x] **ACC-05**: Export financial data to Excel
 
 ### Reports
 
@@ -80,9 +80,9 @@
 
 ### Dashboard
 
-- [ ] **DASH-01**: KPI cards: active jobs count, pending approvals count, outstanding invoices total, new customers this month
-- [ ] **DASH-02**: Recent activity feed (last 10 jobs/approvals created)
-- [ ] **DASH-03**: Quick-action shortcuts to create job, add customer
+- [x] **DASH-01**: KPI cards: active jobs count, pending approvals count, outstanding invoices total, new customers this month
+- [x] **DASH-02**: Recent activity feed (last 10 jobs/approvals created)
+- [x] **DASH-03**: Quick-action shortcuts to create job, add customer
 
 ### Administration & Setup
 
@@ -165,48 +165,48 @@
 | RBAC-02 | Phase 2 — Authentication & RBAC | Complete |
 | RBAC-03 | Phase 2 — Authentication & RBAC | Complete |
 | RBAC-04 | Phase 2 — Authentication & RBAC | Complete |
-| CUST-01 | Phase 4 — Customer Management | Pending |
-| CUST-02 | Phase 4 — Customer Management | Pending |
-| CUST-03 | Phase 4 — Customer Management | Pending |
-| CUST-04 | Phase 4 — Customer Management | Pending |
-| CUST-05 | Phase 4 — Customer Management | Pending |
-| CUST-06 | Phase 4 — Customer Management | Pending |
-| CUST-07 | Phase 4 — Customer Management | Pending |
-| CUST-08 | Phase 4 — Customer Management | Pending |
-| CUST-09 | Phase 4 — Customer Management | Pending |
-| CUST-10 | Phase 4 — Customer Management | Pending |
-| CUST-11 | Phase 4 — Customer Management | Pending |
-| CUST-12 | Phase 4 — Customer Management | Pending |
-| CUST-13 | Phase 4 — Customer Management | Pending |
-| JOB-01 | Phase 5 — Job Management | Pending |
-| JOB-02 | Phase 5 — Job Management | Pending |
-| JOB-03 | Phase 5 — Job Management | Pending |
-| JOB-04 | Phase 5 — Job Management | Pending |
-| JOB-05 | Phase 5 — Job Management | Pending |
-| JOB-06 | Phase 5 — Job Management | Pending |
-| JOB-07 | Phase 5 — Job Management | Pending |
-| JOB-08 | Phase 5 — Job Management | Pending |
-| JOB-09 | Phase 5 — Job Management | Pending |
-| JOB-10 | Phase 5 — Job Management | Pending |
-| JOB-11 | Phase 5 — Job Management | Pending |
-| APR-01 | Phase 6 — Approval Workflow | Pending |
-| APR-02 | Phase 6 — Approval Workflow | Pending |
-| APR-03 | Phase 6 — Approval Workflow | Pending |
-| APR-04 | Phase 6 — Approval Workflow | Pending |
-| APR-05 | Phase 6 — Approval Workflow | Pending |
-| ACC-01 | Phase 7 — Accounts & Finance | Pending |
-| ACC-02 | Phase 7 — Accounts & Finance | Pending |
-| ACC-03 | Phase 7 — Accounts & Finance | Pending |
-| ACC-04 | Phase 7 — Accounts & Finance | Pending |
-| ACC-05 | Phase 7 — Accounts & Finance | Pending |
-| RPT-01 | Phase 9 — Reports | Pending |
-| RPT-02 | Phase 9 — Reports | Pending |
-| RPT-03 | Phase 9 — Reports | Pending |
-| RPT-04 | Phase 9 — Reports | Pending |
-| RPT-05 | Phase 9 — Reports | Pending |
-| DASH-01 | Phase 8 — Dashboard | Pending |
-| DASH-02 | Phase 8 — Dashboard | Pending |
-| DASH-03 | Phase 8 — Dashboard | Pending |
+| CUST-01 | Phase 4 — Customer Management | Complete |
+| CUST-02 | Phase 4 — Customer Management | Complete |
+| CUST-03 | Phase 4 — Customer Management | Complete |
+| CUST-04 | Phase 4 — Customer Management | Complete |
+| CUST-05 | Phase 4 — Customer Management | Complete |
+| CUST-06 | Phase 4 — Customer Management | Complete |
+| CUST-07 | Phase 4 — Customer Management | Complete |
+| CUST-08 | Phase 4 — Customer Management | Complete |
+| CUST-09 | Phase 4 — Customer Management | Complete |
+| CUST-10 | Phase 4 — Customer Management | Complete |
+| CUST-11 | Phase 4 — Customer Management | Complete |
+| CUST-12 | Phase 4 — Customer Management | Complete |
+| CUST-13 | Phase 4 — Customer Management | Complete |
+| JOB-01 | Phase 5 — Job Management | Complete |
+| JOB-02 | Phase 5 — Job Management | Complete |
+| JOB-03 | Phase 5 — Job Management | Complete |
+| JOB-04 | Phase 5 — Job Management | Complete |
+| JOB-05 | Phase 5 — Job Management | Complete |
+| JOB-06 | Phase 5 — Job Management | Complete |
+| JOB-07 | Phase 5 — Job Management | Complete |
+| JOB-08 | Phase 5 — Job Management | Complete |
+| JOB-09 | Phase 5 — Job Management | Complete |
+| JOB-10 | Phase 5 — Job Management | Complete |
+| JOB-11 | Phase 5 — Job Management | Complete |
+| APR-01 | Phase 6 — Approval Workflow | Complete |
+| APR-02 | Phase 6 — Approval Workflow | Complete |
+| APR-03 | Phase 6 — Approval Workflow | Complete |
+| APR-04 | Phase 6 — Approval Workflow | Complete |
+| APR-05 | Phase 6 — Approval Workflow | Complete |
+| ACC-01 | Phase 7 — Accounts & Finance | Complete |
+| ACC-02 | Phase 7 — Accounts & Finance | Complete |
+| ACC-03 | Phase 7 — Accounts & Finance | Complete |
+| ACC-04 | Phase 7 — Accounts & Finance | Complete |
+| ACC-05 | Phase 7 — Accounts & Finance | Complete |
+| RPT-01 | Phase 9 — Reports | Complete |
+| RPT-02 | Phase 9 — Reports | Complete |
+| RPT-03 | Phase 9 — Reports | Complete |
+| RPT-04 | Phase 9 — Reports | Complete |
+| RPT-05 | Phase 9 — Reports | Complete |
+| DASH-01 | Phase 8 — Dashboard | Complete |
+| DASH-02 | Phase 8 — Dashboard | Complete |
+| DASH-03 | Phase 8 — Dashboard | Complete |
 | ADMIN-01 | Phase 3 — Administration & Lookup Setup | Complete |
 | ADMIN-02 | Phase 3 — Administration & Lookup Setup | Complete |
 | ADMIN-03 | Phase 3 — Administration & Lookup Setup | Complete |

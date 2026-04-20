@@ -147,7 +147,7 @@ export default function LoginPage() {
     setServerError(null);
     try {
       await login(data.username, data.password, data.rememberMe);
-      router.push("/");
+      router.push("/jobs");
     } catch (error) {
       setServerError(getErrorMessage(error));
     }

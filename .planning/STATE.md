@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-04)
 
 **Core value:** Operations staff can create, track, and approve freight jobs end-to-end — from customer onboarding to invoice generation — with full audit trails and role-based access control.
-**Current focus:** Phase 4 — Customer Management
+**Current focus:** Phase 10 — Security Hardening & Launch
 
 ## Current Position
 
-Phase: 4 of 10 (Customer Management)
-Plan: 7 of 7 in current phase (04-02, 04-03, 04-04, 04-05, 04-07 complete)
+Phase: 10 of 10 (Security Hardening & Launch)
+Plan: 5 of 7 in current phase (10-01, 10-02, 10-03, 10-04, 10-05 complete)
 Status: In progress
-Last activity: 2026-04-07 — Completed 04-07 (Customer Export XLSX/CSV)
+Last activity: 2026-04-18 — Completed 10-05-PLAN.md (production infrastructure: DATABASE_URL support, Railway/Render/Nginx/Vercel deploy configs, deploy README)
 
-Progress: [█████░░░░░] ~50% (29/~57 plans estimated complete)
+Progress: [█████████░] ~92% (53/~57 plans estimated complete)
 
 ## Performance Metrics
 
@@ -98,6 +98,114 @@ Progress: [█████░░░░░] ~50% (29/~57 plans estimated complete
 - [04-07]: Export action reuses get_queryset() unchanged — guarantees identical filter semantics to list endpoint
 - [04-07]: No audit log on export — read-only operation; logging exports would pollute the audit trail
 - [04-07]: Custom export dropdown built with fixed-inset overlay (shadcn DropdownMenu not available in project)
+- [04-08]: entrypoint.sh uses #!/bin/sh (not bash) — python:3.12-slim base has sh, not bash
+- [04-08]: exec runserver replaces shell process — PID 1 receives SIGTERM correctly
+- [04-08]: seed_customers exits 0 on missing Excel file — set -e does not abort startup when file absent
+- [04-08]: chmod +x applied inside Dockerfile RUN step — host filesystem execute bit not required
+- [05-01]: generate_job_number() is module-level (not classmethod) to avoid forward-reference issues; uses select_for_update() for race-safe concurrent creation
+- [05-01]: Job.save() checks both not self.pk and not self.job_number — allows explicit job number override in bulk imports
+- [05-01]: FMS-{YEAR}-{SEQUENCE:05d} is the canonical job number format for all creation paths
+- [05-02]: Cached _s3_client at module level — boto3 client construction is not free per-call
+- [05-02]: delete_document logs errors without raising — deletion failure must never block a job record update
+- [05-02]: upload_document returns storage key (not URL) — presigned URLs generated on demand via get_presigned_url
+- [05-02]: AWS_S3_ENDPOINT_URL passed as None when blank — empty string would break boto3 client init; or None guard used
+- [05-03]: perform_create bypasses AuditLogMixin.perform_create — calls serializer.save(created_by=...) directly to avoid double audit log while still creating JobAuditTrail CREATED entry
+- [05-03]: delete_document returns 204 No Content — no response body for document deletion
+- [05-03]: list_documents injects presigned_url per-document post-serialization; StorageError yields None (non-fatal)
+- [05-03]: Admin-only reversal check reads request.user.profile.role.name from DB — upholds RBAC-02, no JWT claim trust
+- [05-04]: customer_name typed as string | null in Job interface — matches actual 05-03 API serializer (linter-corrected)
+- [05-04]: AbortController used in JobTable fetch — cancels stale in-flight requests when filters change rapidly
+- [05-04]: View/Edit buttons (not kebab menu) for job row actions — plan preference for simpler UI confirmed
+- [05-04]: StatusBadge is reusable — import from jobs/components/StatusBadge for job detail and form pages
+- [05-05]: CustomerPicker uses Controller from react-hook-form to integrate custom onChange while keeping RHF validation flow
+- [05-05]: DRF field errors mapped via fieldMap + setError for per-field inline display; fallback to apiError banner if no field keys match
+- [05-05]: assigned_to uses simple select from /api/users/?page_size=100 — staff roster is small, no picker needed
+- [05-05]: weight_kg, volume_cbm, total_cost stored as strings in Zod schema with refine() for parseFloat validation; parseFloat() applied on submit
+- [05-06]: Multipart upload uses raw fetch with credentials:include (not apiFetch which would set Content-Type:json and corrupt FormData boundary)
+- [05-06]: Finance role sees status badge only — no dropdown trigger; backend still validates permissions independently
+- [05-06]: useAuth exported from @/providers/auth-provider (not @/context/AuthContext — path confirmed from sidebar-nav.tsx usage)
+- [06-01]: UniqueConstraint on job filtered by status=PENDING — allows multiple historical approvals per job, prevents duplicate pending
+- [06-01]: is_pending property on ApprovalQueue uses class constant (self.PENDING) not string literal
+- [06-01]: Migration 0002 written manually — Docker CLI not available in execution environment
+- [06-02]: pending_count inherits IsAdminOrOperations — Operations staff need badge count to know when to act
+- [06-02]: history action overrides to IsAdmin — full audit trail restricted to admins only per permission matrix
+- [06-02]: Approval action pattern: check is_pending → validate ApprovalActionSerializer → update approval → update job status → create ApprovalHistory + JobAuditTrail STATUS_CHANGE
+- [06-03]: useApprovalBadge enabled guard prevents Finance role from triggering a 403 on pending-count endpoint
+- [06-03]: badgeCount computed inline per map iteration — /approvals uses live count, others fall back to static item.badge
+- [06-03]: Operations role added to Approvals nav item — oversight visibility confirmed
+- [06-04]: job.id not serialized in ApprovalQueueSerializer — job numbers rendered as teal text (not links) in approval queue table; add job.id to nested serializer if link navigation is needed
+- [06-04]: RejectModal blocks backdrop click — consistent with SessionWarningDialog pattern from 02-05; destructive actions require explicit user intent
+- [06-05]: Admin-only History tab uses UI-side isAdmin check (role.name.toLowerCase() === "admin") + API-side IsAdmin permission — dual enforcement
+- [06-05]: ApprovalHistory table renders job_number as text (no job FK id in history serializer — link enhancement deferred)
+- [06-05]: History filter Apply button is explicit (not debounced on-change) — consistent with reporting pattern
+- [06-06]: rejection_reason only in JobSerializer (not JobListSerializer) — avoids N+1 on AG Grid list view
+- [06-06]: get_rejection_reason uses approval_requests.filter(status=REJECTED).order_by('-created_at').values_list('rejection_reason', flat=True).first()
+- [06-06]: RejectionCallout conditioned on status==='DRAFT' AND rejection_reason non-empty — no empty callout for non-rejected DRAFTs
+- [07-01]: generate_invoice_number() is module-level (not classmethod) — mirrors jobs pattern; uses select_for_update() for race-safe concurrent creation; format is INV-{YEAR}-{SEQ:05d}
+- [07-01]: Invoice.save() checks both not self.pk and not self.invoice_number — allows explicit invoice number override
+- [07-01]: outstanding_for_customer(id) uses Payment.objects.filter(invoice__customer_id=...) cross-model aggregation — single DB round-trip
+- [07-01]: Migration 0002 adds AlterField (db_index on payment_date) + two AddIndex operations; written manually per Docker-unavailable pattern
+    - [07-02]: PaymentViewSet.http_method_names = ["get","post","head","options"] — payments are immutable once recorded
+    - [07-02]: generate action uses detail=False (url_path="generate") — resolves to /invoices/generate/, not /invoices/{id}/generate/
+    - [07-02]: invoice.refresh_from_db() inside perform_create before status recalculation — ensures accurate balance after payment insert
+    - [07-02]: IsAnyRole for list/retrieve on both ViewSets; IsAdminOrFinance for all writes — Operations can read invoices per permission matrix
+    - [07-03]: customer.phone (model field) exposed as phone_number in balance_detail API response — key rename to match locked contract
+    - [07-03]: currency_code defaults to "GHS" when customer.currency_preference is NULL — per checker-fix iteration 1 lock
+    - [07-03]: Period summaries use outstanding (not balance) as field name — canonical name to avoid confusion with invoice-level balance field
+    - [07-03]: _build_balance_rows() uses prefetch_related(invoices__payments) — avoids JOIN-multiplication bug on multi-payment invoices
+    - [07-03]: summary() returns wrapped {period, date_from, date_to, rows, totals} — frontend renders totals footer without client-side reduce
+    - [07-04]: InvoiceDetailDrawer allows backdrop dismiss (viewer) while GenerateInvoiceDialog and RecordPaymentDialog block backdrop (create actions) — consistent with 02-05/06-04 pattern
+    - [07-04]: Generate Invoice button uses amber #F89C1C (CTA); Record Payment in drawer uses teal #1F7A8C
+    - [07-04]: fetchApprovedJobs filters client-side by eligible status set (IN_PROGRESS, CUSTOMS, DELIVERED, CLOSED) — no server-side approved filter endpoint; backend enforces at generate-time
+    - [07-04]: InvoiceTable uses fetchInvoices() from accounts-api.ts only (never raw apiFetch in components) — accounts-api is single source of truth
+    - [07-05]: Invoice rows NON-interactive in v1 — click-through to /accounts?invoice={id} deferred to Phase 8
+    - [07-05]: Totals footer in BalancesTable computed client-side — /api/accounts/balances/ returns no totals wrapper
+    - [07-05]: getSortModel() → getColumnState() for AG Grid v31+ column sort API
+    - [07-06]: outstanding (not balance) is the field name for period summary rows — locked 07-03 contract
+    - [07-06]: date_from/date_to are the only summary endpoint params — start_date/end_date silently ignored by backend
+    - [07-06]: SummaryTable totals footer reads data.totals directly — backend-authoritative, no client-side reduce
+    - [07-06]: AccountsTabs (07-04 named export) verified correct — no changes needed in 07-06
+    - [07-06]: No chart library for v1 CSS bar chart — Phase 9 can introduce recharts if needed
+    - [07-07]: exportInvoicesBlob strips page/page_size before calling export endpoint — export downloads all matching records
+    - [07-07]: Export dropdown positioned right-0 to prevent viewport overflow (right-edge toolbar)
+    - [07-07]: InvoiceToolbar error toast uses ApiError isinstance check for typed status code in message
+    - [08-01]: outstanding_invoice_total is net balance (invoiced minus paid) across non-PAID, non-CANCELLED invoices — returned as string (e.g. "12450.00") for JSON serialisation
+    - [08-01]: pending_approvals returns null (not 0) for Finance role — Finance cannot act on approvals so the count must not be surfaced
+    - [08-01]: _build_feed is a module-level function shared by both DashboardView and DashboardActivityView — single source of truth for role-filtering and serialisation
+    - [08-01]: DashboardActivityView clamps limit to 1..100 to prevent runaway aggregation queries
+    - [08-01]: Feed link values use dict mapping keyed on model_name; unknown model names return None — forward-compatible pattern
+    - [08-02]: page.tsx is a Server Component shell rendering <DashboardClient> — keeps metadata export valid while allowing hooks in the client child
+    - [08-02]: Finance role omits Pending Approvals KPI card entirely (3-card layout) — mirrors backend returning null for pending_approvals
+    - [08-02]: Activity feed extra entries accumulated in extraEntries state — reset on each 30s poll to show freshest 10, Load More appends older pages
+    - [08-02]: Intl.RelativeTimeFormat used for timestamps — date-fns not installed in project
+    - [08-02]: Quick-action shortcuts use ?create=1 URL param (not /jobs/new route) — creation is modal-driven on list pages; useSearchParams reads the param on mount to auto-open the dialog
+    - [09-01]: Job value field in queries is total_cost (not cost) — confirmed from Job model; plan template had wrong field name
+    - [09-01]: customer_activity_query filters Job.created_at__date; revenue_query filters Invoice.issue_date — different date field per model
+    - [09-01]: revenue_query returns nested dict {period_rows, period_totals, customer_rows, customer_totals} — 09-02 view passes through directly
+    - [09-02]: _parse_dates() returns 3-tuple (None, None, Response) on error — callers check len(result)==3, keeping view methods linear
+    - [09-02]: currency_code uses `or None` guard — empty string query param must not bypass the currency filter in revenue_query
+    - [09-02]: customer_id integer validation done in view layer (400 before DB hit) — not in query function
+    - [09-04]: format=pdf|xlsx query param on export endpoints — single URL per report, format-dispatched in view body
+    - [09-04]: Revenue Excel uses two sheets (Period Summary + Customer Breakdown) — structured separation matches revenue_query data model
+    - [09-04]: WeasyPrint import is lazy (inside generate_report_pdf body) — avoids import-time crash if system libs absent in dev
+    - [09-04]: WeasyPrint system deps added to Dockerfile (Pango, Cairo, GDK-PixBuf, libffi) — required for PDF generation in container
+    - [09-04]: Export buttons in section components deferred pending 09-03 (parallel execution) — export API functions complete in reports-api.ts
+    - [09-03]: Export buttons visible only after data loads (gated on data !== null) — no empty button state before Run
+    - [09-03]: Per-format export loading state (exportingPdf / exportingXlsx) — each button independently disabled during in-flight request
+    - [09-03]: apiFetchBlob download trigger: createObjectURL → anchor.download → click → revokeObjectURL — established pattern for all blob downloads in section components
+    - [10-01]: DEBUG defaults to False — DJANGO_DEBUG=True must be explicit for dev; prevents accidental prod debug
+    - [10-01]: ALLOWED_HOSTS empty-string default in prod; auto-filled for dev when DEBUG=True and env var not set
+    - [10-01]: CSRF_COOKIE_HTTPONLY=False intentional — frontend JS must read CSRF token for DRF SessionAuth
+    - [10-01]: CORS_ALLOWED_ORIGINS unset in prod raises RuntimeError — hard startup failure preferred over silent open-CORS
+    - [10-01]: DJANGO_ADMIN_ENABLED defaults to False when DEBUG=False — explicit opt-in required for admin on prod
+    - [10-01]: BrowsableAPIRenderer excluded from DRF DEFAULT_RENDERER_CLASSES in prod — reduces attack surface
+    - [10-04]: ApprovalHistory.history action is an unbounded queryset (BLOCKER) — must add pagination before launch
+    - [10-04]: All main ViewSets (Customer, Job, Invoice, Payment) use explicit pagination 20/max-100; PERF-02 confirmed
+    - [10-04]: WhiteNoise not installed — static delivery requires Nginx or whitenoise>=6 before production deploy
+    - [10-04]: Missing indexes to add: ApprovalHistory.action, ApprovalHistory.created_at, Customer.created_at (recommended before Lighthouse)
+    - [10-05]: DATABASE_URL parsed with urllib.parse (stdlib) — no new dependency; CONN_MAX_AGE=60 and sslmode=require for PaaS connections
+    - [10-05]: Railway recommended as default hosting (lowest complexity); Render and VPS also fully configured
+    - [10-05]: vercel.json security headers applied to all routes via source: /(.*) pattern
 
 ### Pending Todos
 
@@ -110,8 +218,11 @@ None.
 - [Note]: Docker CLI not available in execution environment — runtime container verification deferred to developer machine
 - [Note]: Vercel integration not yet connected — deferred by user
 
+- [10-03]: Deploy-time requirements: DJANGO_SECRET_KEY, DJANGO_ALLOWED_HOSTS, CORS_ALLOWED_ORIGINS must be set before production launch
+- [10-04]: LAUNCH BLOCKER — ApprovalHistory history endpoint is unbounded (no pagination); fix in next available plan before deploy
+
 ## Session Continuity
 
-Last session: 2026-04-07T11:14:00Z
-Stopped at: Completed 04-07-PLAN.md (Customer Export XLSX/CSV)
+Last session: 2026-04-18T15:17:50Z
+Stopped at: Completed 10-05-PLAN.md — production infrastructure configs (DATABASE_URL support, Railway/Render/Nginx/Vercel)
 Resume file: None

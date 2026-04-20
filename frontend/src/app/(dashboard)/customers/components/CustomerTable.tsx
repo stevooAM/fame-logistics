@@ -8,6 +8,7 @@ import type {
   ICellRendererParams,
   CellValueChangedEvent,
   RowClassParams,
+  CellClickedEvent,
 } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
@@ -544,6 +545,23 @@ export function CustomerTable({
     [dirtyRows]
   );
 
+  const handleCellClicked = useCallback(
+    (event: CellClickedEvent<Customer>) => {
+      const customer = event.data;
+      if (!customer || customer.id < 0) return; // skip temp rows
+
+      // Skip if click was on the Actions column
+      const colId = event.column.getColId();
+      if (!colId || colId === "Actions" || colId === "actions") return;
+
+      // Skip if a cell is currently being edited
+      if (event.api.getEditingCells().length > 0) return;
+
+      router.push(`/customers/${customer.id}`);
+    },
+    [router]
+  );
+
   // ---------------------------------------------------------------------------
   // Pagination
   // ---------------------------------------------------------------------------
@@ -584,6 +602,7 @@ export function CustomerTable({
             rowClassRules={rowClassRules}
             onCellValueChanged={handleCellValueChanged}
             stopEditingWhenCellsLoseFocus
+            onCellClicked={handleCellClicked}
           />
         </div>
 

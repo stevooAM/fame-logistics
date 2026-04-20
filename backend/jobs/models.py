@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 
 from core.models import TimeStampedModel
 from customers.models import Customer
@@ -22,6 +23,36 @@ class JobType(models.TextChoices):
     LOCAL = "LOCAL", "Local"
 
 
+def generate_job_number() -> str:
+    """
+    Generate the next job number in FMS-{YEAR}-{SEQUENCE:05d} format.
+
+    Uses select_for_update() via a transaction-safe query to avoid race
+    conditions when multiple jobs are created concurrently. The caller is
+    responsible for wrapping this in an atomic block if needed.
+    """
+    year = timezone.now().year
+    prefix = f"FMS-{year}-"
+
+    # Lock the latest row for the current year to prevent concurrent duplicates.
+    latest = (
+        Job.objects.select_for_update()
+        .filter(job_number__startswith=prefix)
+        .order_by("-job_number")
+        .first()
+    )
+
+    if latest is None:
+        sequence = 1
+    else:
+        try:
+            sequence = int(latest.job_number.split("-")[-1]) + 1
+        except (ValueError, IndexError):
+            sequence = 1
+
+    return f"{prefix}{sequence:05d}"
+
+
 class Job(TimeStampedModel):
     """Freight job record."""
 
@@ -42,15 +73,35 @@ class Job(TimeStampedModel):
         User, on_delete=models.SET_NULL, null=True, related_name="created_jobs"
     )
 
+    # Fields added in 0002
+    assigned_to = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="assigned_jobs",
+    )
+    eta = models.DateField(null=True, blank=True)
+    delivery_date = models.DateField(null=True, blank=True)
+
     class Meta:
         ordering = ["-created_at"]
         indexes = [
-            models.Index(fields=["job_number"]),
-            models.Index(fields=["status"]),
-            models.Index(fields=["job_type"]),
-            models.Index(fields=["customer"]),
-            models.Index(fields=["created_at"]),
+            models.Index(fields=["job_number"], name="jobs_job_number_idx"),
+            models.Index(fields=["status"], name="jobs_job_status_idx"),
+            models.Index(fields=["job_type"], name="jobs_job_type_idx"),
+            models.Index(fields=["customer"], name="jobs_job_customer_idx"),
+            models.Index(fields=["created_at"], name="jobs_job_created_idx"),
+            models.Index(fields=["assigned_to"], name="jobs_job_assigned_idx"),
+            models.Index(fields=["eta"], name="jobs_job_eta_idx"),
+            models.Index(fields=["delivery_date"], name="jobs_job_delivery_idx"),
         ]
+
+    def save(self, *args, **kwargs):
+        """Auto-assign a job number on first save when none is provided."""
+        if not self.pk and not self.job_number:
+            self.job_number = generate_job_number()
+        super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return f"{self.job_number} — {self.customer}"
@@ -68,8 +119,8 @@ class JobAuditTrail(TimeStampedModel):
     class Meta:
         ordering = ["-created_at"]
         indexes = [
-            models.Index(fields=["job"]),
-            models.Index(fields=["created_at"]),
+            models.Index(fields=["job"], name="jobs_jobaud_job_idx"),
+            models.Index(fields=["created_at"], name="jobs_jobaud_created_idx"),
         ]
 
     def __str__(self) -> str:

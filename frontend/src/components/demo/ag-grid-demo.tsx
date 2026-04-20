@@ -1,10 +1,13 @@
 "use client";
 
 import { AgGridReact } from "ag-grid-react";
+import type { ColDef } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 
-const mockData = [
+type DemoRow = { jobNo: string; customer: string; type: string; status: string; date: string };
+
+const mockData: DemoRow[] = [
   { jobNo: "FMS-2026-00001", customer: "Acme Shipping Ltd", type: "Import", status: "Draft", date: "2026-01-15" },
   { jobNo: "FMS-2026-00002", customer: "Global Trade Co", type: "Export", status: "Pending", date: "2026-01-16" },
   { jobNo: "FMS-2026-00003", customer: "West Africa Freight", type: "Transit", status: "In Progress", date: "2026-01-17" },
@@ -14,7 +17,7 @@ const mockData = [
   { jobNo: "FMS-2026-00007", customer: "Meridian Freight", type: "Transit", status: "Pending", date: "2026-01-21" },
 ];
 
-const columnDefs = [
+const columnDefs: ColDef<DemoRow>[] = [
   { field: "jobNo", headerName: "Job No", sortable: true, filter: true, resizable: true, minWidth: 140 },
   { field: "customer", headerName: "Customer", sortable: true, filter: true, resizable: true, flex: 1 },
   { field: "type", headerName: "Type", sortable: true, filter: true, resizable: true, width: 100 },

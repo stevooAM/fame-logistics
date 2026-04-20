@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+from .dashboard_views import DashboardActivityView, DashboardView
 
 urlpatterns = [
     # Health check
@@ -31,4 +32,8 @@ urlpatterns = [
     # Session management (Admin only)
     path("sessions/", views.ActiveSessionListView.as_view(), name="active_session_list"),
     path("sessions/<int:token_id>/terminate/", views.TerminateSessionView.as_view(), name="terminate_session"),
+
+    # Dashboard
+    path("dashboard/", DashboardView.as_view(), name="dashboard"),
+    path("dashboard/activity/", DashboardActivityView.as_view(), name="dashboard_activity"),
 ]

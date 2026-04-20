@@ -33,6 +33,17 @@ class ApprovalQueue(TimeStampedModel):
             models.Index(fields=["submitted_by"]),
             models.Index(fields=["reviewed_by"]),
         ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["job"],
+                condition=models.Q(status="PENDING"),
+                name="unique_pending_approval_per_job",
+            )
+        ]
+
+    @property
+    def is_pending(self) -> bool:
+        return self.status == self.PENDING
 
     def __str__(self) -> str:
         return f"Approval for {self.job.job_number} — {self.status}"

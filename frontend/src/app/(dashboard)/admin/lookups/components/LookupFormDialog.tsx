@@ -61,7 +61,7 @@ export function LookupFormDialog({
         ...Object.fromEntries(
           (config.extraFields ?? []).map((f) => [
             f.name,
-            (entry as Record<string, unknown>)[f.name] ?? (f.type === "checkbox" ? false : f.type === "number" ? 0 : ""),
+            (entry as unknown as Record<string, unknown>)[f.name] ?? (f.type === "checkbox" ? false : f.type === "number" ? 0 : ""),
           ])
         ),
       });

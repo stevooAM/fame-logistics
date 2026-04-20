@@ -13,12 +13,12 @@ This roadmap rebuilds the Fame Logistics freight management system from a legacy
 - [x] **Phase 1: Foundation** — Project scaffold, Docker, PostgreSQL, CI/CD, design system *(completed 2026-04-05)*
 - [x] **Phase 2: Authentication & RBAC** — Login, session management, role enforcement *(completed 2026-04-05)*
 - [x] **Phase 3: Administration & Lookup Setup** — User admin, audit log, lookup tables, company profile *(completed 2026-04-06)*
-- [ ] **Phase 4: Customer Management** — Customer CRUD, AG Grid list, data seed, Excel export
-- [ ] **Phase 5: Job Management** — Job creation, workflow statuses, document attachments
-- [ ] **Phase 6: Approval Workflow** — Approval queue, approve/reject actions, history
-- [ ] **Phase 7: Accounts & Finance** — Invoice generation, payment recording, financial summaries
-- [ ] **Phase 8: Dashboard** — KPI cards, activity feed, quick-action shortcuts
-- [ ] **Phase 9: Reports** — Customer, job status, and revenue reports with PDF/Excel export
+- [x] **Phase 4: Customer Management** — Customer CRUD, AG Grid list, data seed, Excel export *(completed 2026-04-10)*
+- [x] **Phase 5: Job Management** — Job creation, workflow statuses, document attachments *(completed 2026-04-11)*
+- [x] **Phase 6: Approval Workflow** — Approval queue, approve/reject actions, history *(completed 2026-04-17)*
+- [x] **Phase 7: Accounts & Finance** — Invoice generation, payment recording, financial summaries *(completed 2026-04-18)*
+- [x] **Phase 8: Dashboard** — KPI cards, activity feed, quick-action shortcuts *(completed 2026-04-18)*
+- [x] **Phase 9: Reports** — Customer, job status, and revenue reports with PDF/Excel export *(completed 2026-04-18)*
 - [ ] **Phase 10: Security Hardening & Launch** — Security hardening, performance validation, production deploy
 
 ---
@@ -124,7 +124,7 @@ Plans:
 5. The database already contains the 197 migrated customer records when the system is first deployed — no manual entry required
 6. The customer list can be exported to Excel/CSV with current filters applied
 
-**Plans:** 7 plans
+**Plans:** 8 plans
 
 Plans:
 - [ ] 04-01-PLAN.md — Customer model update: add business_type, preferred_port FK, currency_preference FK, credit_terms + migration
@@ -134,6 +134,7 @@ Plans:
 - [ ] 04-05-PLAN.md — Customer create/edit: modal form (React Hook Form + Zod), inline editing, TIN duplicate warning
 - [ ] 04-06-PLAN.md — Customer detail page: two-column layout, inline-editable info, linked jobs placeholder
 - [ ] 04-07-PLAN.md — Excel/CSV export: backend endpoint + frontend download trigger
+- [ ] 04-08-PLAN.md — Gap closure: Docker entrypoint wiring migrate + seed_customers on first deploy
 
 ---
 
@@ -152,16 +153,15 @@ Plans:
 4. Submitting a job for approval creates an entry in the Approval queue (Phase 6) — the submit action is only available to authorised roles
 5. Searching by job number, customer name, status, or date range returns correct results in the paginated AG Grid within 500ms
 
-**Plans**: TBD (5–7 plans)
+**Plans:** 6 plans
 
 Plans:
-- [ ] 05-01: Job Django model — all fields, status enum, FK to Customer, auto-number generation, migration
-- [ ] 05-02: Job audit trail model — status change log with user/timestamp FK
-- [ ] 05-03: Job API endpoints — create, update, status transition, list (server-side pagination + search), detail, submit-for-approval
-- [ ] 05-04: Cloud storage integration — document upload to Cloudflare R2 / AWS S3, signed URL retrieval
-- [ ] 05-05: Job list UI — AG Grid with search/filter controls, status badges, action column (use `/frontend-design` skill)
-- [ ] 05-06: Job create/edit form — all fields, customer picker, job type selector, status controls (use `/frontend-design` skill)
-- [ ] 05-07: Job detail view — field summary, document attachment panel, audit trail timeline (use `/frontend-design` skill)
+- [ ] 05-01-PLAN.md — Job model update: add assigned_to, eta, delivery_date fields + auto-number generation + migration
+- [ ] 05-02-PLAN.md — Cloud storage integration: boto3, R2/S3 config, upload/download/presigned URL utilities
+- [ ] 05-03-PLAN.md — Job API: serializers, ViewSet with CRUD, status transitions, document endpoints, pagination/search
+- [ ] 05-04-PLAN.md — Job list UI: AG Grid with search/filter controls, status badges, server-side pagination
+- [ ] 05-05-PLAN.md — Job create/edit form: all fields, customer picker, Zod validation
+- [ ] 05-06-PLAN.md — Job detail view: field summary, status transition dropdown, document panel, audit trail timeline
 
 ---
 
@@ -180,14 +180,15 @@ Plans:
 4. Rejecting a job requires a mandatory rejection reason; the originating staff member can see the rejection reason on the job record
 5. An Admin can view the full approval history log — all approvals and rejections with approver, timestamp, and reason
 
-**Plans**: TBD (4–5 plans)
+**Plans:** 6 plans
 
 Plans:
-- [ ] 06-01: Approval Django model — ApprovalQueue and ApprovalHistory models, FKs to Job and User, migration
-- [ ] 06-02: Approval API endpoints — pending list, approve action, reject action (with reason), history list
-- [ ] 06-03: Sidebar badge counter — API endpoint returning live pending count; Next.js polling or server-sent update
-- [ ] 06-04: Approval queue UI — list view with job summary, approve/reject actions, rejection reason modal (use `/frontend-design` skill)
-- [ ] 06-05: Approval history UI — admin-only filterable history table (use `/frontend-design` skill)
+- [ ] 06-01-PLAN.md — Approval model audit and extension: verify scaffolded models, add UniqueConstraint, migration 0002, admin registration
+- [ ] 06-02-PLAN.md — Approval API: ApprovalViewSet with pending list, approve, reject, history, pending-count endpoints; RBAC enforcement
+- [ ] 06-03-PLAN.md — Sidebar badge: useApprovalBadge polling hook (30s interval); SidebarNav integration; fix Approvals nav roles to include Operations
+- [ ] 06-04-PLAN.md — Approval queue UI: pending list table, Approve/Reject buttons, RejectModal with mandatory reason validation
+- [ ] 06-05-PLAN.md — Approval history UI: Admin-only tabbed History view with action/date filters
+- [ ] 06-06-PLAN.md — Gap closure: surface rejection_reason to originating staff via JobSerializer field + job detail callout
 
 ---
 
@@ -206,15 +207,16 @@ Plans:
 4. Monthly and quarterly financial period summaries aggregate income and payment data correctly
 5. Financial data (invoices, payments, balances) can be exported to Excel with current filter/period applied
 
-**Plans**: TBD (4–6 plans)
+**Plans:** 7 plans
 
 Plans:
-- [ ] 07-01: Invoice and Payment Django models — Invoice FK to Job, Payment FK to Invoice, balance calculation, migration
-- [ ] 07-02: Accounts API endpoints — generate invoice, record payment, outstanding balances, period summaries, export
-- [ ] 07-03: Invoice management UI — invoice list, create invoice form, payment recording panel (use `/frontend-design` skill)
-- [ ] 07-04: Outstanding balances view — per-customer balance table with drill-down (use `/frontend-design` skill)
-- [ ] 07-05: Financial period summaries UI — monthly/quarterly aggregation view with date range picker (use `/frontend-design` skill)
-- [ ] 07-06: Excel export — financial data export endpoint and frontend trigger
+- [ ] 07-01-PLAN.md — Invoice/Payment model extensions: auto-gen invoice_number, balance helpers, outstanding_for_customer manager, migration 0002 indexes
+- [ ] 07-02-PLAN.md — Invoice/Payment API: serializers, InvoiceViewSet (generate action), PaymentViewSet (record + status recalc), URL wiring
+- [ ] 07-03-PLAN.md — Reporting endpoints: outstanding balances list/detail, period summary (month/quarter), Excel/CSV export for invoices and balances
+- [ ] 07-04-PLAN.md — Invoice management UI: list, detail drawer, Generate Invoice dialog (approved-job picker), Record Payment dialog (use `/frontend-design` skill)
+- [ ] 07-05-PLAN.md — Outstanding balances UI: per-customer AG Grid with sort/search, drill-down invoice list, export trigger (use `/frontend-design` skill)
+- [ ] 07-06-PLAN.md — Period summary UI: Month/Quarter toggle, date range picker, table + CSS bar chart, shared AccountsTabs nav, export trigger (use `/frontend-design` skill)
+- [ ] 07-07-PLAN.md — Gap closure: invoice export to Excel/CSV (exportInvoicesBlob + Export dropdown in InvoiceToolbar)
 
 ---
 
@@ -231,11 +233,11 @@ Plans:
 2. The recent activity feed lists the last 10 job and approval events with actor name, action, and timestamp — and reflects the most recent state on page load
 3. Clicking "Create Job" or "Add Customer" from the dashboard shortcut navigates to the correct creation form
 
-**Plans**: TBD (2–3 plans)
+**Plans:** 2 plans
 
 Plans:
-- [ ] 08-01: Dashboard API endpoint — aggregate KPI query (active jobs, pending approvals, outstanding invoices, new customers); recent activity feed query
-- [ ] 08-02: Dashboard UI — KPI card grid, activity feed list, quick-action buttons (use `/frontend-design` skill)
+- [ ] 08-01-PLAN.md — Dashboard API endpoint: KPI aggregation (active_jobs, pending_approvals, outstanding_invoice_total, new_customers_this_month), role-filtered activity feed
+- [ ] 08-02-PLAN.md — Dashboard UI: KPI card grid, quick-action shortcuts, activity feed with Load More (uses `/frontend-design` skill)
 
 ---
 
@@ -254,13 +256,13 @@ Plans:
 4. Any report can be exported to PDF (formatted, print-ready) and Excel from the same page
 5. All reports default to the current month but accept any custom date range via a date range picker
 
-**Plans**: TBD (3–5 plans)
+**Plans:** 4 plans
 
 Plans:
-- [ ] 09-01: Report query layer — optimised Django ORM queries for customer activity, job status, revenue aggregations
-- [ ] 09-02: Report API endpoints — customer activity, job status, revenue; all accept date range + filter params
-- [ ] 09-03: Report UI — date range picker, report tables, run/refresh button (use `/frontend-design` skill)
-- [ ] 09-04: PDF and Excel export — server-side PDF generation (WeasyPrint or ReportLab), Excel export (openpyxl); download triggers from frontend
+- [ ] 09-01-PLAN.md — Report query layer: Django app scaffold + ORM query functions for customer activity, job status, and revenue aggregations
+- [ ] 09-02-PLAN.md — Report API endpoints: CustomerActivityView, JobStatusView, RevenueView under /api/reports/
+- [ ] 09-03-PLAN.md — Report UI: tabbed page with date toolbar, Run Report button, three report tables with totals footer
+- [ ] 09-04-PLAN.md — PDF and Excel export: WeasyPrint PDF + openpyxl Excel for all three reports, frontend apiFetchBlob download
 
 ---
 
@@ -279,16 +281,16 @@ Plans:
 4. Server-side pagination is confirmed on all AG Grid tables — no endpoint returns an unbounded result set
 5. The application is deployed and accessible at the production domain with all 197 customer records present and all modules functional
 
-**Plans**: TBD (5–7 plans)
+**Plans:** 7 plans
 
 Plans:
-- [ ] 10-01: Production infrastructure — Vercel (Next.js), Railway/Render (Django + Celery + Redis), PostgreSQL managed instance, Nginx reverse proxy config
-- [ ] 10-02: SSL / HTTPS setup — Let's Encrypt cert, Nginx HTTP→HTTPS redirect, HSTS header, CSP header configuration
-- [ ] 10-03: Security audit — review bcrypt config, CSRF middleware, parameterized queries, XSS output encoding, cookie flags, rate limiting
-- [ ] 10-04: Performance audit — Lighthouse / DevTools 3G throttle test on dashboard and customer list; query profiling on slow endpoints; index review on PostgreSQL
-- [ ] 10-05: Environment hardening — production `.env` secrets management, DEBUG=False, ALLOWED_HOSTS, CORS config, disable Django admin on prod
-- [ ] 10-06: End-to-end smoke test — run full workflow (login → create customer → create job → approve → generate invoice → run report) in production
-- [ ] 10-07: Launch — seed production database with 197 customers, final Go/No-Go check, DNS cutover
+- [ ] 10-01-PLAN.md — Django settings production hardening (DEBUG, HSTS, SSL redirect, secure cookies, admin toggle, CSRF/CORS origins)
+- [ ] 10-02-PLAN.md — Next.js security headers (CSP, HSTS, X-Frame-Options, Permissions-Policy, remove X-Powered-By)
+- [ ] 10-03-PLAN.md — Security audit pass — SEC-01..SEC-09 evidence-backed AUDIT.md
+- [ ] 10-04-PLAN.md — Performance audit pass — N+1, index coverage, PERF-02 pagination PERF-AUDIT.md
+- [ ] 10-05-PLAN.md — Production infrastructure configs (Railway, Render, Procfile, Nginx sample, vercel.json, DATABASE_URL support, deploy/README.md)
+- [ ] 10-06-PLAN.md — Provision & deploy (decision + automation checkpoint; Railway/Render/VPS + Vercel)
+- [ ] 10-07-PLAN.md — DNS cutover, SSL Labs + securityheaders + Lighthouse, E2E smoke test, Go/No-Go launch checklist
 
 ---
 
@@ -301,12 +303,12 @@ Plans:
 | 1. Foundation | 7/7 | ✓ Complete | 2026-04-05 |
 | 2. Authentication & RBAC | 6/6 | ✓ Complete | 2026-04-05 |
 | 3. Administration & Lookup Setup | 7/7 | ✓ Complete | 2026-04-06 |
-| 4. Customer Management | 0/7 | Not started | - |
-| 5. Job Management | 0/7 | Not started | - |
-| 6. Approval Workflow | 0/5 | Not started | - |
-| 7. Accounts & Finance | 0/6 | Not started | - |
-| 8. Dashboard | 0/2 | Not started | - |
-| 9. Reports | 0/4 | Not started | - |
+| 4. Customer Management | 8/8 | ✓ Complete | 2026-04-10 |
+| 5. Job Management | 6/6 | ✓ Complete | 2026-04-11 |
+| 6. Approval Workflow | 6/6 | ✓ Complete | 2026-04-17 |
+| 7. Accounts & Finance | 7/7 | ✓ Complete | 2026-04-18 |
+| 8. Dashboard | 2/2 | ✓ Complete | 2026-04-18 |
+| 9. Reports | 4/4 | ✓ Complete | 2026-04-18 |
 | 10. Security Hardening & Launch | 0/7 | Not started | - |
 
 **Total plans (estimated):** 57 plans across 10 phases
