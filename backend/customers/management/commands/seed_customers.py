@@ -210,6 +210,9 @@ class Command(BaseCommand):
 
         company_name = get_cell("company_name")
         if not company_name:
+            # Fall back to contact_person (common in this dataset for individual contacts)
+            company_name = get_cell("contact_person")
+        if not company_name:
             logger.warning("Row %d: missing company_name — skipping.", row_num)
             self.stdout.write(
                 self.style.WARNING(f"Row {row_num}: missing company_name — skipping.")
